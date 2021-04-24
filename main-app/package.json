@@ -1,0 +1,26 @@
+{
+  "name": "erp-entry",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.5.3",
+    "axios": "^0.21.1",
+    "express": "^4.17.1",
+    "fastify": "^3.14.2",
+    "http-errors": "^1.7.0",
+    "pug": "^2.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^5.15.2",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0"
+  }
+}

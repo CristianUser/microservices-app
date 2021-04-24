@@ -1,0 +1,31 @@
+{
+  "extends": ["tslint:recommended", "tslint-config-prettier"],
+  "rules": {
+    "await-promise": true,
+    "eofline":true,
+    "import-spacing": true,
+    "max-line-length": {
+        "options": [120]
+    },
+    "new-parens": true,
+    "no-arg": true,
+    "no-bitwise": true,
+    "no-conditional-assignment": true,
+    "no-consecutive-blank-lines": false,
+    "no-var-keyword": true,
+    "no-irregular-whitespace": true,
+    "no-console": {
+        "severity": "warning",
+        "options": ["debug", "info", "log", "time", "timeEnd", "trace"]
+    },
+    "no-unnecessary-type-assertion": true,
+    "ordered-imports": true,
+    "prefer-const": true,
+    "typedef-whitespace": true
+  },
+  "jsRules": {
+    "max-line-length": {
+      "options": [120]
+    }
+  }
+}
