@@ -1,7 +1,16 @@
 version: '3'
 services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    volumes:
+      - ./.docker/mongodb/data:/data/db
+    ports:
+      - '27017-27019:27017-27019'
+
   postgres:
     image: postgres
+    container_name: postgres
     restart: always
     environment:
       - POSTGRES_USER=user
@@ -13,6 +22,17 @@ services:
       - 5432:5432
     healthcheck:
       test: nc -z localhost 5432
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    volumes:
+        - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+        - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
+        - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+    ports:
+        - 5672:5672
+        - 15672:15672
 
   service-registry:
     build:
@@ -37,7 +57,7 @@ services:
       - service-registry
     restart: always
     environment:
-      REGISTRY_PORT: 50250
+      REGISTRY_URL: http://service-registry:50250
     volumes:
       - ./auth-service:/usr/src/app
     ports:

@@ -5,7 +5,8 @@ import { FastifyInstance } from 'fastify';
 import createService from './lib/service';
 import configs from './config';
 
-const config: any = configs[process.env.NODE_ENV || 'development'];
+const { NODE_ENV = 'development', REGISTRY_URL = 'http://localhost:3000' } = process.env;
+const config: any = configs[NODE_ENV];
 const fastify: FastifyInstance = createService(config);
 const log = config.log();
 
@@ -13,17 +14,16 @@ const log = config.log();
 fastify.listen(process.env.PORT || 0, '::', () => {
   const address: any = fastify.server.address();
   const port: number = address.port;
-  const { REGISTRY_PORT = 3000 } = process.env;
 
   const registerService = () =>
-    axios.put(`http://service-registry:${REGISTRY_PORT}/register`, {
+    axios.put(`${REGISTRY_URL}/register`, {
       serviceName: config.name,
       serviceVersion: config.version,
       servicePort: port
     });
   const unregisterService = () =>
     axios.delete(
-      `http://service-registry:${REGISTRY_PORT}/register/${config.name}/${config.version}/${port}`
+      `${REGISTRY_URL}/register/${config.name}/${config.version}/${port}`
     );
 
   registerService();
@@ -53,5 +53,5 @@ fastify.listen(process.env.PORT || 0, '::', () => {
     process.exit(0);
   });
 
-  log.info(`Hi there! I'm listening on port ${port} in ${'env'} mode.`);
+  log.info(`Hi there! I'm listening on port ${port} in ${NODE_ENV} mode.`);
 });

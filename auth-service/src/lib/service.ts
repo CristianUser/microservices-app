@@ -12,10 +12,17 @@ export default (config: any) => {
     reply.send({ status: 'ok' })
   })
 
-  service.post('/auth', async (request: FastifyRequest, reply: FastifyReply) => {
+  service.post('/authenticate', async (request: FastifyRequest, reply: FastifyReply) => {
     const token = authService.createToken(request.body);
 
     reply.send(token);
+  });
+
+  service.post('/verify', async (request: FastifyRequest, reply: FastifyReply) => {
+    const { token }: any = request.body; 
+    const digest = authService.validate(token);
+
+    reply.send({digest});
   });
 
   service.setErrorHandler((error: any, request: FastifyRequest, reply: FastifyReply) => {

@@ -5,21 +5,29 @@ export class AuthService {
   private jwtSecret: string;
   constructor(config: any) {
     this.config = config;
-    this.jwtSecret = process.env.JWT_SECRET || '';
+    this.jwtSecret = process.env.JWT_SECRET || 'your_jwt_secret';
 
   }
 
   createToken(payload: any): string {
-    return jwt.sign(JSON.stringify(payload), this.jwtSecret || 'your_jwt_secret')
+    return jwt.sign(payload, this.jwtSecret, {
+      expiresIn: '15 minutes'
+    })
   }
 
   readDigestInfo(digest: string) {
-    return jwt.verify(digest, this.jwtSecret)
+    try {
+      return jwt.verify(digest, this.jwtSecret)
+    }
+    catch (err) {
+      return null
+    }
   }
 
   validate(digest: string) {
-    const payload = this.readDigestInfo(digest);
+    const decoded: any = this.readDigestInfo(digest);
+    const timestamp = Date.now() / 1000;
 
-    return !!payload;
+    return decoded && (decoded.exp > timestamp);
   }
 }
