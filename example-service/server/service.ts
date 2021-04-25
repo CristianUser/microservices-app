@@ -16,6 +16,9 @@ module.exports = (config: any) => {
   //     return next();
   //   });
   // }
+  service.get('/health-check', function (request, reply) {
+    reply.send({ status: 'ok' })
+  })
 
   service.get('/list', async (request: FastifyRequest, reply: FastifyReply) => {
     return speakers.getList();

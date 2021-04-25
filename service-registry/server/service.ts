@@ -6,13 +6,10 @@ const service = fastify({ logger: { prettyPrint: true } });
 module.exports = (config: any) => {
   const log = config.log();
   const serviceRegistry = new ServiceRegistry(log);
-  // Add a request logging middleware in development mode
-  if (process.env.NODE_ENV === 'development') {
-    // service.use((request: FastifyRequest, reply: FastifyReply) => {
-    //   log.debug(`${request.method}: ${request.url}`);
-    //   throw new Error();
-    // });
-  }
+
+  service.get('/health-check', function (request, reply) {
+    reply.send({ status: 'ok' })
+  })
 
   service.route({
     method: 'PUT',
@@ -57,10 +54,10 @@ module.exports = (config: any) => {
     url: '/find/:serviceName/:serviceVersion',
     handler: (request, reply) => {
       const { serviceName, serviceVersion }: any = request.params;
-      const svc = serviceRegistry.get(serviceName, serviceVersion);
+      const foundService = serviceRegistry.get(serviceName, serviceVersion);
 
-      if (!svc) reply.status(404).send({ result: 'Service not found' });
-      reply.send(svc);
+      if (!foundService) reply.status(404).send({ result: 'Service not found' });
+      reply.send(foundService);
     }
   });
 

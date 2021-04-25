@@ -1,7 +1,17 @@
 const semver = require('semver');
 
+export interface IServiceInstance {
+  ip: string | undefined;
+  name: string;
+  port: string;
+  timestamp: number;
+  version: string;
+}
+
 export class ServiceRegistry {
-  private services: any = {};
+  private services: {
+    [key: string]: IServiceInstance
+  } = {};
   private log;
   private timeout: number;
 
@@ -10,11 +20,11 @@ export class ServiceRegistry {
     this.timeout = 30;
   }
 
-  _getServiceKey(name: string, version: string, ip: string | undefined, port: string) {
+  private _getServiceKey(name: string, version: string, ip: string | undefined, port: string): string {
     return `${name}@${version}_${ip}:${port}`;
   }
 
-  get(name: string, version: string) {
+  get(name: string, version: string): IServiceInstance {
     this.cleanup();
     const candidates = Object.values(this.services).filter(
       (service: any) => service.name === name && semver.satisfies(service.version, version)
@@ -23,7 +33,7 @@ export class ServiceRegistry {
     return candidates[Math.floor(Math.random() * candidates.length)];
   }
 
-  register(name: string, version: string, ip: string | undefined, port: string) {
+  register(name: string, version: string, ip: string | undefined, port: string): string {
     this.cleanup();
     const key = this._getServiceKey(name, version, ip, port);
     const timestamp = Math.floor(Date.now() / 1000);
@@ -45,7 +55,7 @@ export class ServiceRegistry {
     return key;
   }
 
-  unregister(name: string, version: string, ip: string | undefined, port: string) {
+  unregister(name: string, version: string, ip: string | undefined, port: string): string {
     const key = this._getServiceKey(name, version, ip, port);
 
     delete this.services[key];

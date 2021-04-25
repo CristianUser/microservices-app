@@ -7,21 +7,20 @@ const axios = require('axios');
 const config = require('../config')[process.env.NODE_ENV || 'development'];
 
 const log = config.log();
-const fastify: FastifyInstance = require('../server/service')(config);
+const fastify: FastifyInstance = require('./service')(config);
 
 // Important - a service should not have a fixed port but should randomly choose one
-fastify.listen(0);
-
-fastify.listen(0, () => {
+fastify.listen(process.env.PORT || 0, '::', () => {
   const address: any = fastify.server.address();
   const port: number = address.port;
+  const { REGISTRY_PORT = 3000 }  = process.env;
 
-  const registerService = () => axios.put('http://localhost:3000/register', {
+  const registerService = () => axios.put(`http://service-registry:${REGISTRY_PORT}/register`, {
     serviceName: config.name,
     serviceVersion: config.version,
     servicePort: port
   });
-  const unregisterService = () => axios.delete(`http://localhost:3000/register/${config.name}/${config.version}/${port}`);
+  const unregisterService = () => axios.delete(`http://service-registry:${REGISTRY_PORT}/register/${config.name}/${config.version}/${port}`);
 
   registerService();
 
@@ -34,6 +33,12 @@ fastify.listen(0, () => {
   process.on('uncaughtException', async () => {
     await cleanup();
     process.exit(0);
+  });
+
+  process.on('unhandledRejection', async (error) => {
+  log.fatal('unhandledRejection', error.message)
+    // await cleanup();
+    // process.exit(0);
   });
 
   process.on('SIGINT', async () => {

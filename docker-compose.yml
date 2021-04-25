@@ -1,0 +1,50 @@
+version: '3'
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_DB=erp
+      - POSTGRES_PASSWORD=pass
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: nc -z localhost 5432
+
+  service-registry:
+    build:
+      context: .
+      dockerfile: ./service-registry/Dockerfile
+      args:
+        SERVICE_PORT: 50250
+    restart: always
+    volumes:
+      - ./service-registry:/usr/src/app
+    ports:
+      - 50250:50250
+    command: ["npm", "run", "dev"]
+
+  example-service:
+    build:
+      context: .
+      dockerfile: ./example-service/Dockerfile
+      args:
+        SERVICE_PORT: 50270
+    depends_on:
+      - service-registry
+    restart: always
+    environment:
+      REGISTRY_PORT: 50250
+    volumes:
+      - ./example-service:/usr/src/app
+    ports:
+      - 50270:50270
+    command: ["npm", "run", "dev"]
+
+volumes:
+  postgres-volume:
+    driver: local
+
