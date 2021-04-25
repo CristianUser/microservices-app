@@ -27,10 +27,10 @@ services:
       - 50250:50250
     command: ["npm", "run", "dev"]
 
-  example-service:
+  auth-service:
     build:
       context: .
-      dockerfile: ./example-service/Dockerfile
+      dockerfile: ./auth-service/Dockerfile
       args:
         SERVICE_PORT: 50270
     depends_on:
@@ -39,7 +39,7 @@ services:
     environment:
       REGISTRY_PORT: 50250
     volumes:
-      - ./example-service:/usr/src/app
+      - ./auth-service:/usr/src/app
     ports:
       - 50270:50270
     command: ["npm", "run", "dev"]

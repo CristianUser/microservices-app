@@ -1,4 +1,4 @@
-microservices = postgres service-registry example-service
+services = postgres service-registry auth-service
 
 .PHONY: start
 start:

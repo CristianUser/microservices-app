@@ -2,5 +2,5 @@
   "watch": ["./"],
   "ext": "ts,json",
   "ignore": ["./**/*.spec.ts"],
-  "exec": "ts-node server | bunyan"
+  "exec": "ts-node src/server | bunyan"
 }
