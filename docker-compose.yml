@@ -36,8 +36,7 @@ services:
 
   service-registry:
     build:
-      context: .
-      dockerfile: ./service-registry/Dockerfile
+      context: ./service-registry
       args:
         SERVICE_PORT: 50250
     restart: always
@@ -45,7 +44,6 @@ services:
       - ./service-registry:/usr/src/app
     ports:
       - 50250:50250
-    command: ["npm", "run", "dev"]
 
   auth-service:
     build:
@@ -55,6 +53,7 @@ services:
         SERVICE_PORT: 50270
     depends_on:
       - service-registry
+      - mongodb
     restart: always
     environment:
       REGISTRY_URL: http://service-registry:50250
@@ -62,7 +61,6 @@ services:
       - ./auth-service:/usr/src/app
     ports:
       - 50270:50270
-    command: ["npm", "run", "dev"]
 
 volumes:
   postgres-volume:

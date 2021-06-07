@@ -1,12 +1,14 @@
 import jwt from 'jsonwebtoken';
+import { DatabaseClient } from '../db';
 
 export class AuthService {
   private config: any;
   private jwtSecret: string;
+  private db: DatabaseClient;
   constructor(config: any) {
     this.config = config;
     this.jwtSecret = process.env.JWT_SECRET || 'your_jwt_secret';
-
+    this.db = new DatabaseClient(config);
   }
 
   createToken(payload: any): string {

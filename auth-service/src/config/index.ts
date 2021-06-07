@@ -10,12 +10,14 @@ const { name: packageName, version } = packageJson;
 const getLogger = (serviceName: string, serviceVersion: string, level: any) => bunyan.createLogger({ name: `${serviceName}:${serviceVersion}`, level });
 const config: any = {
   development: {
+    dbUrl: 'mongodb://mongodb/auth_db',
     name: packageName,
     version,
     serviceTimeout: 30,
     log: () => getLogger(packageName, version, 'debug'),
   },
   production: {
+    dbUrl: 'mongodb://mongodb/auth_db',
     name: packageName,
     version,
     serviceTimeout: 30,
