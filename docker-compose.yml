@@ -62,6 +62,22 @@ services:
     ports:
       - 50270:50270
 
+  ui-app:
+    build:
+      context: .
+      dockerfile: ./ui-app/Dockerfile
+      args:
+        SERVICE_PORT: 8080
+    depends_on:
+      - service-registry
+    restart: always
+    environment:
+      REGISTRY_URL: http://service-registry:50250
+    volumes:
+      - ./ui-app:/usr/src/app
+    ports:
+      - 8080:8080
+
 volumes:
   postgres-volume:
     driver: local

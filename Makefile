@@ -1,5 +1,5 @@
 requirements = mongodb# postgres rabbitmq
-services = service-registry auth-service
+services = service-registry auth-service ui-app
 
 .PHONY: start
 start:
