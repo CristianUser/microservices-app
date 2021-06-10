@@ -2,10 +2,10 @@ const express = require('express');
 
 const router = express.Router();
 
-module.exports = (param) => {
+module.exports = (param: any) => {
   const { speakers } = param;
 
-  router.get('/', async (req, res) => {
+  router.get('/', async (req: any, res: any) => {
     try {
       const promises = [];
       promises.push(speakers.getList());
@@ -23,7 +23,7 @@ module.exports = (param) => {
     }
   });
 
-  router.get('/:name', async (req, res, next) => {
+  router.get('/:name', async (req: any, res: any, next: (arg0?: undefined) => any) => {
     try {
       const promises = [];
       promises.push(speakers.getSpeaker(req.params.name));
