@@ -1,17 +1,17 @@
-#!/usr/bin/env node
+import service from '../server/service';
+import { getConfig } from '../config';
 
-const config = require('../config')[process.env.NODE_ENV || 'development'];
-
+const config = getConfig();
 const log = config.log();
-const fastify = require('../server/service')(config);
+const fastify = service(config);
 
 // Important - a service should not have a fixed port but should randomly choose one
 
-fastify.listen(process.env.PORT || 3000, '::', () => {
+fastify.listen(config.port || 3000, '::', () => {
   const address: any = fastify.server.address();
   const port: number = address.port;
 
   log.info(
-    `Hi there! I'm listening on port ${port} in ${process.env.NODE_ENV} mode.`,
+    `Hi there! I'm listening on port ${port} in ${config.env} mode.`,
   );
 });

@@ -19,6 +19,7 @@
     "pino-pretty": "^4.7.1"
   },
   "devDependencies": {
+    "@types/bunyan": "^1.8.6",
     "@types/jsonwebtoken": "^8.5.1",
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",

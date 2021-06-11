@@ -1,3 +1,5 @@
+import { IConfig } from "../../config";
+
 const semver = require('semver');
 
 export interface IServiceInstance {
@@ -15,13 +17,15 @@ export class ServiceRegistry {
   private log;
   private timeout: number;
 
-  constructor(log: any) {
-    this.log = log;
-    this.timeout = 30;
+  constructor(config: IConfig) {
+    this.log = config.log();
+    this.timeout = config.serviceTimeout;
   }
 
+  // TODO: refactor this to receive an service instance instead of a lot of params
+  // also a service instance class can be created with their methods
   private _getServiceKey(name: string, version: string, ip: string | undefined, port: string): string {
-    return `${name}@${version}_${ip}:${port}`;
+    return `${ip}:${port}/${name}@${version}`;
   }
 
   get(name: string, version: string): IServiceInstance {

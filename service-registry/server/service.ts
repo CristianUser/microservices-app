@@ -1,55 +1,57 @@
-import fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import { IConfig } from '../config';
 import { ServiceRegistry } from './lib/ServiceRegistry';
 
-const service = fastify({ logger: { prettyPrint: true } });
+function getRequestIp(request: FastifyRequest): string | undefined {
+  return request.socket.remoteAddress?.includes('::')
+  ? `[${request.socket.remoteAddress}]`
+  : request.socket.remoteAddress;
+}
 
-module.exports = (config: any) => {
+export default (config: IConfig) => {
   const log = config.log();
-  const serviceRegistry = new ServiceRegistry(log);
+  const serviceRegistry = new ServiceRegistry(config);
+  const fastify = Fastify({ logger: { prettyPrint: true } });
 
-  service.get('/health-check', function (request, reply) {
+  fastify.get('/health-check', function (request, reply) {
     reply.send({ status: 'ok' })
   })
 
-  service.route({
+  fastify.route({
     method: 'PUT',
     url: '/register',
     handler: (request: FastifyRequest, reply: FastifyReply) => {
       const { serviceName, serviceVersion, servicePort }: any = request.body;
-
-      const serviceIp = request.connection.remoteAddress?.includes('::')
-        ? `[${request.connection.remoteAddress}]`
-        : request.connection.remoteAddress;
-
+      const serviceIp = getRequestIp(request)
       const serviceKey = serviceRegistry.register(
         serviceName,
         serviceVersion,
         serviceIp,
         servicePort
       );
+
       reply.send({ result: serviceKey });
     }
   });
 
-  service.route({
+  fastify.route({
     method: 'DELETE',
     url: '/register/:serviceName/:serviceVersion/:servicePort',
     handler: (request, reply) => {
       const { serviceName, serviceVersion, servicePort }: any = request.params;
-      const serviceIp = request.connection.remoteAddress?.includes('::')
-        ? `[${request.connection.remoteAddress}]`
-        : request.connection.remoteAddress;
+      const serviceIp = getRequestIp(request);
       const serviceKey = serviceRegistry.unregister(
         serviceName,
         serviceVersion,
         serviceIp,
         servicePort
       );
+
       reply.send({ result: serviceKey });
     }
   });
 
-  service.route({
+  fastify.route({
     method: 'GET',
     url: '/find/:serviceName/:serviceVersion',
     handler: (request, reply) => {
@@ -61,7 +63,7 @@ module.exports = (config: any) => {
     }
   });
 
-  service.setErrorHandler((error: any, request: FastifyRequest, reply: FastifyReply) => {
+  fastify.setErrorHandler((error: any, request: FastifyRequest, reply: FastifyReply) => {
     reply.status(error.status || 500);
     // Log out the error to the console
     log.error(error);
@@ -72,5 +74,5 @@ module.exports = (config: any) => {
     });
   });
 
-  return service;
+  return fastify;
 };

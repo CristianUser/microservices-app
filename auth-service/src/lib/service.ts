@@ -1,31 +1,41 @@
-import fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import { IConfig } from '../config';
 import { AuthService } from './Auth';
 
-const service = fastify();
 
 
-export default (config: any) => {
+export default (config: IConfig) => {
   const log = config.log();
   const authService = new AuthService(config);
+  const fastify = Fastify();
 
-  service.get('/health-check', function (request, reply) {
-    reply.send({ status: 'ok' })
+  fastify.get('/health-check', function (request, reply) {
+    const { uptime, memoryUsage, cpuUsage } = process;
+    const status = {
+      cpuUsage: cpuUsage(),
+      memoryUsage: memoryUsage(),
+      status: 'ok',
+      timestamp: Date.now(),
+      uptime: uptime()
+    };
+
+    reply.send(status);
   })
 
-  service.post('/authenticate', async (request: FastifyRequest, reply: FastifyReply) => {
+  fastify.post('/authenticate', async (request: FastifyRequest, reply: FastifyReply) => {
     const token = authService.createToken(request.body);
 
     reply.send(token);
   });
 
-  service.post('/verify', async (request: FastifyRequest, reply: FastifyReply) => {
+  fastify.post('/verify', async (request: FastifyRequest, reply: FastifyReply) => {
     const { token }: any = request.body; 
     const digest = authService.validate(token);
 
     reply.send({digest});
   });
 
-  service.setErrorHandler((error: any, request: FastifyRequest, reply: FastifyReply) => {
+  fastify.setErrorHandler((error: any, request: FastifyRequest, reply: FastifyReply) => {
     reply.status(error.status || 500);
     // Log out the error to the console
     log.error(error);
@@ -36,5 +46,5 @@ export default (config: any) => {
     });
   });
 
-  return service;
+  return fastify;
 };
