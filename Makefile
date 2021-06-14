@@ -8,28 +8,28 @@ start:
 .PHONY: build
 build:
 	./build-helper.sh -c install
-	docker-compose build $(services)
+	docker compose build --no-cache $(services)
 
 .PHONY: start-services
 start-services:
-	docker-compose up $(services)
+	docker compose up $(services)
 
 .PHONY: stop-services
 stop-services:
-	docker-compose stop $(services)
+	docker compose stop $(services)
 
 .PHONY: start-requirements
 start-requirements:
-	docker-compose up -d $(requirements)
+	docker compose up -d $(requirements)
 
 .PHONY: stop-requirements
 stop-requirements:
-	docker-compose stop $(requirements)
+	docker compose stop $(requirements)
 
 .PHONY: remove-containers
 remove-containers:
 	@echo "Removing all stopped containers..."
-	docker-compose rm $(services) $(requirements)
+	docker compose rm $(services) $(requirements)
 
 .PHONY: burn
 burn:

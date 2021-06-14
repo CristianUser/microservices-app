@@ -47,8 +47,7 @@ services:
 
   auth-service:
     build:
-      context: .
-      dockerfile: ./auth-service/Dockerfile
+      context: ./auth-service
       args:
         SERVICE_PORT: 50270
     depends_on:
@@ -64,8 +63,7 @@ services:
 
   main-service:
     build:
-      context: .
-      dockerfile: ./main-app/Dockerfile
+      context: ./main-app
       args:
         SERVICE_PORT: 5000
     depends_on:
@@ -79,17 +77,17 @@ services:
       - 5000:5000
   ui-app:
     build:
-      context: .
-      dockerfile: ./ui-app/Dockerfile
+      context: ./ui-app
       args:
         SERVICE_PORT: 8080
-    depends_on:
-      - service-registry
+    # depends_on:
+    #   - main-service
     restart: always
     environment:
       REGISTRY_URL: http://service-registry:50250
     volumes:
       - ./ui-app:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
       - 8080:8080
 

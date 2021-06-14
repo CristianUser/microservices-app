@@ -6,7 +6,7 @@ import {
   RouteProps
 } from 'react-router-dom';
 import Home from './Pages/Home';
-import './App.css';
+import './App.scss';
 
 const routes: RouteProps[] = [
   {
