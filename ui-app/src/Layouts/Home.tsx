@@ -1,17 +1,14 @@
 import React, { FC } from 'react';
 import { Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom';
+import PublicHeader from '../Components/PublicHeader';
+
 const { Header, Footer, Content } = Layout;
 
 const HomeLayout: FC = (props) =>{
     return (
     <Layout>
-        <Header>
-            <div className="logo" />
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-                <Menu.Item><Link to="/">Home</Link></Menu.Item>
-            </Menu>
-        </Header>
+        <PublicHeader />
         <Content>
             {props.children}
         </Content>

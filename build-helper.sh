@@ -17,9 +17,9 @@ function print_help()
 function install_dependencies() {
     for i in  ./*/package.json;
     do
-    SERVICE_DIRECTORY="$(dirname "${i}")"
-    printf "Start Installing dependencies on %s\n" "$SERVICE_DIRECTORY" ;
-    (cd $SERVICE_DIRECTORY && npm i);
+      SERVICE_DIRECTORY="$(dirname "${i}")"
+      printf "Start Installing dependencies on %s\n" "$SERVICE_DIRECTORY" ;
+      (cd $SERVICE_DIRECTORY && npm i);
     done
 }
 

@@ -80,11 +80,9 @@ services:
       context: ./ui-app
       args:
         SERVICE_PORT: 8080
-    # depends_on:
-    #   - main-service
+    depends_on:
+      - main-service
     restart: always
-    environment:
-      REGISTRY_URL: http://service-registry:50250
     volumes:
       - ./ui-app:/usr/src/app
       - /usr/src/app/node_modules

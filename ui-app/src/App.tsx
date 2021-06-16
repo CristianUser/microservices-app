@@ -5,13 +5,20 @@ import {
   Route,
   RouteProps
 } from 'react-router-dom';
-import Home from './Pages/Home';
 import './App.scss';
+
+import Home from './Pages/Home';
+import ProductList from './Pages/ProductList';
 
 const routes: RouteProps[] = [
   {
     component: Home,
     path: '/',
+    exact: true
+  },
+  {
+    component: ProductList,
+    path: '/product-list',
     exact: true
   }
 ]
