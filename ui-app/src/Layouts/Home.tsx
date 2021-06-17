@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
-import { Layout, Menu } from 'antd';
-import { Link } from 'react-router-dom';
+import { Layout } from 'antd';
 import PublicHeader from '../Components/PublicHeader';
 
-const { Header, Footer, Content } = Layout;
+const { Footer, Content } = Layout;
 
 const HomeLayout: FC = (props) =>{
     return (

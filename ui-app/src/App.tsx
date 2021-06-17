@@ -8,7 +8,8 @@ import {
 import './App.scss';
 
 import Home from './Pages/Home';
-import ProductList from './Pages/ProductList';
+import ItemsList from './Pages/ItemsList';
+import ItemPage from './Pages/Item';
 
 const routes: RouteProps[] = [
   {
@@ -17,8 +18,13 @@ const routes: RouteProps[] = [
     exact: true
   },
   {
-    component: ProductList,
+    component: ItemsList,
     path: '/product-list',
+    exact: true
+  },
+  {
+    component: ItemPage,
+    path: '/item/id',
     exact: true
   }
 ]

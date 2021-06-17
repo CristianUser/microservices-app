@@ -1,12 +1,13 @@
 import React, { FC } from 'react';
 import { Button, Table } from 'antd';
 import TableListLayout from '../Layouts/TableList';
+import { Link } from 'react-router-dom';
 
 const columns = [
     {
       title: 'Name',
       dataIndex: 'name',
-      render: (text: string) => <a>{text}</a>,
+      render: (text: string) => <Link to="/item/id">{text}</Link>,
     },
     {
       title: 'Status',
@@ -63,7 +64,7 @@ const rowSelection = {
     }),
   };
   
-const ProductListPage: FC = () =>{
+const ItemListPage: FC = () =>{
     return (
       <TableListLayout>
         <Table
@@ -78,4 +79,4 @@ const ProductListPage: FC = () =>{
     );
   }
   
-  export default ProductListPage;
+  export default ItemListPage;
