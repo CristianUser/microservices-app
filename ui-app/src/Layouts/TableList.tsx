@@ -5,8 +5,12 @@ import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import AdminHeader from '../Components/AdminHeader';
 
 const { Header, Content, Sider } = Layout;
+type Props = {
+  left?: React.ReactNode,
+  children?: React.ReactNode
+}
 
-const TableListLayout: FC = (props) => {
+const TableListLayout: FC<Props> = (props: Props) => {
   const [collapsed, setCollapsed] = useState(false);
   return (
     <Layout>
@@ -17,7 +21,7 @@ const TableListLayout: FC = (props) => {
             <Link to="/">Home</Link>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <Link to="/product-list">Products</Link>
+            <Link to="/items-list">Items</Link>
           </Breadcrumb.Item>
         </Breadcrumb>
         {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
@@ -33,19 +37,7 @@ const TableListLayout: FC = (props) => {
             collapsedWidth={0}
             width={200}
           >
-            <Menu
-              mode="inline"
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
-              style={{ height: '100%' }}
-            >
-              <Menu.SubMenu key="sub1" title="subnav 1">
-                <Menu.Item key="1">option1</Menu.Item>
-                <Menu.Item key="2">option2</Menu.Item>
-                <Menu.Item key="3">option3</Menu.Item>
-                <Menu.Item key="4">option4</Menu.Item>
-              </Menu.SubMenu>
-            </Menu>
+            {props.left}
           </Sider>
           <Content style={{ padding: '0 24px', minHeight: 280 }}>{props.children}</Content>
         </Layout>

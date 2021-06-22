@@ -19,4 +19,4 @@ RUN npm install
 COPY . .
 
 EXPOSE ${SERVICE_PORT}
-CMD [ "npm", "run", "dev"]
+CMD ["npm", "run", "dev"]

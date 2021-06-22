@@ -11,6 +11,20 @@ const SiderContent: FC = (): React.ReactElement => {
   </>)
 };
 
+const routes = [
+  {
+    path: '/',
+    breadcrumbName: 'Home',
+  },
+  {
+    path: '/product-list',
+    breadcrumbName: 'Items',
+  },
+  {
+    path: '/item/id',
+    breadcrumbName: 'Item Name',
+  },
+];
 
 const layout = {
   labelCol: { span: 5 },
@@ -21,12 +35,13 @@ const tailLayout = {
   wrapperCol: { offset: 1, span: 16 },
 };
 
-const BasicForm: FC = () => {
+const BasicForm: FC<any> = (props) => {
   return (
     <Form
       {...layout}
       name="basic"
       initialValues={{ maintainStock: true }}
+      {...props}
     >
       <Row>
         <Col span={12}>
@@ -63,24 +78,32 @@ const BasicForm: FC = () => {
             <Checkbox>Maintain Stock</Checkbox>
           </Form.Item>
           <Form.Item
-            label="Item Name"
-            name="name"
-            rules={[{ required: true, message: 'Please input the name!' }]}
+            label="Something"
+            name="something"
           >
             <Input />
           </Form.Item>
+          <Form.Item>
+        <Button type="primary" htmlType="submit" className="login-form-button">
+          Log in
+        </Button>
+        Or <a href="">register now!</a>
+      </Form.Item>
         </Col>
       </Row>
     </Form>
   )
 }
 const ItemPage: FC = () => {
+  const onFinish = (values: any) => {
+    console.log('Received values of form: ', values);
+  };
 
   return (
-    <EditPageLayout left={<SiderContent />}>
+    <EditPageLayout left={<SiderContent />} breadcrumbRoutes={routes}>
       <Space direction="vertical" style={{ width: '100%' }}>
         <Card style={{ width: '100%' }}>
-          <BasicForm />
+          <BasicForm onFinish={onFinish}/>
         </Card>
         <Card title="Description" style={{ width: '100%' }}>
           <Form>

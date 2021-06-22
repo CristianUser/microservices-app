@@ -6,24 +6,16 @@ import AdminHeader from '../Components/AdminHeader';
 
 const { Content, Sider } = Layout;
 
+type BreadcrumbRoute = {
+  path: string,
+  breadcrumbName: string
+}
 type Props = {
   left?: React.ReactNode,
-  children?: React.ReactNode
+  children?: React.ReactNode,
+  breadcrumbRoutes?: Array<BreadcrumbRoute>,
+  onSave?: <T = any>(a?: T) => void
 }
-const routes = [
-  {
-    path: '/',
-    breadcrumbName: 'Home',
-  },
-  {
-    path: '/product-list',
-    breadcrumbName: 'Items',
-  },
-  {
-    path: '/item/id',
-    breadcrumbName: 'Item Name',
-  },
-];
 
 const EditPageLayout: FC<Props> = (props: Props) => {
   const [collapsed, setCollapsed] = useState(false);
@@ -32,7 +24,7 @@ const EditPageLayout: FC<Props> = (props: Props) => {
     <Layout>
       <AdminHeader />
         <PageHeader
-          breadcrumb={{ routes }}
+          breadcrumb={{ routes: props.breadcrumbRoutes }}
           ghost={false}
           backIcon={collapsed ? <MenuUnfoldOutlined/> :<MenuFoldOutlined />}
           onBack={() => setCollapsed(!collapsed)}
@@ -40,7 +32,7 @@ const EditPageLayout: FC<Props> = (props: Props) => {
           subTitle="This is a subtitle"
           extra={[
             <Button key="2">Discard</Button>,
-            <Button key="1" type="primary">
+            <Button key="1" type="primary" onClick={() => props.onSave?.()}>
               Save
             </Button>,
           ]}
