@@ -85,9 +85,8 @@ const BasicForm: FC<any> = (props) => {
           </Form.Item>
           <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
-          Log in
+          submit?
         </Button>
-        Or <a href="">register now!</a>
       </Form.Item>
         </Col>
       </Row>

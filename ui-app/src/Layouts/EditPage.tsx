@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Layout, Menu, Breadcrumb, PageHeader, Button } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import AdminHeader from '../Components/AdminHeader';
+import CommonSider from '../Components/CommonSider';
 
 const { Content, Sider } = Layout;
 
@@ -40,17 +41,7 @@ const EditPageLayout: FC<Props> = (props: Props) => {
         </PageHeader>
       <Content style={{ padding: '0 50px' }}>
         <Layout className="" style={{ padding: '24px 0' }}>
-          <Sider
-            style={{ background: '#fff' }}
-            className="gray-2"
-            trigger={null}
-            collapsible
-            collapsed={collapsed}
-            collapsedWidth={0}
-            width={200}
-          >
-            {props.left}
-          </Sider>
+          <CommonSider collapsed={collapsed}> {props.left} </CommonSider>
           <Content style={{ padding: '0 24px', minHeight: 280 }}>{props.children}</Content>
         </Layout>
       </Content>
