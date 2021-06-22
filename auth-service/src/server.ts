@@ -8,7 +8,7 @@ const fastify: FastifyInstance = createService(config);
 const log = config.log();
 
 // Important - a service should not have a fixed port but should randomly choose one
-fastify.listen(process.env.PORT || 0, '::', () => {
+fastify.listen(config.port || 0, '::', () => {
   const address: any = fastify.server.address();
   const port: number = address.port;
 

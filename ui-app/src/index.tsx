@@ -3,10 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { ConfigProvider } from 'antd';
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ConfigProvider direction="ltr">
+      <App />
+    </ConfigProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
