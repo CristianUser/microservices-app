@@ -1,18 +1,13 @@
-import Fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import configs from './config/index';
-import routes from './routes';
+import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import { getConfig } from './config/index';
+import registerRoutes from './routes';
 
-function registerRoutes(fastify: FastifyInstance) {
-  routes(fastify, configs['development']);
-}
+const config = getConfig();
 
 async function build () {
   const fastify = Fastify({ logger: { prettyPrint: true } });
 
-  await fastify.register(require('fastify-express'));
-
-  registerRoutes(fastify);
-
+  registerRoutes(fastify, config);
   fastify.setErrorHandler((errors: any, request: FastifyRequest, reply: FastifyReply) => {
     const { stack, ...error } = errors;
     reply.status(error.status || 500);
@@ -29,5 +24,5 @@ async function build () {
 }
 
 build()
-  .then(fastify => fastify.listen(process.env.PORT || 3001, '::'))
+  .then(fastify => fastify.listen(config.port || 3001, '::'))
   .catch(console.log)
