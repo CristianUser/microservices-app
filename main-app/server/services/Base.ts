@@ -20,15 +20,15 @@ export class BaseService {
     this.serviceName = serviceName
   }
 
-  buildUrl(service: IServiceInstance, path: string = '/'): string {
+  protected buildUrl(service: IServiceInstance, path: string = '/'): string {
     return `http://${service.ip}:${service.port}${path}`
   }
 
-  async callService(requestOptions: AxiosRequestConfig) {
+  protected async callService(requestOptions: AxiosRequestConfig) {
     return circuitBreaker.callService(requestOptions);
   }
 
-  async getService(serviceName: string): Promise<IServiceInstance> {
+  protected async getService(serviceName: string): Promise<IServiceInstance> {
     const response = await axios.get(`${this.serviceRegistryUrl}/find/${serviceName}/${this.serviceVersionIdentifier}`);
     return response.data;
   }

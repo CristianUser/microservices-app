@@ -61,6 +61,22 @@ services:
     ports:
       - 50270:50270
 
+  file-service:
+    build:
+      context: ./file-service
+      args:
+        SERVICE_PORT: 50290
+    depends_on:
+      - service-registry
+    restart: always
+    environment:
+      REGISTRY_URL: http://service-registry:50250
+    volumes:
+      - ./file-service:/usr/src/app
+      - ./.docker/file-service/data/:/usr/src/app/files
+    ports:
+      - 50290:50290
+
   item-service:
     build:
       context: ./item-service
@@ -68,7 +84,7 @@ services:
         SERVICE_PORT: 50280
     depends_on:
       - service-registry
-      - mongodb
+      - postgres
     restart: always
     environment:
       REGISTRY_URL: http://service-registry:50250
