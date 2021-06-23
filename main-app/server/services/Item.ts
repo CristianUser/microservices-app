@@ -14,6 +14,39 @@ export class ItemService extends BaseService {
       data
     });
   }
+
+  async getItem(id: string) {
+    const service = await this.getService(this.serviceName);
+    return this.callService({
+      method: 'get',
+      url: this.buildUrl(service, `/${id}`)
+    });
+  }
+
+  async getItems() {
+    const service = await this.getService(this.serviceName);
+    return this.callService({
+      method: 'get',
+      url: this.buildUrl(service)
+    });
+  }
+
+  async updateItem(id: string, data: any) {
+    const service = await this.getService(this.serviceName);
+    return this.callService({
+      method: 'put',
+      url: this.buildUrl(service, `/${id}`),
+      data
+    });
+  }
+
+  async deleteItem(id: string) {
+    const service = await this.getService(this.serviceName);
+    return this.callService({
+      method: 'delete',
+      url: this.buildUrl(service, `/${id}`)
+    });
+  }
 }
 
 export default ItemService;
