@@ -1,15 +1,9 @@
-import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import Fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import configs from './config/index';
-import Speakers from './services/Speakers';
 import routes from './routes';
 
-
-function registerMiddleware(app: any) {
-  const speakers = new Speakers(configs['development']);
-
-  app.use('/', routes({
-    speakers,
-  }));
+function registerRoutes(fastify: FastifyInstance) {
+  routes(fastify, configs['development']);
 }
 
 async function build () {
@@ -17,14 +11,18 @@ async function build () {
 
   await fastify.register(require('fastify-express'));
 
-  registerMiddleware(fastify);
+  registerRoutes(fastify);
 
-  fastify.setErrorHandler(({ stack, ...error }: any, request: FastifyRequest, reply: FastifyReply) => {
+  fastify.setErrorHandler((errors: any, request: FastifyRequest, reply: FastifyReply) => {
+    const { stack, ...error } = errors;
     reply.status(error.status || 500);
     // Log out the error to the console
     console.error(stack);
     return reply.send({
-      error
+      error: {
+        message: errors.message,
+        ...error
+      }
     });
   });
   return fastify;

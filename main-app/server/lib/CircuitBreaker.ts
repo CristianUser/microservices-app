@@ -1,10 +1,18 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
+
+export class ServiceCallError extends Error {
+  public response: any;
+  constructor(err: any) {
+    super("ServiceCallError");
+    this.response = err.response.data;
+  }
+}
 
 export class CircuitBreaker {
-  states: any;
-  failureThreshold: number;
-  cooldownPeriod: number;
-  requestTimeout: number;
+  private states: any;
+  private failureThreshold: number;
+  private cooldownPeriod: number;
+  private requestTimeout: number;
   constructor() {
     this.states = {};
     this.failureThreshold = 5;
@@ -12,10 +20,12 @@ export class CircuitBreaker {
     this.requestTimeout = 1;
   }
 
-  async callService(requestOptions: any) {
+  public async callService(requestOptions: AxiosRequestConfig) {
     const endpoint = `${requestOptions.method}:${requestOptions.url}`;
 
-    if (!this.canRequest(endpoint)) return false;
+    if (!this.canRequest(endpoint)) {
+      throw new Error("CircuitBreaker: OPEN - Cannot request")
+    };
 
     // eslint-disable-next-line no-param-reassign
     requestOptions.timeout = this.requestTimeout * 1000;
@@ -26,15 +36,15 @@ export class CircuitBreaker {
       return response.data;
     } catch (err) {
       this.onFailure(endpoint);
-      return false;
+      throw new ServiceCallError(err)
     }
   }
 
-  onSuccess(endpoint: string) {
+  private onSuccess(endpoint: string) {
     this.initState(endpoint);
   }
 
-  onFailure(endpoint: string) {
+  private onFailure(endpoint: string) {
     const state = this.states[endpoint];
     state.failures += 1;
     if (state.failures > this.failureThreshold) {
@@ -44,7 +54,7 @@ export class CircuitBreaker {
     }
   }
 
-  canRequest(endpoint: string) {
+  private canRequest(endpoint: string) {
     if (!this.states[endpoint]) this.initState(endpoint);
     const state = this.states[endpoint];
     if (state.circuit === 'CLOSED') return true;
@@ -56,7 +66,7 @@ export class CircuitBreaker {
     return false;
   }
 
-  initState(endpoint: string) {
+  private initState(endpoint: string) {
     this.states[endpoint] = {
       failures: 0,
       cooldownPeriod: this.cooldownPeriod,

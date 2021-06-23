@@ -1,12 +1,12 @@
+const { REGISTRY_URL = 'http://localhost:3000' } = process.env
+
 export default {
   development: {
-    sitename: 'Main App [Development]',
-    serviceRegistryUrl: process.env.REGISTRY_URL || 'http://localhost:3000',
+    serviceRegistryUrl: REGISTRY_URL,
     serviceVersionIdentifier: '1.x.x',
   },
   production: {
-    sitename: 'Roux Meetups',
-    serviceRegistryUrl: process.env.REGISTRY_URL || 'http://localhost:3000',
+    serviceRegistryUrl: REGISTRY_URL,
     serviceVersionIdentifier: '1.x.x',
   },
 };
