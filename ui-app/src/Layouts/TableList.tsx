@@ -1,8 +1,9 @@
 import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu, Breadcrumb, Button } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import AdminHeader from '../Components/AdminHeader';
+import ToolHeader from '../Components/ToolHeader';
 
 const { Header, Content, Sider } = Layout;
 type Props = {
@@ -15,19 +16,20 @@ const TableListLayout: FC<Props> = (props: Props) => {
   return (
     <Layout>
       <AdminHeader />
+      <ToolHeader
+        header={{
+          backIcon: collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />,
+          onBack: () => setCollapsed(!collapsed),
+          title: "Title",
+          subTitle: "This is a subtitle",
+          extra: [
+            <Button key="1" type="primary">
+              New
+            </Button>,
+          ]
+        }}
+      />
       <Content style={{ padding: '0 50px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>
-            <Link to="/">Home</Link>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>
-            <Link to="/items-list">Items</Link>
-          </Breadcrumb.Item>
-        </Breadcrumb>
-        {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-          className: 'trigger',
-          onClick: () => setCollapsed(!collapsed)
-        })}
         <Layout className="site-layout-background" style={{ padding: '24px 0' }}>
           <Sider
             className="site-layout-background"

@@ -19,6 +19,7 @@
     "axios": "^0.21.1",
     "express": "^4.17.1",
     "fastify": "^3.14.2",
+    "fastify-cors": "^6.0.1",
     "fastify-express": "^0.3.2",
     "fastify-multipart": "^4.0.6",
     "http-errors": "^1.7.0",

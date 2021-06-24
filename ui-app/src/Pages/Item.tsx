@@ -1,6 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { Button, Card, Checkbox, Col, Form, Image, Input, Row, Select, Space } from 'antd';
+import { useParams } from 'react-router-dom';
 import EditPageLayout from '../Layouts/EditPage';
+import itemClient from '../Services/Item';
+
 
 const SiderContent: FC = (): React.ReactElement => {
   return (<>
@@ -17,7 +20,7 @@ const routes = [
     breadcrumbName: 'Home',
   },
   {
-    path: '/product-list',
+    path: '/items-list',
     breadcrumbName: 'Items',
   },
   {
@@ -35,12 +38,15 @@ const tailLayout = {
   wrapperCol: { offset: 1, span: 16 },
 };
 
+const FormContext = React.createContext({});
 const BasicForm: FC<any> = (props) => {
+  const value = useContext(FormContext);
+
   return (
     <Form
       {...layout}
       name="basic"
-      initialValues={{ maintainStock: true }}
+      initialValues={{ ...value, maintainStock: true }}
       {...props}
     >
       <Row>
@@ -93,36 +99,48 @@ const BasicForm: FC<any> = (props) => {
     </Form>
   )
 }
+
 const ItemPage: FC = () => {
+  let { id }: any = useParams();
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    itemClient.getItem(id).then(data => {
+      setData(data)
+    })
+  }, [])
+
   const onFinish = (values: any) => {
     console.log('Received values of form: ', values);
   };
 
   return (
-    <EditPageLayout left={<SiderContent />} breadcrumbRoutes={routes}>
-      <Space direction="vertical" style={{ width: '100%' }}>
-        <Card style={{ width: '100%' }}>
-          <BasicForm onFinish={onFinish}/>
-        </Card>
-        <Card title="Description" style={{ width: '100%' }}>
-          <Form>
-            <Form.Item name="brand" label="Brand">
-              <Select defaultValue="lucy" style={{ width: 120 }}>
-                <Select.Option value="jack">Jack</Select.Option>
-                <Select.Option value="lucy">Lucy</Select.Option>
-                <Select.Option value="disabled" disabled>
-                  Disabled
-                </Select.Option>
-                <Select.Option value="Yiminghe">yiminghe</Select.Option>
-              </Select>
-            </Form.Item>
-            <Form.Item name="description" label="Description">
-              <Input.TextArea />
-            </Form.Item>
-          </Form>
-        </Card>
-      </Space>
-    </EditPageLayout>
+    <FormContext.Provider value={data}>
+      <EditPageLayout left={<SiderContent />} breadcrumbRoutes={routes}>
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Card style={{ width: '100%' }}>
+            <BasicForm onFinish={onFinish}/>
+          </Card>
+          <Card title="Description" style={{ width: '100%' }}>
+            <Form initialValues={data}>
+              <Form.Item name="brand" label="Brand">
+                <Select defaultValue="lucy" style={{ width: 120 }}>
+                  <Select.Option value="jack">Jack</Select.Option>
+                  <Select.Option value="lucy">Lucy</Select.Option>
+                  <Select.Option value="disabled" disabled>
+                    Disabled
+                  </Select.Option>
+                  <Select.Option value="Yiminghe">yiminghe</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item name="description" label="Description">
+                <Input.TextArea />
+              </Form.Item>
+            </Form>
+          </Card>
+        </Space>
+      </EditPageLayout>
+    </FormContext.Provider>
   );
 }
 

@@ -7,6 +7,8 @@ const config = getConfig();
 async function build () {
   const fastify = Fastify({ logger: { prettyPrint: true } });
 
+  fastify.register(require('fastify-cors'))
+  
   registerRoutes(fastify, config);
   fastify.setErrorHandler((errors: any, request: FastifyRequest, reply: FastifyReply) => {
     const { stack, ...error } = errors;
