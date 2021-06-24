@@ -10,7 +10,7 @@ export default (config: IConfig) => {
   const fileService = new FileService(config, new FsStrategy(config.uploadDir));
   const fastify = Fastify();
 
-  fastify.register(fastifyMultipart);
+  fastify.register(fastifyMultipart);//, { attachFieldsToBody: true });
 
   fastify.get('/health-check', function (request, reply) {
     const { uptime, memoryUsage, cpuUsage } = process;
@@ -27,9 +27,8 @@ export default (config: IConfig) => {
 
   fastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
     const data = await request.file();
-    const result = await fileService.putFile(data, request.body);
 
-    return result;
+    return fileService.putFile(data);
   });
 
   fastify.get('/*', async (request: FastifyRequest, reply: FastifyReply) => {
