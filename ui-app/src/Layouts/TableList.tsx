@@ -1,11 +1,11 @@
 import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Menu, Breadcrumb, Button } from 'antd';
+import { Layout, Button } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import AdminHeader from '../Components/AdminHeader';
 import ToolHeader from '../Components/ToolHeader';
 
-const { Header, Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 type Props = {
   left?: React.ReactNode,
   children?: React.ReactNode
@@ -20,12 +20,13 @@ const TableListLayout: FC<Props> = (props: Props) => {
         header={{
           backIcon: collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />,
           onBack: () => setCollapsed(!collapsed),
-          title: "Title",
-          subTitle: "This is a subtitle",
+          title: "Items",
           extra: [
-            <Button key="1" type="primary">
-              New
-            </Button>,
+            <Link key="1" to="/item/new">
+              <Button type="primary">
+                New
+              </Button>
+            </Link>
           ]
         }}
       />

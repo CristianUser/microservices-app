@@ -15,7 +15,7 @@ type Props = {
 export const ToolHeader: FC<Props> = (props: Props) => {
     return (
         <PageHeader
-            breadcrumb={{ itemRender: route => (<Link to={route.path}>{route.breadcrumbName}</Link>), routes: props.breadcrumbRoutes }}
+            breadcrumb={{ itemRender: route => (<Link key={`link_${route.path}`} to={route.path}>{route.breadcrumbName}</Link>), routes: props.breadcrumbRoutes }}
             ghost={false}
             {...props.header}
         />

@@ -15,7 +15,7 @@ const routes: RouteProps[] = [
   {
     component: Home,
     path: '/',
-    exact: true
+    exact: true,
   },
   {
     component: ItemsList,

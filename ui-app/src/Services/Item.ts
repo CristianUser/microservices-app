@@ -41,6 +41,13 @@ export class ItemClient extends BaseClient {
       url: `/${id}`
     });
   }
+
+  async save(id: string, data: any) {
+    if (id && id !== 'new') {
+      return this.updateItem(id, data);
+    }
+    return this.createItem(data);
+  }
 }
 
 export default new ItemClient({ host: 'http://localhost:5000' });
