@@ -4,3 +4,4 @@
 - Item Group
 - Item Variations
 - Item Price
+- Item Brands

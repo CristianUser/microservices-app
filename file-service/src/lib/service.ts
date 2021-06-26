@@ -10,6 +10,7 @@ export default (config: IConfig) => {
   const fileService = new FileService(config, new FsStrategy(config.uploadDir));
   const fastify = Fastify();
 
+  fastify.register(require('fastify-cors'))
   fastify.register(fastifyMultipart);//, { attachFieldsToBody: true });
 
   fastify.get('/health-check', function (request, reply) {

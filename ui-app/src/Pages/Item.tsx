@@ -1,17 +1,20 @@
+import _ from 'lodash';
 import React, { FC, useContext, useEffect, useState } from 'react';
-import { Button, Card, Checkbox, Col, Form, FormInstance, FormProps, Image, Input, Row, Select, Space } from 'antd';
-import { useParams } from 'react-router-dom';
+import { Button, Card, Checkbox, Col, Form, FormInstance, FormProps, Image, Input, Row, Select, Space, message } from 'antd';
+import { useParams, useHistory } from 'react-router-dom';
 import EditPageLayout from '../Layouts/EditPage';
 import itemClient from '../Services/Item';
-import _ from 'lodash';
+import PreviewAndUpload from '../Components/PreviewAndUpload';
 
+const PageContext = React.createContext({});
 
 const SiderContent: FC = (): React.ReactElement => {
+  const { data, setData }: any = useContext(PageContext);
+
   return (<>
-    <Image
-      width={200}
-      src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-    />
+    <PreviewAndUpload imageUrl={data.imageUrl} uploadOptions={{ path: '/item/' }} onComplete={({ uri }) => {
+      setData({ ...data, imageUrl: `http://localhost:5000/files${uri}` })
+    }} />
   </>)
 };
 
@@ -39,15 +42,14 @@ const tailLayout = {
   wrapperCol: { offset: 1, span: 16 },
 };
 
-const FormContext = React.createContext({});
 const BasicForm: FC<FormProps> = (props) => {
-  const formValue = useContext(FormContext);
+  const { data }: any = useContext(PageContext);
 
   return (
     <Form
       {...layout}
       name="basicForm"
-      initialValues={formValue}
+      initialValues={data}
       {...props}
     >
       <Row>
@@ -97,7 +99,8 @@ const BasicForm: FC<FormProps> = (props) => {
 }
 
 const ItemPage: FC = () => {
-  let { id }: any = useParams();
+  const { id }: any = useParams();
+  const history = useHistory()
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
   const [basicForm] = Form.useForm();
@@ -105,8 +108,10 @@ const ItemPage: FC = () => {
 
 
   useEffect(() => {
-    setLoading(true)
-    itemClient.getItem(id).then(setData).then(() => setLoading(false))
+    if (id !== 'new') {
+      setLoading(true)
+      itemClient.getItem(id).then(setData).finally(() => setLoading(false))
+    }
   }, [])
 
   const onFinish = async (name: any, info: any) => {
@@ -120,21 +125,27 @@ const ItemPage: FC = () => {
       })
     }))
 
-    itemClient.save(id, formValues).then(data => {
-      console.log('returned data', data);
-    })
+    try {
+      const result = await itemClient.save(id, formValues);
+
+      message.success('Item Saved!')
+      history.replace(history.location.pathname.replace('new', result.id))
+    } catch (error) {
+      message.error('Error saving!')
+    }
+
   };
 
   return (
     <Form.Provider onFormFinish={onFinish}>
-      <FormContext.Provider value={data}>
+      <PageContext.Provider value={{ data, setData }}>
         <EditPageLayout left={<SiderContent />} breadcrumbRoutes={routes} onSave={() => basicForm.submit()}>
           <Space direction="vertical" style={{ width: '100%' }}>
             <Card style={{ width: '100%' }} loading={loading}>
               <BasicForm form={basicForm} />
             </Card>
             <Card title="Description" style={{ width: '100%' }} loading={loading}>
-              <Form  form={descriptionForm} name="descriptionForm" initialValues={data}>
+              <Form form={descriptionForm} name="descriptionForm" initialValues={data}>
                 <Form.Item name="brand" label="Brand">
                   <Select style={{ width: 120 }}>
                     <Select.Option value="jack">Jack</Select.Option>
@@ -152,7 +163,7 @@ const ItemPage: FC = () => {
             </Card>
           </Space>
         </EditPageLayout>
-      </FormContext.Provider>
+      </PageContext.Provider>
     </Form.Provider>
   );
 }

@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Item {
-  constructor({ id, name, description, disabled, status, uom, brand, itemGroup }: any = {}) {
+  constructor({ id, name, description, disabled, status, uom, brand, itemGroup, imageUrl }: any = {}) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -11,6 +11,7 @@ export class Item {
     this.uom = uom;
     this.brand = brand;
     this.itemGroup = itemGroup;
+    this.imageUrl = imageUrl;
   }
   @PrimaryGeneratedColumn()
   id: number;
@@ -22,6 +23,12 @@ export class Item {
 
   @Column('text')
   description?: string;
+
+  @Column({
+    type: 'text',
+    default: ''
+  })
+  imageUrl?: string;
 
   @Column({
     type: 'boolean',

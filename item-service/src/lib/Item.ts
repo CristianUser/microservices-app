@@ -1,4 +1,4 @@
-import { FindManyOptions, getRepository, Repository } from 'typeorm';
+import { FindManyOptions, getConnection, getRepository, Repository } from 'typeorm';
 import { IConfig } from '../config';
 import { Item } from '../db/entity/Item';
 
@@ -27,7 +27,14 @@ export class ItemService {
   }
 
   updateItem(id: string, payload: any) {
-    return this.itemRepository.update(id, payload);
+    return getConnection()
+      .createQueryBuilder()
+      .update(Item)
+      .set(payload)
+      .where({ id })
+      .returning('*')
+      .execute()
+      .then((response) => response.raw[0]);
   }
 
   deleteItem(id: string) {

@@ -115,6 +115,8 @@ services:
     depends_on:
       - main-service
     restart: always
+    environment:
+      MAIN_APP_URL: http://localhost:5000
     volumes:
       - ./ui-app:/usr/src/app
       - /usr/src/app/node_modules
