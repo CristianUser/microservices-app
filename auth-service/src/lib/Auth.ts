@@ -4,7 +4,9 @@ import { DatabaseClient } from '../db';
 
 export class AuthService {
   private config: IConfig;
+
   private db: DatabaseClient;
+
   constructor(config: IConfig) {
     this.config = config;
     this.db = new DatabaseClient(config);
@@ -13,15 +15,14 @@ export class AuthService {
   createToken(payload: any): string {
     return jwt.sign(payload, this.config.jwtSecret, {
       expiresIn: '15 minutes'
-    })
+    });
   }
 
   readDigestInfo(digest: string) {
     try {
-      return jwt.verify(digest, this.config.jwtSecret)
-    }
-    catch (err) {
-      return null
+      return jwt.verify(digest, this.config.jwtSecret);
+    } catch (err) {
+      return null;
     }
   }
 
@@ -29,6 +30,8 @@ export class AuthService {
     const decoded: any = this.readDigestInfo(digest);
     const timestamp = Date.now() / 1000;
 
-    return decoded && (decoded.exp > timestamp);
+    return decoded && decoded.exp > timestamp;
   }
 }
+
+export default AuthService;

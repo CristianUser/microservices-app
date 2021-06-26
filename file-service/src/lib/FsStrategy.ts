@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 import { MultipartFile } from 'fastify-multipart';
 import fs, { ReadStream } from 'fs';
 import pathLib from 'path';
@@ -12,14 +13,16 @@ function createDirectory(dir: string): void {
 
 class HTTPError extends Error {
   public status: number;
+
   constructor(message: string, statusCode: number) {
     super(message);
     this.status = statusCode;
   }
 }
 
-export class FsStrategy implements FileStrategy {
+export default class FsStrategy implements FileStrategy {
   private uploadDir: string;
+
   constructor(uploadDir?: string) {
     this.uploadDir = uploadDir || 'files';
   }

@@ -1,10 +1,7 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { FC } from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  RouteProps
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, RouteProps } from 'react-router-dom';
 import './App.scss';
 
 import Home from './Pages/Home';
@@ -15,7 +12,7 @@ const routes: RouteProps[] = [
   {
     component: Home,
     path: '/',
-    exact: true,
+    exact: true
   },
   {
     component: ItemsList,
@@ -27,16 +24,18 @@ const routes: RouteProps[] = [
     path: '/item/:id',
     exact: true
   }
-]
+];
 
-const App: FC = () =>{
+const App: FC = () => {
   return (
     <Router>
-        <Switch>
-          {routes.map((route, i) => <Route {...route} key={i}/>)}
-        </Switch>
+      <Switch>
+        {routes.map((route, i) => (
+          <Route {...route} key={`r_${i}`} />
+        ))}
+      </Switch>
     </Router>
   );
-}
+};
 
 export default App;

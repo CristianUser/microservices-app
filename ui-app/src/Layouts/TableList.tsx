@@ -1,3 +1,5 @@
+/* eslint-disable react/require-default-props */
+/* eslint-disable import/no-extraneous-dependencies */
 import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Button } from 'antd';
@@ -7,12 +9,14 @@ import ToolHeader from '../Components/ToolHeader';
 
 const { Content, Sider } = Layout;
 type Props = {
-  left?: React.ReactNode,
-  children?: React.ReactNode
-}
+  left?: React.ReactNode;
+  children?: React.ReactNode;
+};
 
 const TableListLayout: FC<Props> = (props: Props) => {
+  const { children, left } = props;
   const [collapsed, setCollapsed] = useState(false);
+
   return (
     <Layout>
       <AdminHeader />
@@ -20,12 +24,10 @@ const TableListLayout: FC<Props> = (props: Props) => {
         header={{
           backIcon: collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />,
           onBack: () => setCollapsed(!collapsed),
-          title: "Items",
+          title: 'Items',
           extra: [
             <Link key="1" to="/item/new">
-              <Button type="primary">
-                New
-              </Button>
+              <Button type="primary">New</Button>
             </Link>
           ]
         }}
@@ -40,9 +42,9 @@ const TableListLayout: FC<Props> = (props: Props) => {
             collapsedWidth={0}
             width={200}
           >
-            {props.left}
+            {left}
           </Sider>
-          <Content style={{ padding: '0 24px', minHeight: 280 }}>{props.children}</Content>
+          <Content style={{ padding: '0 24px', minHeight: 280 }}>{children}</Content>
         </Layout>
       </Content>
     </Layout>

@@ -2,14 +2,12 @@ import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
 import { IConfig } from '../config';
 import { AuthService } from './Auth';
 
-
-
 export default (config: IConfig) => {
   const log = config.log();
   const authService = new AuthService(config);
   const fastify = Fastify();
 
-  fastify.get('/health-check', function (request, reply) {
+  fastify.get('/health-check', (request, reply) => {
     const { uptime, memoryUsage, cpuUsage } = process;
     const status = {
       cpuUsage: cpuUsage(),
@@ -20,7 +18,7 @@ export default (config: IConfig) => {
     };
 
     reply.send(status);
-  })
+  });
 
   fastify.post('/authenticate', async (request: FastifyRequest, reply: FastifyReply) => {
     const token = authService.createToken(request.body);
@@ -29,10 +27,10 @@ export default (config: IConfig) => {
   });
 
   fastify.post('/verify', async (request: FastifyRequest, reply: FastifyReply) => {
-    const { token }: any = request.body; 
+    const { token }: any = request.body;
     const digest = authService.validate(token);
 
-    reply.send({digest});
+    reply.send({ digest });
   });
 
   fastify.setErrorHandler((error: any, request: FastifyRequest, reply: FastifyReply) => {

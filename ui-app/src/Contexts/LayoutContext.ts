@@ -1,3 +1,5 @@
-import React, { createContext } from "react";
+import { createContext } from 'react';
 
-export const LayoutContext = createContext({});
+const LayoutContext = createContext({});
+
+export default LayoutContext;

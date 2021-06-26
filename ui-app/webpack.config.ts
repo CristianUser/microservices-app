@@ -1,6 +1,6 @@
 export default {
-    devServer: {
-        historyApiFallback: true,
-        contentBase: './'
-    }
-}
+  devServer: {
+    historyApiFallback: true,
+    contentBase: './'
+  }
+};

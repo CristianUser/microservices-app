@@ -53,4 +53,4 @@ function startServer() {
   });
 }
 
-startServer()
+startServer();

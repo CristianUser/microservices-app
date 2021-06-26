@@ -1,13 +1,18 @@
-import { FindManyOptions, getConnection, getRepository, Repository } from 'typeorm';
+import { Connection, FindManyOptions, getConnection, getRepository, Repository } from 'typeorm';
 import { IConfig } from '../config';
-import { Item } from '../db/entity/Item';
+import Item from '../db/entity/Item';
 
 export class ItemService {
   private config: IConfig;
+
   private itemRepository: Repository<Item>;
+
+  private connection: Connection;
+
   constructor(config: IConfig) {
     this.config = config;
     this.itemRepository = getRepository(Item);
+    this.connection = getConnection();
   }
 
   async createItem(payload: any) {
@@ -27,7 +32,7 @@ export class ItemService {
   }
 
   updateItem(id: string, payload: any) {
-    return getConnection()
+    return this.connection
       .createQueryBuilder()
       .update(Item)
       .set(payload)

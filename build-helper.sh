@@ -23,6 +23,15 @@ function install_dependencies() {
     done
 }
 
+function run_linter() {
+    for i in  ./*/package.json;
+    do
+      SERVICE_DIRECTORY="$(dirname "${i}")"
+      printf "Linting Files on %s\n" "$SERVICE_DIRECTORY" ;
+      (cd $SERVICE_DIRECTORY && npm run lint:fix);
+    done
+}
+
 selected_command=""
 while getopts "a:b:c:" opt
 do
@@ -43,6 +52,10 @@ fi
 
 if [ "${selected_command}" == "install" ]; then
     install_dependencies
+fi
+
+if [ "${selected_command}" == "lint" ]; then
+    run_linter
 fi
 
 # Begin script in case all parameters are correct

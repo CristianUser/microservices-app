@@ -13,7 +13,7 @@ function startServer() {
   // Important - a service should not have a fixed port but should randomly choose one
   fastify.listen(config.port || 0, '::', () => {
     const address: any = fastify.server.address();
-    const port: number = address.port;
+    const { port } = address;
 
     const registerService = () =>
       axios.put(`${config.registryUrl}/register`, {

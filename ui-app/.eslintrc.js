@@ -7,6 +7,7 @@ module.exports = {
   plugins: ["@typescript-eslint"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
+    tsconfigRootDir: __dirname,
     project: ["./tsconfig.json"], //required for "type-aware linting"
   },
   rules: {
@@ -18,11 +19,5 @@ module.exports = {
       },
     ],
   },
-  settings: {
-    "import/resolver": {
-      webpack: {
-        config: "webpack.config.js",
-      },
-    },
-  },
+  settings: {},
 };
