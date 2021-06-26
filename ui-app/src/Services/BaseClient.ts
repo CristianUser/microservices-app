@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import axios, { AxiosRequestConfig } from 'axios';
 
 export class BaseClient {
@@ -12,6 +13,7 @@ export class BaseClient {
 
       return response.data;
     } catch (err) {
+      message.error('Request Failed')
       throw err;
     }
   }
