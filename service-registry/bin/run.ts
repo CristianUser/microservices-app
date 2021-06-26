@@ -9,9 +9,7 @@ const fastify = service(config);
 
 fastify.listen(config.port || 3000, '::', () => {
   const address: any = fastify.server.address();
-  const port: number = address.port;
+  const { port } = address;
 
-  log.info(
-    `Hi there! I'm listening on port ${port} in ${config.env} mode.`,
-  );
+  log.info(`Hi there! I'm listening on port ${port} in ${config.env} mode.`);
 });

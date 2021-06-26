@@ -1,9 +1,11 @@
+import { message } from 'antd';
 import axios, { AxiosRequestConfig } from 'axios';
 
 export class BaseClient {
   baseUrl: string;
+
   constructor({ baseUrl }: any) {
-    this.baseUrl = baseUrl
+    this.baseUrl = baseUrl;
   }
 
   async callService(requestOptions: AxiosRequestConfig) {
@@ -12,6 +14,7 @@ export class BaseClient {
 
       return response.data;
     } catch (err) {
+      message.error('Request Failed');
       throw err;
     }
   }

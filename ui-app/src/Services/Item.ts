@@ -2,7 +2,7 @@ import { BaseClient } from './BaseClient';
 
 export class ItemClient extends BaseClient {
   constructor({ host }: any) {
-    super({ baseUrl: `${host}/item` })
+    super({ baseUrl: `${host}/item` });
   }
 
   async createItem(data: any) {

@@ -4,8 +4,8 @@ import { ServiceRegistry } from './lib/ServiceRegistry';
 
 function getRequestIp(request: FastifyRequest): string | undefined {
   return request.socket.remoteAddress?.includes('::')
-  ? `[${request.socket.remoteAddress}]`
-  : request.socket.remoteAddress;
+    ? `[${request.socket.remoteAddress}]`
+    : request.socket.remoteAddress;
 }
 
 export default (config: IConfig) => {
@@ -13,16 +13,16 @@ export default (config: IConfig) => {
   const serviceRegistry = new ServiceRegistry(config);
   const fastify = Fastify({ logger: { prettyPrint: true } });
 
-  fastify.get('/health-check', function (request, reply) {
-    reply.send({ status: 'ok' })
-  })
+  fastify.get('/health-check', (request, reply) => {
+    reply.send({ status: 'ok' });
+  });
 
   fastify.route({
     method: 'PUT',
     url: '/register',
     handler: (request: FastifyRequest, reply: FastifyReply) => {
       const { serviceName, serviceVersion, servicePort }: any = request.body;
-      const serviceIp = getRequestIp(request)
+      const serviceIp = getRequestIp(request);
       const serviceKey = serviceRegistry.register(
         serviceName,
         serviceVersion,

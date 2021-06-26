@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Button, Table } from 'antd';
-import TableListLayout from '../Layouts/TableList';
+import { Table } from 'antd';
 import { Link } from 'react-router-dom';
-import itemClient from '../Services/Item';
 import { ColumnsType } from 'antd/lib/table';
+import TableListLayout from '../Layouts/TableList';
+import itemClient from '../Services/Item';
 
 const columns: ColumnsType<any> = [
   {
@@ -13,12 +13,12 @@ const columns: ColumnsType<any> = [
   },
   {
     title: 'Status',
-    dataIndex: 'status',
+    dataIndex: 'status'
   },
   {
     title: 'ID',
-    dataIndex: 'id',
-  },
+    dataIndex: 'id'
+  }
 ];
 
 const rowSelection = {
@@ -27,24 +27,24 @@ const rowSelection = {
   },
   getCheckboxProps: (record: any) => ({
     disabled: record.disabled, // Column configuration not to be checked
-    name: record.name,
-  }),
+    name: record.name
+  })
 };
 
 const ItemListPage: FC = () => {
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    itemClient.getItems().then(data => {
-      setRows(data.rows)
-    })
-  }, [])
+    itemClient.getItems().then((data) => {
+      setRows(data.rows);
+    });
+  }, []);
   return (
     <TableListLayout>
       <Table
         rowSelection={{
           type: 'checkbox',
-          ...rowSelection,
+          ...rowSelection
         }}
         rowKey="id"
         columns={columns}
@@ -52,6 +52,6 @@ const ItemListPage: FC = () => {
       />
     </TableListLayout>
   );
-}
+};
 
 export default ItemListPage;

@@ -3,7 +3,7 @@ import { BaseService } from './Base';
 
 export class ItemService extends BaseService {
   constructor({ serviceRegistryUrl, serviceVersionIdentifier }: IConfig) {
-    super({ serviceRegistryUrl, serviceVersionIdentifier, serviceName: 'item-service' })
+    super({ serviceRegistryUrl, serviceVersionIdentifier, serviceName: 'item-service' });
   }
 
   async createItem(data: any) {

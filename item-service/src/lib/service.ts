@@ -7,7 +7,7 @@ export default (config: IConfig) => {
   const itemService = new ItemService(config);
   const fastify = Fastify();
 
-  fastify.get('/health-check', function (request, reply) {
+  fastify.get('/health-check', (request, reply) => {
     const { uptime, memoryUsage, cpuUsage } = process;
     const status = {
       cpuUsage: cpuUsage(),
@@ -18,7 +18,7 @@ export default (config: IConfig) => {
     };
 
     reply.send(status);
-  })
+  });
 
   fastify.get('/:id', async (request: FastifyRequest) => {
     const { id }: any = request.params;
@@ -33,20 +33,20 @@ export default (config: IConfig) => {
     return result;
   });
 
-  fastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
+  fastify.post('/', async (request: FastifyRequest) => {
     const result = await itemService.createItem(request.body);
 
     return result;
   });
 
-  fastify.put('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
+  fastify.put('/:id', async (request: FastifyRequest) => {
     const { id }: any = request.params;
     const result = await itemService.updateItem(id, request.body);
 
     return result;
   });
 
-  fastify.delete('/:id', async (request: FastifyRequest, reply: FastifyReply) => {
+  fastify.delete('/:id', async (request: FastifyRequest) => {
     const { id }: any = request.params;
     const result = await itemService.deleteItem(id);
 

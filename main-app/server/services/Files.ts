@@ -3,7 +3,7 @@ import { BaseService } from './Base';
 
 export class FilesService extends BaseService {
   constructor({ serviceRegistryUrl, serviceVersionIdentifier }: IConfig) {
-    super({ serviceRegistryUrl, serviceVersionIdentifier, serviceName: 'file-service' })
+    super({ serviceRegistryUrl, serviceVersionIdentifier, serviceName: 'file-service' });
   }
 
   async postFile(data: any) {

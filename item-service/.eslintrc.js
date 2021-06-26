@@ -1,7 +1,7 @@
-export default {
+module.exports = {
   extends: [
     "airbnb-typescript/base",
-    "prettier/@typescript-eslint",
+    "prettier",
     "plugin:prettier/recommended"
   ],
   plugins: ["@typescript-eslint"],

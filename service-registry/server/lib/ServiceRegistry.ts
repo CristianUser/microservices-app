@@ -1,4 +1,4 @@
-import { IConfig } from "../../config";
+import { IConfig } from '../../config';
 
 const semver = require('semver');
 
@@ -11,11 +11,13 @@ export interface IServiceInstance {
 }
 
 export class ServiceRegistry {
-  private services: {
-    [key: string]: IServiceInstance
-  } = {};
   private log;
+
   private timeout: number;
+
+  private services: {
+    [key: string]: IServiceInstance;
+  } = {};
 
   constructor(config: IConfig) {
     this.log = config.log();
@@ -24,7 +26,13 @@ export class ServiceRegistry {
 
   // TODO: refactor this to receive an service instance instead of a lot of params
   // also a service instance class can be created with their methods
-  private _getServiceKey(name: string, version: string, ip: string | undefined, port: string): string {
+  // eslint-disable-next-line class-methods-use-this
+  private getServiceKey(
+    name: string,
+    version: string,
+    ip: string | undefined,
+    port: string
+  ): string {
     return `${ip}:${port}/${name}@${version}`;
   }
 
@@ -39,7 +47,7 @@ export class ServiceRegistry {
 
   register(name: string, version: string, ip: string | undefined, port: string): string {
     this.cleanup();
-    const key = this._getServiceKey(name, version, ip, port);
+    const key = this.getServiceKey(name, version, ip, port);
     const timestamp = Math.floor(Date.now() / 1000);
 
     if (!this.services[key]) {
@@ -60,7 +68,7 @@ export class ServiceRegistry {
   }
 
   unregister(name: string, version: string, ip: string | undefined, port: string): string {
-    const key = this._getServiceKey(name, version, ip, port);
+    const key = this.getServiceKey(name, version, ip, port);
 
     delete this.services[key];
     this.log.debug(`Unregistered services ${name}, version ${version} at ${ip}:${port}`);

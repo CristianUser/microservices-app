@@ -14,14 +14,14 @@ const RoleSchema = new Schema<RoleDocument, RoleModel>({
 });
 
 export interface Statement {
-  effect: 'allow' | 'block' | 'ask'
+  effect: 'allow' | 'block' | 'ask';
   action: string;
   resource: string;
 }
 
 export interface Role {
   name: string;
-  statements: Statement[]
+  statements: Statement[];
 }
 
 /**

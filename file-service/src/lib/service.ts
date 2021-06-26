@@ -1,19 +1,19 @@
 import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import fastifyMultipart from 'fastify-multipart';
+import fastifyCors from 'fastify-cors';
 import { IConfig } from '../config';
 import { FileService } from './File';
-import { FsStrategy } from './FsStrategy';
-import fastifyMultipart from 'fastify-multipart';
-
+import FsStrategy from './FsStrategy';
 
 export default (config: IConfig) => {
   const log = config.log();
   const fileService = new FileService(config, new FsStrategy(config.uploadDir));
   const fastify = Fastify();
 
-  fastify.register(require('fastify-cors'))
-  fastify.register(fastifyMultipart);//, { attachFieldsToBody: true });
+  fastify.register(fastifyCors);
+  fastify.register(fastifyMultipart); // , { attachFieldsToBody: true });
 
-  fastify.get('/health-check', function (request, reply) {
+  fastify.get('/health-check', (request, reply) => {
     const { uptime, memoryUsage, cpuUsage } = process;
     const status = {
       cpuUsage: cpuUsage(),
@@ -24,9 +24,9 @@ export default (config: IConfig) => {
     };
 
     reply.send(status);
-  })
+  });
 
-  fastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
+  fastify.post('/', async (request: FastifyRequest) => {
     const data = await request.file();
 
     return fileService.putFile(data);
@@ -35,13 +35,13 @@ export default (config: IConfig) => {
   fastify.get('/*', async (request: FastifyRequest, reply: FastifyReply) => {
     const { '*': path }: any = request.params;
 
-    fileService.getFile(path).pipe(reply.raw)
+    fileService.getFile(path).pipe(reply.raw);
   });
 
   fastify.delete('/*', async (request: FastifyRequest) => {
     const { '*': path }: any = request.params;
 
-    return fileService.deleteFile(path)
+    return fileService.deleteFile(path);
   });
 
   fastify.setErrorHandler((error: any, request: FastifyRequest, reply: FastifyReply) => {

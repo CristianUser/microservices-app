@@ -15,7 +15,9 @@ function getValue(data: any, prop: string): any {
 
 export class FileService {
   private config: IConfig;
+
   private strategy: FileStrategy;
+
   constructor(config: IConfig, strategy: FileStrategy) {
     this.config = config;
     this.strategy = strategy;

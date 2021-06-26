@@ -1,12 +1,13 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { FC } from 'react';
-import { Layout, Menu } from 'antd';
-import { Link } from 'react-router-dom';
+import { Layout } from 'antd';
 import { SiderProps } from 'antd/lib/layout';
+
 const { Sider } = Layout;
 
-const CommonSider: FC<SiderProps>= (props: SiderProps) =>{
-    return (
-      <Sider
+const CommonSider: FC<SiderProps> = (props: SiderProps) => {
+  return (
+    <Sider
       style={{ background: '#fff' }}
       className="gray-2"
       trigger={null}
@@ -15,7 +16,7 @@ const CommonSider: FC<SiderProps>= (props: SiderProps) =>{
       width={200}
       {...props}
     />
-    );
-  }
-  
-  export default CommonSider;
+  );
+};
+
+export default CommonSider;

@@ -18,11 +18,7 @@ const { name: packageName, version } = packageJson;
 // Set up a logger
 const getLogger = (serviceName: string, serviceVersion: string, level: any) =>
   createLogger({ name: `${serviceName}:${serviceVersion}`, level });
-const {
-  NODE_ENV = 'development',
-  REGISTRY_URL = 'http://localhost:3000',
-  PORT = 0,
-} = process.env;
+const { NODE_ENV = 'development', REGISTRY_URL = 'http://localhost:3000', PORT = 0 } = process.env;
 
 const common = {
   env: NODE_ENV,

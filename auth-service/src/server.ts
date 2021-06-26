@@ -10,7 +10,7 @@ const log = config.log();
 // Important - a service should not have a fixed port but should randomly choose one
 fastify.listen(config.port || 0, '::', () => {
   const address: any = fastify.server.address();
-  const port: number = address.port;
+  const { port } = address;
 
   const registerService = () =>
     axios.put(`${config.registryUrl}/register`, {
@@ -19,9 +19,7 @@ fastify.listen(config.port || 0, '::', () => {
       servicePort: port
     });
   const unregisterService = () =>
-    axios.delete(
-      `${config.registryUrl}/register/${config.name}/${config.version}/${port}`
-    );
+    axios.delete(`${config.registryUrl}/register/${config.name}/${config.version}/${port}`);
 
   registerService();
 

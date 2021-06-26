@@ -4,16 +4,20 @@ import PublicHeader from '../Components/PublicHeader';
 
 const { Footer, Content } = Layout;
 
-const HomeLayout: FC = (props) =>{
-    return (
+type Props = {
+  children: any;
+};
+
+const HomeLayout: FC<Props> = (props: Props) => {
+  const { children } = props;
+
+  return (
     <Layout>
-        <PublicHeader />
-        <Content>
-            {props.children}
-        </Content>
-        <Footer style={{ textAlign: 'center' }}>ERP App ©2021 Created by Some Devs</Footer>
-      </Layout>
-    );
-  }
-  
-  export default HomeLayout;
+      <PublicHeader />
+      <Content>{children}</Content>
+      <Footer style={{ textAlign: 'center' }}>ERP App ©2021 Created by Some Devs</Footer>
+    </Layout>
+  );
+};
+
+export default HomeLayout;
