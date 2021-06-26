@@ -1,12 +1,12 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Item Service
+name: Service Registry
 
 on:
   push:
     paths:
-      - 'item-service/**'
+      - 'main-app/**'
 
 jobs:
   lint:
@@ -18,12 +18,12 @@ jobs:
         with:
           node-version: 14.x
       - name: Install
-        working-directory: ./item-service
+        working-directory: ./main-app
         env:
           CI: true
         run: npm install
       - name: Lint JS
-        working-directory: ./item-service
+        working-directory: ./main-app
         env:
           CI: true
         run: npm run lint

@@ -1,6 +1,6 @@
 {
   "watch": ["./"],
   "ext": "ts,json",
-  "ignore": ["./**/*.spec.ts"],
+  "ignore": ["node_modules", "./**/*.spec.ts"],
   "exec": "ts-node bin/run | bunyan"
 }
