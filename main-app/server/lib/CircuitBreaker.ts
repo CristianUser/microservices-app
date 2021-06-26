@@ -1,18 +1,24 @@
+/* eslint-disable max-classes-per-file */
 import axios, { AxiosRequestConfig } from 'axios';
 
 export class ServiceCallError extends Error {
   public response: any;
+
   constructor(err: any) {
-    super("ServiceCallError");
+    super('ServiceCallError');
     this.response = err.response.data;
   }
 }
 
 export class CircuitBreaker {
   private states: any;
+
   private failureThreshold: number;
+
   private cooldownPeriod: number;
+
   private requestTimeout: number;
+
   constructor() {
     this.states = {};
     this.failureThreshold = 5;
@@ -24,8 +30,8 @@ export class CircuitBreaker {
     const endpoint = `${requestOptions.method}:${requestOptions.url}`;
 
     if (!this.canRequest(endpoint)) {
-      throw new Error("CircuitBreaker: OPEN - Cannot request")
-    };
+      throw new Error('CircuitBreaker: OPEN - Cannot request');
+    }
 
     // eslint-disable-next-line no-param-reassign
     requestOptions.timeout = this.requestTimeout * 1000;
@@ -36,7 +42,7 @@ export class CircuitBreaker {
       return response.data;
     } catch (err) {
       this.onFailure(endpoint);
-      throw new ServiceCallError(err)
+      throw new ServiceCallError(err);
     }
   }
 

@@ -1,14 +1,15 @@
 import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import fastifyCors from 'fastify-cors';
 import { getConfig } from './config/index';
 import registerRoutes from './routes';
 
 const config = getConfig();
 
-async function build () {
+async function build() {
   const fastify = Fastify({ logger: { prettyPrint: true } });
 
-  fastify.register(require('fastify-cors'))
-  
+  fastify.register(fastifyCors);
+
   registerRoutes(fastify, config);
   fastify.setErrorHandler((errors: any, request: FastifyRequest, reply: FastifyReply) => {
     const { stack, ...error } = errors;
@@ -26,5 +27,5 @@ async function build () {
 }
 
 build()
-  .then(fastify => fastify.listen(config.port || 3001, '::'))
-  .catch(console.log)
+  .then((fastify) => fastify.listen(config.port || 3001, '::'))
+  .catch(console.log);
