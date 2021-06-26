@@ -1,82 +1,57 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Button, Table } from 'antd';
 import TableListLayout from '../Layouts/TableList';
 import { Link } from 'react-router-dom';
+import itemClient from '../Services/Item';
+import { ColumnsType } from 'antd/lib/table';
 
-const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      render: (text: string) => <Link to="/item/id">{text}</Link>,
-    },
-    {
-      title: 'Status',
-      dataIndex: 'age',
-    },
-    {
-      title: 'ID',
-      dataIndex: 'address',
-    },
-  ];
-  
-  interface DataType {
-    key: React.Key;
-    name: string;
-    age: number;
-    address: string;
-  }
-  
-  const data: DataType[] = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-    },
-    {
-      key: '4',
-      name: 'Disabled User',
-      age: 99,
-      address: 'Sidney No. 1 Lake Park',
-    },
-  ];
+const columns: ColumnsType<any> = [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    render: (text: string, data: any) => <Link to={`/item/${data.id}`}>{text}</Link>
+  },
+  {
+    title: 'Status',
+    dataIndex: 'status',
+  },
+  {
+    title: 'ID',
+    dataIndex: 'id',
+  },
+];
 
-  // rowSelection object indicates the need for row selection
 const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    },
-    getCheckboxProps: (record: DataType) => ({
-      disabled: record.name === 'Disabled User', // Column configuration not to be checked
-      name: record.name,
-    }),
-  };
-  
-const ItemListPage: FC = () =>{
-    return (
-      <TableListLayout>
-        <Table
-            rowSelection={{
-            type: 'checkbox',
-            ...rowSelection,
-            }}
-            columns={columns}
-            dataSource={data}
-        />
-      </TableListLayout>
-    );
-  }
-  
-  export default ItemListPage;
+  onChange: (selectedRowKeys: React.Key[], selectedRows: any[]) => {
+    console.log('selectedRows: ', selectedRows);
+  },
+  getCheckboxProps: (record: any) => ({
+    disabled: record.disabled, // Column configuration not to be checked
+    name: record.name,
+  }),
+};
+
+const ItemListPage: FC = () => {
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    itemClient.getItems().then(data => {
+      setRows(data.rows)
+    })
+  }, [])
+  return (
+    <TableListLayout>
+      <Table
+        rowSelection={{
+          type: 'checkbox',
+          ...rowSelection,
+        }}
+        rowKey="id"
+        columns={columns}
+        dataSource={rows}
+      />
+    </TableListLayout>
+  );
+}
+
+export default ItemListPage;

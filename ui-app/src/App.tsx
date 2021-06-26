@@ -15,7 +15,7 @@ const routes: RouteProps[] = [
   {
     component: Home,
     path: '/',
-    exact: true
+    exact: true,
   },
   {
     component: ItemsList,
@@ -24,7 +24,7 @@ const routes: RouteProps[] = [
   },
   {
     component: ItemPage,
-    path: '/item/id',
+    path: '/item/:id',
     exact: true
   }
 ]
@@ -33,7 +33,7 @@ const App: FC = () =>{
   return (
     <Router>
         <Switch>
-          {routes.map(route => <Route {...route}/>)}
+          {routes.map((route, i) => <Route {...route} key={i}/>)}
         </Switch>
     </Router>
   );

@@ -2,15 +2,16 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Item {
-  constructor({ id, name, description, barCode, disabled = false, status = 'active', uom, brand }: any = {}) {
+  constructor({ id, name, description, disabled, status, uom, brand, itemGroup, imageUrl }: any = {}) {
     this.id = id;
     this.name = name;
     this.description = description;
-    this.barCode = barCode;
     this.disabled = disabled;
     this.status = status;
     this.uom = uom;
     this.brand = brand;
+    this.itemGroup = itemGroup;
+    this.imageUrl = imageUrl;
   }
   @PrimaryGeneratedColumn()
   id: number;
@@ -23,18 +24,40 @@ export class Item {
   @Column('text')
   description?: string;
 
-  @Column()
-  barCode?: string;
+  @Column({
+    type: 'text',
+    default: ''
+  })
+  imageUrl?: string;
 
-  @Column()
+  @Column({
+    type: 'boolean',
+    default: false
+  })
   disabled: boolean;
 
-  @Column('text')
+  @Column({
+    type: 'enum',
+    enum: ['active', 'draft', 'archived'],
+    default: 'draft'
+  })
   status: string;
 
-  @Column('text')
+  @Column({
+    type: 'text',
+    default: 'Unit'
+  })
   uom?: string;
 
-  @Column('text')
+  @Column({
+    type: 'text',
+    default: ''
+  })
   brand?: string;
+
+  @Column({
+    type: 'text',
+    default: ''
+  })
+  itemGroup?: string;
 }
