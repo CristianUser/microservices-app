@@ -10,7 +10,7 @@ export interface IServiceInstance {
   timestamp: number;
   version: string;
 }
-export class BaseService {
+export abstract class BaseService {
   public serviceName: string;
 
   private serviceRegistryUrl: string;
