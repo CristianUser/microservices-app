@@ -1,10 +1,14 @@
 import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
 import { IConfig } from '../config';
-import { ItemService } from './Item';
+import CrudService from './Crud';
+import Item from '../db/entity/Item';
+import ItemGroup from '../db/entity/ItemGroup';
+import { createCrudRoutes } from './utils';
 
 export default (config: IConfig) => {
   const log = config.log();
-  const itemService = new ItemService(config);
+  const itemService = new CrudService<Item>(config, Item);
+  const itemGroupService = new CrudService<ItemGroup>(config, ItemGroup);
   const fastify = Fastify();
 
   fastify.get('/health-check', (request, reply) => {
@@ -20,37 +24,13 @@ export default (config: IConfig) => {
     reply.send(status);
   });
 
-  fastify.get('/:id', async (request: FastifyRequest) => {
-    const { id }: any = request.params;
-    const result = await itemService.getItem(id);
-
-    return result;
+  fastify.register(createCrudRoutes, {
+    prefix: '/group',
+    controller: itemGroupService
   });
 
-  fastify.get('/', async () => {
-    const result = await itemService.getItems();
-
-    return result;
-  });
-
-  fastify.post('/', async (request: FastifyRequest) => {
-    const result = await itemService.createItem(request.body);
-
-    return result;
-  });
-
-  fastify.put('/:id', async (request: FastifyRequest) => {
-    const { id }: any = request.params;
-    const result = await itemService.updateItem(id, request.body);
-
-    return result;
-  });
-
-  fastify.delete('/:id', async (request: FastifyRequest) => {
-    const { id }: any = request.params;
-    const result = await itemService.deleteItem(id);
-
-    return result;
+  fastify.register(createCrudRoutes, {
+    controller: itemService
   });
 
   fastify.setErrorHandler((error: any, request: FastifyRequest, reply: FastifyReply) => {

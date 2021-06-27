@@ -1,0 +1,50 @@
+import { FastifyInstance, FastifyRequest } from 'fastify';
+import CrudService from './Crud';
+
+type Options<T> = {
+  controller: CrudService<T>;
+};
+export function createCrudRoutes<T>(
+  fastify: FastifyInstance,
+  { controller }: Options<T>,
+  done: () => void
+) {
+  fastify.get('/:id', async (request: FastifyRequest) => {
+    const { id }: any = request.params;
+    const result = await controller.getItem(id);
+
+    return result;
+  });
+
+  fastify.get('/', async () => {
+    const result = await controller.getItems();
+
+    return result;
+  });
+
+  fastify.post('/', async (request: FastifyRequest) => {
+    const result = await controller.createItem(request.body);
+
+    return result;
+  });
+
+  fastify.put('/:id', async (request: FastifyRequest) => {
+    const { id }: any = request.params;
+    const result = await controller.updateItem(id, request.body);
+
+    return result;
+  });
+
+  fastify.delete('/:id', async (request: FastifyRequest) => {
+    const { id }: any = request.params;
+    const result = await controller.deleteItem(id);
+
+    return result;
+  });
+
+  done();
+}
+
+export default {
+  createCrudRoutes
+};

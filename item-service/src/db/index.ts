@@ -10,8 +10,9 @@ export class DatabaseClient {
     this.log = config.log();
     try {
       this.client = getConnection();
-      // eslint-disable-next-line no-empty
-    } catch (error) {}
+    } catch (error) {
+      this.log.error(error.message);
+    }
   }
 
   async connect() {

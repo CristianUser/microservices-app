@@ -1,28 +1,15 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import ItemGroup from './ItemGroup';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import Item from './Item';
 
 @Entity()
-export default class Item {
-  constructor({
-    id,
-    name,
-    description,
-    disabled,
-    status,
-    uom,
-    brand,
-    itemGroup,
-    imageUrl
-  }: any = {}) {
+export default class ItemGroup {
+  constructor({ id, name, description, disabled, status, imageUrl }: any = {}) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.disabled = disabled;
     this.status = status;
-    this.uom = uom;
-    this.brand = brand;
-    this.itemGroup = itemGroup;
     this.imageUrl = imageUrl;
   }
 
@@ -56,18 +43,6 @@ export default class Item {
   })
   status: string;
 
-  @Column({
-    type: 'text',
-    default: 'Unit'
-  })
-  uom?: string;
-
-  @Column({
-    type: 'text',
-    default: ''
-  })
-  brand?: string;
-
-  @ManyToOne(() => ItemGroup, (group) => group.items)
-  itemGroup: ItemGroup;
+  @OneToMany(() => Item, (item) => item.itemGroup)
+  items?: Item[];
 }
