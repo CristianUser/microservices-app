@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import axios, { AxiosRequestConfig } from 'axios';
 
-export class BaseClient {
+export abstract class BaseClient {
   baseUrl: string;
 
   constructor({ baseUrl }: any) {

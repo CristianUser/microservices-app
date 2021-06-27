@@ -11,10 +11,12 @@ const { Content, Sider } = Layout;
 type Props = {
   left?: React.ReactNode;
   children?: React.ReactNode;
+  title: string;
+  toNewDoc: string;
 };
 
 const TableListLayout: FC<Props> = (props: Props) => {
-  const { children, left } = props;
+  const { children, left, title, toNewDoc } = props;
   const [collapsed, setCollapsed] = useState(false);
 
   return (
@@ -24,9 +26,9 @@ const TableListLayout: FC<Props> = (props: Props) => {
         header={{
           backIcon: collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />,
           onBack: () => setCollapsed(!collapsed),
-          title: 'Items',
+          title,
           extra: [
-            <Link key="1" to="/item/new">
+            <Link key="1" to={toNewDoc}>
               <Button type="primary">New</Button>
             </Link>
           ]

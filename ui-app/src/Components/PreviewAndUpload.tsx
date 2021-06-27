@@ -19,7 +19,7 @@ export type UploadOptions = {
 };
 
 type Props = {
-  onComplete?: (response: any) => void;
+  onComplete?: (response: any, imageUrl: string) => void;
   imageUrl?: string;
   uploadOptions?: UploadOptions;
 };
@@ -44,7 +44,10 @@ const PreviewAndUpload: FC<Props> = (props: Props) => {
   const handleChange = ({ file, fileList: _fileList }: any) => {
     setFileList(_fileList);
     if (file.response) {
-      props.onComplete?.(file.response);
+      props.onComplete?.(
+        file.response,
+        `${process.env.REACT_APP_API_URL}/files${file.response.uri}`
+      );
     }
   };
 
