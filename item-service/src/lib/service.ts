@@ -7,7 +7,7 @@ import { createCrudRoutes } from './utils';
 
 export default (config: IConfig) => {
   const log = config.log();
-  const itemService = new CrudService<Item>(config, Item);
+  const itemService = new CrudService<Item>(config, Item, ['itemGroup']);
   const itemGroupService = new CrudService<ItemGroup>(config, ItemGroup);
   const fastify = Fastify();
 

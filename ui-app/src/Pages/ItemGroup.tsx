@@ -90,7 +90,7 @@ const ItemGroupPage: FC = () => {
       breadcrumbName: 'Item Groups'
     },
     {
-      path: '/item-group/id',
+      path: `/item-group/${id}`,
       breadcrumbName: data?.name || 'Group'
     }
   ];

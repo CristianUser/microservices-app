@@ -18,9 +18,12 @@ export default class CrudService<Entity extends ObjectLiteral> {
 
   private entityClass: EntityTarget<Entity>;
 
-  constructor(config: IConfig, entityClass: EntityTarget<Entity>) {
+  private relations: string[];
+
+  constructor(config: IConfig, entityClass: EntityTarget<Entity>, relations: string[] = []) {
     this.config = config;
     this.entityClass = entityClass;
+    this.relations = relations;
     this.repository = getRepository(this.entityClass);
     this.connection = getConnection();
   }
@@ -36,11 +39,11 @@ export default class CrudService<Entity extends ObjectLiteral> {
   }
 
   getItem(id: string) {
-    return this.repository.findOne(id);
+    return this.repository.findOne(id, { relations: this.relations });
   }
 
-  async getItems(where?: FindManyOptions<Entity>) {
-    const [rows, count] = await this.repository.findAndCount(where);
+  async getItems(findOptions?: FindManyOptions<Entity>) {
+    const [rows, count] = await this.repository.findAndCount(findOptions);
 
     return { rows, count };
   }

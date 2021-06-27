@@ -16,41 +16,36 @@ import {
 } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
 import EditPageLayout from '../Layouts/EditPage';
-import itemClient from '../Services/Item';
 import PreviewAndUpload from '../Components/PreviewAndUpload';
+import itemClient from '../Services/Item';
+import CrudClient from '../Services/CrudClient';
+import { Item, ItemGroup } from '../Utils/interfaces';
 
-const PageContext = React.createContext({});
+const itemGroupClient = new CrudClient<ItemGroup>({ routePrefix: '/item/group' });
+
+type IPageContext = {
+  data?: Item;
+  setData?: React.Dispatch<any>;
+  groups: ItemGroup[];
+};
+
+const PageContext = React.createContext<IPageContext>({ groups: [] });
 
 const SiderContent: FC = (): React.ReactElement => {
-  const { data, setData }: any = useContext(PageContext);
+  const { data, setData } = useContext(PageContext);
 
   return (
     <>
       <PreviewAndUpload
-        imageUrl={data.imageUrl}
+        imageUrl={data?.imageUrl}
         uploadOptions={{ path: '/item/' }}
         onComplete={({ uri }) => {
-          setData({ ...data, imageUrl: `http://localhost:5000/files${uri}` });
+          setData?.({ ...data, imageUrl: `http://localhost:5000/files${uri}` });
         }}
       />
     </>
   );
 };
-
-const routes = [
-  {
-    path: '/',
-    breadcrumbName: 'Home'
-  },
-  {
-    path: '/items-list',
-    breadcrumbName: 'Items'
-  },
-  {
-    path: '/item/id',
-    breadcrumbName: 'Item Name'
-  }
-];
 
 const layout = {
   labelCol: { span: 5 },
@@ -61,8 +56,18 @@ const tailLayout = {
   wrapperCol: { offset: 1, span: 16 }
 };
 
+const RemapProp: FC<any> = ({ children, value, ...rest }: any) => {
+  const childrenWithProps = React.Children.map(children, (child) => {
+    if (React.isValidElement(child)) {
+      return React.cloneElement(child, { ...children.props, ...rest, value: value?.id || value });
+    }
+    return child;
+  });
+  return childrenWithProps;
+};
+
 const BasicForm: FC<FormProps> = (props) => {
-  const { data }: any = useContext(PageContext);
+  const { data, groups } = useContext(PageContext);
 
   return (
     <Form {...layout} name="basicForm" initialValues={data} {...props}>
@@ -77,7 +82,19 @@ const BasicForm: FC<FormProps> = (props) => {
           </Form.Item>
 
           <Form.Item label="Item Group" name="itemGroup">
-            <Input />
+            <RemapProp>
+              <Select style={{ width: 120 }}>
+                {groups.map((group) => (
+                  <Select.Option
+                    key={group.id || ''}
+                    value={group.id || ''}
+                    disabled={group.disabled}
+                  >
+                    {group.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </RemapProp>
           </Form.Item>
 
           <Form.Item label="Unit of Measure" name="uom">
@@ -106,19 +123,41 @@ const BasicForm: FC<FormProps> = (props) => {
 const ItemPage: FC = () => {
   const { id }: any = useParams();
   const history = useHistory();
-  const [data, setData] = useState({});
+  const [data, setData] = useState<Item>({});
+  const [groups, setGroups] = useState<ItemGroup[]>([]);
   const [loading, setLoading] = useState(false);
   const [basicForm] = Form.useForm();
   const [descriptionForm] = Form.useForm();
 
-  useEffect(() => {
-    if (id !== 'new') {
-      setLoading(true);
-      itemClient
-        .getDoc(id)
-        .then(setData)
-        .finally(() => setLoading(false));
+  const routes = [
+    {
+      path: '/',
+      breadcrumbName: 'Home'
+    },
+    {
+      path: '/items-list',
+      breadcrumbName: 'Items'
+    },
+    {
+      path: `/item/${id}`,
+      breadcrumbName: data?.name || 'Item'
     }
+  ];
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      await itemGroupClient.getDocs().then(({ rows }) => setGroups(rows));
+      if (id !== 'new') {
+        await itemClient.getDoc(id).then(setData);
+      }
+      // eslint-disable-next-line no-empty
+    } catch (error) {}
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   const onFinish = async (name: any, info: any) => {
@@ -138,7 +177,7 @@ const ItemPage: FC = () => {
       const result = await itemClient.save(id, formValues);
 
       message.success('Item Saved!');
-      history.replace(history.location.pathname.replace('new', result.id));
+      history.replace(history.location.pathname.replace('new', result.id || ''));
     } catch (error) {
       message.error('Error saving!');
     }
@@ -146,7 +185,7 @@ const ItemPage: FC = () => {
 
   return (
     <Form.Provider onFormFinish={onFinish}>
-      <PageContext.Provider value={{ data, setData }}>
+      <PageContext.Provider value={{ data, setData, groups }}>
         <EditPageLayout
           left={<SiderContent />}
           breadcrumbRoutes={routes}
