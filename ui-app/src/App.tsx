@@ -7,6 +7,8 @@ import './App.scss';
 import Home from './Pages/Home';
 import ItemsList from './Pages/ItemsList';
 import ItemPage from './Pages/Item';
+import ItemGroupsListPage from './Pages/ItemGroupsList';
+import ItemGroupPage from './Pages/ItemGroup';
 
 const routes: RouteProps[] = [
   {
@@ -22,6 +24,16 @@ const routes: RouteProps[] = [
   {
     component: ItemPage,
     path: '/item/:id',
+    exact: true
+  },
+  {
+    component: ItemGroupsListPage,
+    path: '/item-groups',
+    exact: true
+  },
+  {
+    component: ItemGroupPage,
+    path: '/item-group/:id',
     exact: true
   }
 ];

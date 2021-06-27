@@ -3,13 +3,14 @@ import { Table } from 'antd';
 import { Link } from 'react-router-dom';
 import { ColumnsType } from 'antd/lib/table';
 import TableListLayout from '../Layouts/TableList';
-import itemClient from '../Services/Item';
+import CrudClient from '../Services/CrudClient';
 
+const itemClient = new CrudClient<any>({ routePrefix: '/item/group' });
 const columns: ColumnsType<any> = [
   {
     title: 'Name',
     dataIndex: 'name',
-    render: (text: string, data: any) => <Link to={`/item/${data.id}`}>{text}</Link>
+    render: (text: string, data: any) => <Link to={`/item-group/${data.id}`}>{text}</Link>
   },
   {
     title: 'Status',
@@ -21,7 +22,7 @@ const columns: ColumnsType<any> = [
   }
 ];
 
-const ItemListPage: FC = () => {
+const ItemGroupsListPage: FC = () => {
   const [rows, setRows] = useState<any[]>([]);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const ItemListPage: FC = () => {
     });
   }, []);
   return (
-    <TableListLayout title="Items" toNewDoc="/item/new">
+    <TableListLayout title="Item Groups" toNewDoc="/item-group/new">
       <Table
         rowSelection={{
           type: 'checkbox'
@@ -43,4 +44,4 @@ const ItemListPage: FC = () => {
   );
 };
 
-export default ItemListPage;
+export default ItemGroupsListPage;

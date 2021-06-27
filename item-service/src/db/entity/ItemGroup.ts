@@ -21,7 +21,10 @@ export default class ItemGroup {
   })
   name: string;
 
-  @Column('text')
+  @Column({
+    type: 'text',
+    default: ''
+  })
   description?: string;
 
   @Column({

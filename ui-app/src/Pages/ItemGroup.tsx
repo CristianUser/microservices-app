@@ -10,15 +10,16 @@ import {
   FormProps,
   Input,
   Row,
-  Select,
   Space,
   message
 } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
 import EditPageLayout from '../Layouts/EditPage';
-import itemClient from '../Services/Item';
 import PreviewAndUpload from '../Components/PreviewAndUpload';
+import CrudClient from '../Services/CrudClient';
+import { ItemGroup } from '../Utils/interfaces';
 
+const itemGroupClient = new CrudClient<ItemGroup>({ routePrefix: '/item/group' });
 const PageContext = React.createContext({});
 
 const SiderContent: FC = (): React.ReactElement => {
@@ -28,29 +29,14 @@ const SiderContent: FC = (): React.ReactElement => {
     <>
       <PreviewAndUpload
         imageUrl={data.imageUrl}
-        uploadOptions={{ path: '/item/' }}
-        onComplete={({ uri }) => {
-          setData({ ...data, imageUrl: `http://localhost:5000/files${uri}` });
+        uploadOptions={{ path: '/item-group/' }}
+        onComplete={(response, imageUrl) => {
+          setData({ ...data, imageUrl });
         }}
       />
     </>
   );
 };
-
-const routes = [
-  {
-    path: '/',
-    breadcrumbName: 'Home'
-  },
-  {
-    path: '/items-list',
-    breadcrumbName: 'Items'
-  },
-  {
-    path: '/item/id',
-    breadcrumbName: 'Item Name'
-  }
-];
 
 const layout = {
   labelCol: { span: 5 },
@@ -69,18 +55,10 @@ const BasicForm: FC<FormProps> = (props) => {
       <Row>
         <Col span={12}>
           <Form.Item
-            label="Item Name"
+            label="Group Name"
             name="name"
             rules={[{ required: true, message: 'Please input the name!' }]}
           >
-            <Input />
-          </Form.Item>
-
-          <Form.Item label="Item Group" name="itemGroup">
-            <Input />
-          </Form.Item>
-
-          <Form.Item label="Unit of Measure" name="uom">
             <Input />
           </Form.Item>
         </Col>
@@ -88,33 +66,39 @@ const BasicForm: FC<FormProps> = (props) => {
           <Form.Item {...tailLayout} valuePropName="checked" name="disabled">
             <Checkbox>Disabled</Checkbox>
           </Form.Item>
-          <Form.Item {...tailLayout} valuePropName="checked" name="allowAlternativeItem">
-            <Checkbox>Allow Alternative Item</Checkbox>
-          </Form.Item>
-          <Form.Item {...tailLayout} valuePropName="checked" name="maintainStock">
-            <Checkbox>Maintain Stock</Checkbox>
-          </Form.Item>
-          <Form.Item label="Something" name="something">
-            <Input />
-          </Form.Item>
         </Col>
       </Row>
     </Form>
   );
 };
 
-const ItemPage: FC = () => {
+const ItemGroupPage: FC = () => {
   const { id }: any = useParams();
   const history = useHistory();
-  const [data, setData] = useState({});
+  const [data, setData] = useState<ItemGroup>({});
   const [loading, setLoading] = useState(false);
   const [basicForm] = Form.useForm();
   const [descriptionForm] = Form.useForm();
 
+  const routes = [
+    {
+      path: '/',
+      breadcrumbName: 'Home'
+    },
+    {
+      path: '/item-groups',
+      breadcrumbName: 'Item Groups'
+    },
+    {
+      path: '/item-group/id',
+      breadcrumbName: data?.name || 'Group'
+    }
+  ];
+
   useEffect(() => {
     if (id !== 'new') {
       setLoading(true);
-      itemClient
+      itemGroupClient
         .getDoc(id)
         .then(setData)
         .finally(() => setLoading(false));
@@ -135,10 +119,10 @@ const ItemPage: FC = () => {
     );
 
     try {
-      const result = await itemClient.save(id, formValues);
+      const result = await itemGroupClient.save(id, formValues);
 
-      message.success('Item Saved!');
-      history.replace(history.location.pathname.replace('new', result.id));
+      message.success('Saved successfully!');
+      history.replace(history.location.pathname.replace('new', result.id || ''));
     } catch (error) {
       message.error('Error saving!');
     }
@@ -158,16 +142,6 @@ const ItemPage: FC = () => {
             </Card>
             <Card title="Description" style={{ width: '100%' }} loading={loading}>
               <Form form={descriptionForm} name="descriptionForm" initialValues={data}>
-                <Form.Item name="brand" label="Brand">
-                  <Select style={{ width: 120 }}>
-                    <Select.Option value="jack">Jack</Select.Option>
-                    <Select.Option value="lucy">Lucy</Select.Option>
-                    <Select.Option value="disabled" disabled>
-                      Disabled
-                    </Select.Option>
-                    <Select.Option value="Yiminghe">yiminghe</Select.Option>
-                  </Select>
-                </Form.Item>
                 <Form.Item name="description" label="Description">
                   <Input.TextArea />
                 </Form.Item>
@@ -180,4 +154,4 @@ const ItemPage: FC = () => {
   );
 };
 
-export default ItemPage;
+export default ItemGroupPage;

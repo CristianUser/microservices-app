@@ -8,9 +8,8 @@ import {
   Repository
 } from 'typeorm';
 import { IConfig } from '../config';
-import Item from '../db/entity/Item';
 
-export default class CrudService<Entity extends ObjectLiteral = Item> {
+export default class CrudService<Entity extends ObjectLiteral> {
   private config: IConfig;
 
   private repository: Repository<Entity>;
@@ -19,7 +18,7 @@ export default class CrudService<Entity extends ObjectLiteral = Item> {
 
   private entityClass: EntityTarget<Entity>;
 
-  constructor(config: IConfig, entityClass: EntityTarget<Entity> = Item) {
+  constructor(config: IConfig, entityClass: EntityTarget<Entity>) {
     this.config = config;
     this.entityClass = entityClass;
     this.repository = getRepository(this.entityClass);
@@ -30,7 +29,7 @@ export default class CrudService<Entity extends ObjectLiteral = Item> {
     return this.connection
       .createQueryBuilder()
       .insert()
-      .into(Item)
+      .into(this.entityClass)
       .values([payload])
       .execute()
       .then((result) => result.raw[0]);
@@ -49,7 +48,7 @@ export default class CrudService<Entity extends ObjectLiteral = Item> {
   updateItem(id: string, payload: any) {
     return this.connection
       .createQueryBuilder()
-      .update(Item)
+      .update(this.entityClass)
       .set(payload)
       .where({ id })
       .returning('*')
