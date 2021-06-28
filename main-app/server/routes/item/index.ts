@@ -6,7 +6,7 @@ import { createCrudRoutes } from '../utils';
 export default (fastify: FastifyInstance, opts: any, done: () => void) => {
   const itemService = new ItemService(opts.config);
   const itemGroupService = new BasicCrud<any>(opts.config, {
-    routePrefix: '/group',
+    routePrefix: '/group/',
     serviceName: 'item-service'
   });
 

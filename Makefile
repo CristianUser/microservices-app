@@ -1,5 +1,5 @@
-requirements = mongodb postgres #rabbitmq
-services = service-registry auth-service file-service item-service main-service ui-app
+requirements = postgres #mongodb rabbitmq
+services = service-registry file-service item-service main-service ui-app
 
 .PHONY: start
 start:
