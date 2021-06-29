@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { materialRenderers, materialCells } from '@cristianuser/antd-renderers';
+import { renderers, cells } from '@cristianuser/antd-renderers';
 import { JsonForms } from '@jsonforms/react';
 
 type FormState<T> = {
@@ -20,8 +20,8 @@ const JsonForm: FC<Props> = (props: Props) => {
       schema={schema}
       uischema={uiSchema}
       data={data}
-      renderers={materialRenderers}
-      cells={materialCells}
+      renderers={renderers}
+      cells={cells}
       onChange={onChange}
     />
   );
