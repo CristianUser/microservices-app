@@ -2,15 +2,14 @@ import React, { FC, useEffect, useState } from 'react';
 import { Table } from 'antd';
 import { Link } from 'react-router-dom';
 import { ColumnsType } from 'antd/lib/table';
-import TableListLayout from '../Layouts/TableList';
-import CrudClient from '../Services/CrudClient';
+import TableListLayout from '../../Layouts/TableList';
+import itemClient from '../../Services/Item';
 
-const itemClient = new CrudClient<any>({ routePrefix: '/item/price' });
 const columns: ColumnsType<any> = [
   {
-    title: 'Item',
-    dataIndex: 'item',
-    render: (text: string, data: any) => <Link to={`/item-price/${data.id}`}>{text}</Link>
+    title: 'Name',
+    dataIndex: 'name',
+    render: (text: string, data: any) => <Link to={`/item/${data.id}`}>{text}</Link>
   },
   {
     title: 'Status',
@@ -22,7 +21,7 @@ const columns: ColumnsType<any> = [
   }
 ];
 
-const ItemPricesListPage: FC = () => {
+const ItemListPage: FC = () => {
   const [rows, setRows] = useState<any[]>([]);
 
   useEffect(() => {
@@ -31,7 +30,7 @@ const ItemPricesListPage: FC = () => {
     });
   }, []);
   return (
-    <TableListLayout title="Item Prices" toNewDoc="/item-price/new">
+    <TableListLayout title="Items" toNewDoc="/item/new">
       <Table
         rowSelection={{
           type: 'checkbox'
@@ -44,4 +43,4 @@ const ItemPricesListPage: FC = () => {
   );
 };
 
-export default ItemPricesListPage;
+export default ItemListPage;

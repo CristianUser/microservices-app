@@ -2,14 +2,14 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { Card, message } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
-import EditPageLayout from '../Layouts/EditPage';
-import PreviewAndUpload from '../Components/PreviewAndUpload';
-import itemClient from '../Services/Item';
-import CrudClient from '../Services/CrudClient';
-import { Item, ItemGroup } from '../Utils/interfaces';
-import JsonForm from '../Components/JsonForm';
+import EditPageLayout from '../../Layouts/EditPage';
+import PreviewAndUpload from '../../Components/PreviewAndUpload';
+import itemClient from '../../Services/Item';
+import BasicClient from '../../Services/BasicClient';
+import { Item, ItemGroup } from '../../Utils/interfaces';
+import JsonForm from '../../Components/JsonForm';
 
-const itemPriceClient = new CrudClient<any>({ routePrefix: '/item/price' });
+const itemPriceClient = new BasicClient<any>({ routePrefix: '/item/price' });
 
 type IPageContext = {
   data?: Item;

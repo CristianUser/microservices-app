@@ -10,6 +10,10 @@ export interface ItemGroup extends CommonProps {
   name?: string;
 }
 
+export interface ItemBrand extends CommonProps {
+  name?: string;
+}
+
 export interface Item extends CommonProps {
   uom?: string;
   brand?: string;

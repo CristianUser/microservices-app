@@ -2,14 +2,15 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { Card, message } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
-import EditPageLayout from '../Layouts/EditPage';
-import PreviewAndUpload from '../Components/PreviewAndUpload';
-import itemClient from '../Services/Item';
-import CrudClient from '../Services/CrudClient';
-import { Item, ItemGroup } from '../Utils/interfaces';
-import JsonForm from '../Components/JsonForm';
+import EditPageLayout from '../../Layouts/EditPage';
+import PreviewAndUpload from '../../Components/PreviewAndUpload';
+import itemClient from '../../Services/Item';
+import BasicClient from '../../Services/BasicClient';
+import { Item, ItemBrand, ItemGroup } from '../../Utils/interfaces';
+import JsonForm from '../../Components/JsonForm';
 
-const itemGroupClient = new CrudClient<ItemGroup>({ routePrefix: '/item/group' });
+const itemGroupClient = new BasicClient<ItemGroup>({ routePrefix: '/item/group' });
+const itemBrandClient = new BasicClient<ItemBrand>({ routePrefix: '/item/brand' });
 
 type IPageContext = {
   data?: Item;
@@ -40,7 +41,9 @@ const ItemPage: FC = () => {
   const history = useHistory();
   const [data, setData] = useState<Item>({});
   const [groups, setGroups] = useState<ItemGroup[]>([]);
+  const [brands, setBrands] = useState<ItemBrand[]>([]);
   const [mappedGroups, setMappedGroups] = useState<any[]>([{ const: 0, title: '' }]);
+  const [mappedBrands, setMappedBrands] = useState<any[]>([{ const: 0, title: '' }]);
   const [loading, setLoading] = useState(false);
 
   const routes = [
@@ -70,17 +73,17 @@ const ItemPage: FC = () => {
       description: {
         type: 'string'
       },
-      brand: {
+      uom: {
         type: 'string',
-        enum: ['Apple', 'Samsung']
+        enum: ['Unit', 'KG']
       },
       itemGroup: {
         type: 'number',
         oneOf: mappedGroups
       },
-      uom: {
-        type: 'string',
-        enum: ['Unit', 'KG']
+      brand: {
+        type: 'number',
+        oneOf: mappedBrands
       }
     },
     required: ['name']
@@ -154,6 +157,7 @@ const ItemPage: FC = () => {
     setLoading(true);
     try {
       await itemGroupClient.getDocs().then(({ rows }) => setGroups(rows));
+      await itemBrandClient.getDocs().then(({ rows }) => setBrands(rows));
 
       if (id !== 'new') {
         await itemClient.getDoc(id).then(setData);
@@ -176,6 +180,15 @@ const ItemPage: FC = () => {
       }))
     );
   }, [groups]);
+
+  useEffect(() => {
+    setMappedBrands(
+      brands.map((row) => ({
+        title: row.name || '',
+        const: row.id || ''
+      }))
+    );
+  }, [brands]);
 
   const onSave = async () => {
     try {

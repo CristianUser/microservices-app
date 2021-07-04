@@ -14,6 +14,10 @@ export default (fastify: FastifyInstance, opts: any, done: () => void) => {
     routePrefix: '/price/',
     serviceName: 'item-service'
   });
+  const itemBrandService = new BasicCrud<any>(opts.config, {
+    routePrefix: '/brand/',
+    serviceName: 'item-service'
+  });
 
   fastify.register(createCrudRoutes, {
     service: itemGroupService,
@@ -23,6 +27,11 @@ export default (fastify: FastifyInstance, opts: any, done: () => void) => {
   fastify.register(createCrudRoutes, {
     service: itemPriceService,
     prefix: '/price'
+  });
+
+  fastify.register(createCrudRoutes, {
+    service: itemBrandService,
+    prefix: '/brand'
   });
   fastify.get('/:id', (request: any) => itemService.getDoc(request.params.id));
   fastify.get('/', () => itemService.getDocs());

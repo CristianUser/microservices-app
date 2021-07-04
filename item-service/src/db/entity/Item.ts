@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import ItemBrand from './ItemBrand';
 import ItemGroup from './ItemGroup';
 import ItemPrice from './ItemPrice';
 
@@ -65,9 +66,8 @@ export default class Item {
   })
   uom?: string;
 
-  @Column({
-    type: 'text',
-    default: ''
+  @ManyToOne(() => ItemBrand, (brand) => brand.items, {
+    eager: true
   })
   brand?: string;
 

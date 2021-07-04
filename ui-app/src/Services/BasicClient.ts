@@ -1,6 +1,6 @@
 import { BaseClient } from './BaseClient';
 
-type CrudClientOptions = {
+type BasicClientOptions = {
   routePrefix: string;
 };
 
@@ -9,8 +9,8 @@ type SearchResult<T> = {
   count: number;
 };
 
-export default class CrudClient<DocInterface> extends BaseClient {
-  constructor({ routePrefix }: CrudClientOptions) {
+export default class BasicClient<DocInterface> extends BaseClient {
+  constructor({ routePrefix }: BasicClientOptions) {
     super({ baseUrl: `${process.env.REACT_APP_API_URL}${routePrefix}` });
   }
 

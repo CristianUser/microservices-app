@@ -62,7 +62,7 @@ export default class CrudService<Entity extends ObjectLiteral> {
   }
 
   deleteItem(id: string) {
-    const payload: any = { disabled: true, status: 'deleted' };
+    const payload: any = { disabled: true, status: 'archived' };
 
     return this.repository.update(id, payload);
   }

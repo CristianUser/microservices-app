@@ -2,13 +2,13 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { Card, message } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
-import EditPageLayout from '../Layouts/EditPage';
-import PreviewAndUpload from '../Components/PreviewAndUpload';
-import CrudClient from '../Services/CrudClient';
-import { ItemGroup } from '../Utils/interfaces';
-import JsonForm from '../Components/JsonForm';
+import EditPageLayout from '../../Layouts/EditPage';
+import PreviewAndUpload from '../../Components/PreviewAndUpload';
+import BasicClient from '../../Services/BasicClient';
+import { ItemBrand } from '../../Utils/interfaces';
+import JsonForm from '../../Components/JsonForm';
 
-const itemGroupClient = new CrudClient<ItemGroup>({ routePrefix: '/item/group' });
+const itemBrandClient = new BasicClient<ItemBrand>({ routePrefix: '/item/brand' });
 const PageContext = React.createContext({});
 
 const SiderContent: FC = (): React.ReactElement => {
@@ -18,7 +18,7 @@ const SiderContent: FC = (): React.ReactElement => {
     <>
       <PreviewAndUpload
         imageUrl={data.imageUrl}
-        uploadOptions={{ path: '/item-group/' }}
+        uploadOptions={{ path: '/item-brand/' }}
         onComplete={(response, imageUrl) => {
           setData({ ...data, imageUrl });
         }}
@@ -27,10 +27,10 @@ const SiderContent: FC = (): React.ReactElement => {
   );
 };
 
-const ItemGroupPage: FC = () => {
+const ItemBrandPage: FC = () => {
   const { id }: any = useParams();
   const history = useHistory();
-  const [data, setData] = useState<ItemGroup>({});
+  const [data, setData] = useState<ItemBrand>({});
   const [loading, setLoading] = useState(false);
 
   const routes = [
@@ -39,12 +39,12 @@ const ItemGroupPage: FC = () => {
       breadcrumbName: 'Home'
     },
     {
-      path: '/item-groups',
-      breadcrumbName: 'Item Groups'
+      path: '/item-brands',
+      breadcrumbName: 'Item Brands'
     },
     {
-      path: `/item-group/${id}`,
-      breadcrumbName: data?.name || 'Group'
+      path: `/item-brand/${id}`,
+      breadcrumbName: data?.name || 'Brand'
     }
   ];
   const schema = {
@@ -102,7 +102,7 @@ const ItemGroupPage: FC = () => {
 
   const onSave = async () => {
     try {
-      const result = await itemGroupClient.save(id, data);
+      const result = await itemBrandClient.save(id, data);
 
       message.success('Saved successfully!');
       history.replace(history.location.pathname.replace('new', result.id || ''));
@@ -114,7 +114,7 @@ const ItemGroupPage: FC = () => {
   useEffect(() => {
     if (id !== 'new') {
       setLoading(true);
-      itemGroupClient
+      itemBrandClient
         .getDoc(id)
         .then(setData)
         .finally(() => setLoading(false));
@@ -141,4 +141,4 @@ const ItemGroupPage: FC = () => {
   );
 };
 
-export default ItemGroupPage;
+export default ItemBrandPage;

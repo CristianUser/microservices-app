@@ -21,6 +21,9 @@ const AdminHeader: FC = () => {
         <Menu.Item key="4">
           <Link to="/item-prices">Item Prices</Link>
         </Menu.Item>
+        <Menu.Item key="5">
+          <Link to="/item-brands">Item Brands</Link>
+        </Menu.Item>
       </Menu>
     </Header>
   );

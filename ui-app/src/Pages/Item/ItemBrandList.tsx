@@ -2,15 +2,15 @@ import React, { FC, useEffect, useState } from 'react';
 import { Table } from 'antd';
 import { Link } from 'react-router-dom';
 import { ColumnsType } from 'antd/lib/table';
-import TableListLayout from '../Layouts/TableList';
-import CrudClient from '../Services/CrudClient';
+import TableListLayout from '../../Layouts/TableList';
+import BasicClient from '../../Services/BasicClient';
 
-const itemClient = new CrudClient<any>({ routePrefix: '/item/group' });
+const itemClient = new BasicClient<any>({ routePrefix: '/item/brand' });
 const columns: ColumnsType<any> = [
   {
     title: 'Name',
     dataIndex: 'name',
-    render: (text: string, data: any) => <Link to={`/item-group/${data.id}`}>{text}</Link>
+    render: (text: string, data: any) => <Link to={`/item-brand/${data.id}`}>{text}</Link>
   },
   {
     title: 'Status',
@@ -22,7 +22,7 @@ const columns: ColumnsType<any> = [
   }
 ];
 
-const ItemGroupsListPage: FC = () => {
+const ItemBrandsListPage: FC = () => {
   const [rows, setRows] = useState<any[]>([]);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const ItemGroupsListPage: FC = () => {
     });
   }, []);
   return (
-    <TableListLayout title="Item Groups" toNewDoc="/item-group/new">
+    <TableListLayout title="Item Brands" toNewDoc="/item-brand/new">
       <Table
         rowSelection={{
           type: 'checkbox'
@@ -44,4 +44,4 @@ const ItemGroupsListPage: FC = () => {
   );
 };
 
-export default ItemGroupsListPage;
+export default ItemBrandsListPage;
