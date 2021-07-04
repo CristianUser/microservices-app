@@ -9,6 +9,8 @@ import ItemsList from './Pages/ItemsList';
 import ItemPage from './Pages/Item';
 import ItemGroupsListPage from './Pages/ItemGroupsList';
 import ItemGroupPage from './Pages/ItemGroup';
+import ItemPricesListPage from './Pages/ItemPricesList';
+import ItemPricePage from './Pages/ItemPrice';
 
 const routes: RouteProps[] = [
   {
@@ -34,6 +36,16 @@ const routes: RouteProps[] = [
   {
     component: ItemGroupPage,
     path: '/item-group/:id',
+    exact: true
+  },
+  {
+    component: ItemPricesListPage,
+    path: '/item-prices',
+    exact: true
+  },
+  {
+    component: ItemPricePage,
+    path: '/item-price/:id',
     exact: true
   }
 ];
