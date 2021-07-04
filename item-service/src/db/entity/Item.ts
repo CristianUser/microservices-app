@@ -1,6 +1,8 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import ItemBrand from './ItemBrand';
 import ItemGroup from './ItemGroup';
+import ItemPrice from './ItemPrice';
 
 @Entity()
 export default class Item {
@@ -13,7 +15,8 @@ export default class Item {
     uom,
     brand,
     itemGroup,
-    imageUrl
+    imageUrl,
+    prices
   }: any = {}) {
     this.id = id;
     this.name = name;
@@ -24,6 +27,7 @@ export default class Item {
     this.brand = brand;
     this.itemGroup = itemGroup;
     this.imageUrl = imageUrl;
+    this.prices = prices;
   }
 
   @PrimaryGeneratedColumn()
@@ -62,12 +66,14 @@ export default class Item {
   })
   uom?: string;
 
-  @Column({
-    type: 'text',
-    default: ''
+  @ManyToOne(() => ItemBrand, (brand) => brand.items, {
+    eager: true
   })
   brand?: string;
 
   @ManyToOne(() => ItemGroup, (group) => group.items)
   itemGroup: ItemGroup;
+
+  @OneToMany(() => ItemPrice, (price) => price.item)
+  prices: ItemPrice;
 }

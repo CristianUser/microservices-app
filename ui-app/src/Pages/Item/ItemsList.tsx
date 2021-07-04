@@ -2,8 +2,8 @@ import React, { FC, useEffect, useState } from 'react';
 import { Table } from 'antd';
 import { Link } from 'react-router-dom';
 import { ColumnsType } from 'antd/lib/table';
-import TableListLayout from '../Layouts/TableList';
-import itemClient from '../Services/Item';
+import TableListLayout from '../../Layouts/TableList';
+import itemClient from '../../Services/Item';
 
 const columns: ColumnsType<any> = [
   {

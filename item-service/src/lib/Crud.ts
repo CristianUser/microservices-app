@@ -38,8 +38,10 @@ export default class CrudService<Entity extends ObjectLiteral> {
       .then((result) => result.raw[0]);
   }
 
-  getItem(id: string) {
-    return this.repository.findOne(id, { relations: this.relations });
+  getItem(id: string, includeRelations = false) {
+    const options = includeRelations ? { relations: this.relations } : {};
+
+    return this.repository.findOne(id, options);
   }
 
   async getItems(findOptions?: FindManyOptions<Entity>) {
@@ -60,7 +62,7 @@ export default class CrudService<Entity extends ObjectLiteral> {
   }
 
   deleteItem(id: string) {
-    const payload: any = { disabled: true, status: 'deleted' };
+    const payload: any = { disabled: true, status: 'archived' };
 
     return this.repository.update(id, payload);
   }

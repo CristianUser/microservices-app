@@ -2,10 +2,10 @@ import React, { FC, useEffect, useState } from 'react';
 import { Table } from 'antd';
 import { Link } from 'react-router-dom';
 import { ColumnsType } from 'antd/lib/table';
-import TableListLayout from '../Layouts/TableList';
-import CrudClient from '../Services/CrudClient';
+import TableListLayout from '../../Layouts/TableList';
+import BasicClient from '../../Services/BasicClient';
 
-const itemClient = new CrudClient<any>({ routePrefix: '/item/group' });
+const itemClient = new BasicClient<any>({ routePrefix: '/item/group' });
 const columns: ColumnsType<any> = [
   {
     title: 'Name',

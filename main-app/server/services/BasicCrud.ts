@@ -27,7 +27,7 @@ export default class BasicCrud<T> extends BaseService {
     });
   }
 
-  async getDoc(id: string) {
+  async getDoc(id: string): Promise<T> {
     const service = await this.getService(this.serviceName);
     return this.callService({
       method: 'get',
@@ -43,7 +43,7 @@ export default class BasicCrud<T> extends BaseService {
     });
   }
 
-  async updateDoc(id: string, data: T) {
+  async updateDoc(id: string, data: T): Promise<T> {
     const service = await this.getService(this.serviceName);
     return this.callService({
       method: 'put',

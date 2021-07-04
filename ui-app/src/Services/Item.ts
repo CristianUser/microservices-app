@@ -1,7 +1,7 @@
 import { Item } from '../Utils/interfaces';
-import CrudClient from './CrudClient';
+import BasicClient from './BasicClient';
 
-export class ItemClient extends CrudClient<Item> {
+export class ItemClient extends BasicClient<Item> {
   constructor() {
     super({ routePrefix: '/item' });
   }
