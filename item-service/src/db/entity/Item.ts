@@ -66,9 +66,7 @@ export default class Item {
   })
   uom?: string;
 
-  @ManyToOne(() => ItemBrand, (brand) => brand.items, {
-    eager: true
-  })
+  @ManyToOne(() => ItemBrand, (brand) => brand.items)
   brand?: string;
 
   @ManyToOne(() => ItemGroup, (group) => group.items)

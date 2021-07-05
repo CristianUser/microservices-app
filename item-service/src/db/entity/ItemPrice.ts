@@ -54,7 +54,6 @@ export default class ItemPrice {
   status: string;
 
   @ManyToOne(() => Item, (item) => item.prices, {
-    eager: true,
     nullable: false
   })
   item?: Item;

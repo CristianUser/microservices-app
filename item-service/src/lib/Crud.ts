@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import {
   Connection,
   EntityTarget,
@@ -26,6 +27,19 @@ export default class CrudService<Entity extends ObjectLiteral> {
     this.relations = relations;
     this.repository = getRepository(this.entityClass);
     this.connection = getConnection();
+    this.renameRelatedFields = this.renameRelatedFields.bind(this);
+  }
+
+  private renameRelatedFields(result: any) {
+    this.relations.forEach((key) => {
+      const idKey = `${key}Id`;
+
+      result[key] = result[idKey];
+
+      delete result[idKey];
+    });
+
+    return result;
   }
 
   async createItem(payload: any) {
@@ -41,7 +55,16 @@ export default class CrudService<Entity extends ObjectLiteral> {
   getItem(id: string, includeRelations = false) {
     const options = includeRelations ? { relations: this.relations } : {};
 
-    return this.repository.findOne(id, options);
+    if (includeRelations) {
+      return this.repository.findOne(id, options);
+    }
+    return this.connection
+      .createQueryBuilder()
+      .select()
+      .from(this.entityClass, '')
+      .where({ id })
+      .getRawOne()
+      .then(this.renameRelatedFields);
   }
 
   async getItems(findOptions?: FindManyOptions<Entity>) {
