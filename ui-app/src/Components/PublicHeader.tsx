@@ -9,11 +9,8 @@ const PublicHeader: FC = () => {
     <Header>
       <div className="logo" />
       <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
-        <Menu.Item>
+        <Menu.Item key="0">
           <Link to="/">Home</Link>
-        </Menu.Item>
-        <Menu.Item>
-          <Link to="/items-list">Items</Link>
         </Menu.Item>
       </Menu>
     </Header>

@@ -14,7 +14,7 @@ const HomeLayout: FC<Props> = (props: Props) => {
   return (
     <Layout>
       <PublicHeader />
-      <Content>{children}</Content>
+      <Content style={{ padding: '0 50px' }}>{children}</Content>
       <Footer style={{ textAlign: 'center' }}>ERP App ©2021 Created by Some Devs</Footer>
     </Layout>
   );

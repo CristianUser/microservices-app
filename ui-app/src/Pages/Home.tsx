@@ -1,29 +1,53 @@
+/* eslint-disable react/no-array-index-key */
 import React, { FC } from 'react';
-import { Button } from 'antd';
+import { Menu, Space, Typography } from 'antd';
+import { Link } from 'react-router-dom';
 import HomeLayout from '../Layouts/Home';
-import logo from '../Assets/logo.svg';
 
+const { Title } = Typography;
 const HomePage: FC = () => {
+  const domains = [
+    {
+      title: 'Item',
+      links: [
+        {
+          to: '/items-list',
+          title: 'Items'
+        },
+        {
+          to: '/item-groups',
+          title: 'Item Groups'
+        },
+        {
+          to: '/item-prices',
+          title: 'Item Prices'
+        },
+        {
+          to: '/item-brands',
+          title: 'Item Brands'
+        }
+      ]
+    }
+  ];
+
   return (
     <HomeLayout>
-      <div className="App">
-        <header className="App-header">
-          <p>This is the homepage content</p>
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <Button type="primary">Button</Button>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Space>
+        {domains.map((domain) => (
+          <Menu title={domain.title}>
+            <Menu.Item key="1">
+              <Title level={5} style={{ marginBottom: 0 }}>
+                {domain.title}
+              </Title>
+            </Menu.Item>
+            {domain.links.map((link, idx) => (
+              <Menu.Item key={`${domain.title}_${idx}`}>
+                <Link to={link.to}>{link.title}</Link>
+              </Menu.Item>
+            ))}
+          </Menu>
+        ))}
+      </Space>
     </HomeLayout>
   );
 };
