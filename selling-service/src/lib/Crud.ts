@@ -52,7 +52,7 @@ export default class CrudService<Entity extends ObjectLiteral> {
       .then((result) => result.raw[0]);
   }
 
-  getItem(id: string, includeRelations = false) {
+  getItem(id: string, includeRelations = true) {
     const options = includeRelations ? { relations: this.relations } : {};
 
     if (includeRelations) {

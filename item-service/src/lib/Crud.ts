@@ -67,8 +67,9 @@ export default class CrudService<Entity extends ObjectLiteral> {
       .then(this.renameRelatedFields);
   }
 
-  async getItems(findOptions?: FindManyOptions<Entity>) {
-    const [rows, count] = await this.repository.findAndCount(findOptions);
+  async getItems(findOptions: FindManyOptions<Entity> = {}, includeRelations = false) {
+    const options = includeRelations ? { relations: this.relations } : {};
+    const [rows, count] = await this.repository.findAndCount({ ...options, ...findOptions });
 
     return { rows, count };
   }

@@ -17,7 +17,8 @@ export function createCrudRoutes<T>(
   });
 
   fastify.get('/', async (request: any) => {
-    const result = await controller.getItems(request.body);
+    const includeRelations = request.query.populate === 'true';
+    const result = await controller.getItems(request.body, includeRelations);
 
     return result;
   });

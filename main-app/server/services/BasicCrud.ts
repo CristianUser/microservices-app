@@ -27,19 +27,21 @@ export default class BasicCrud<T> extends BaseService {
     });
   }
 
-  async getDoc(id: string): Promise<T> {
+  async getDoc(id: string, params: any): Promise<T> {
     const service = await this.getService(this.serviceName);
     return this.callService({
       method: 'get',
-      url: this.buildUrl(service, `${this.routePrefix}${id}`)
+      url: this.buildUrl(service, `${this.routePrefix}${id}`),
+      params
     });
   }
 
-  async getDocs() {
+  async getDocs(params: any) {
     const service = await this.getService(this.serviceName);
     return this.callService({
       method: 'get',
-      url: this.buildUrl(service, this.routePrefix)
+      url: this.buildUrl(service, this.routePrefix),
+      params
     });
   }
 

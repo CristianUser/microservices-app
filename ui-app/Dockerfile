@@ -14,7 +14,11 @@ ENV PATH=/usr/src/app/node_modules/.bin:$PATH
 # where available (npm@5+)
 COPY package*.json ./
 
-RUN npm install
+RUN apk --no-cache add --virtual native-deps \
+  g++ gcc libgcc libstdc++ linux-headers make python && \
+  npm install --quiet node-gyp -g &&\
+  npm install --quiet && \
+  apk del native-deps
 # If you are building your code for production
 # RUN npm ci --only=production
 

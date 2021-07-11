@@ -8,8 +8,8 @@ export default (fastify: FastifyInstance, opts: any, done: () => void) => {
     serviceName: 'selling-service'
   });
 
-  fastify.get('/:id', (request: any) => salesService.getDoc(request.params.id));
-  fastify.get('/', () => salesService.getDocs());
+  fastify.get('/:id', (request: any) => salesService.getDoc(request.params.id, request.query));
+  fastify.get('/', (request) => salesService.getDocs(request.query));
   fastify.post('/', (request: any) => salesService.createDoc(request.body));
   fastify.put('/:id', (request: any) => salesService.updateDoc(request.params.id, request.body));
   fastify.delete('/:id', (request: any) => salesService.deleteDoc(request.params.id));

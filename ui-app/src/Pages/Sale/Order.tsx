@@ -157,6 +157,7 @@ const SaleOrderPage: FC = () => {
       // eslint-disable-next-line eqeqeq
       const itemData = items.find((item) => item.id == itemSelected.item);
 
+      // data.items?[itemIdx].price = 20;
       console.log('itemData', itemData);
       data.subTotal = data.subTotal || 0;
       data.subTotal += 20 * itemSelected.qty;

@@ -9,7 +9,7 @@ import ItemBrand from '../db/entity/ItemBrand';
 
 export default (config: IConfig) => {
   const log = config.log();
-  const itemService = new CrudService<Item>(config, Item, ['itemGroup', 'brand']);
+  const itemService = new CrudService<Item>(config, Item, ['itemGroup', 'brand', 'prices']);
   const itemGroupService = new CrudService<ItemGroup>(config, ItemGroup, ['items']);
   const itemPriceService = new CrudService<ItemPrice>(config, ItemPrice, ['item']);
   const itemBrandService = new CrudService<ItemBrand>(config, ItemBrand, ['items']);

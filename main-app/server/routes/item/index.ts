@@ -33,8 +33,8 @@ export default (fastify: FastifyInstance, opts: any, done: () => void) => {
     service: itemBrandService,
     prefix: '/brand'
   });
-  fastify.get('/:id', (request: any) => itemService.getDoc(request.params.id));
-  fastify.get('/', () => itemService.getDocs());
+  fastify.get('/:id', (request: any) => itemService.getDoc(request.params.id, request.query));
+  fastify.get('/', (request) => itemService.getDocs(request.query));
   fastify.post('/', (request: any) => itemService.createDoc(request.body));
   fastify.put('/:id', (request: any) => itemService.updateDoc(request.params.id, request.body));
   fastify.delete('/:id', (request: any) => itemService.deleteDoc(request.params.id));

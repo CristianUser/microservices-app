@@ -36,9 +36,7 @@ export default class SaleOrder {
   })
   status: string;
 
-  @Column({
-    type: 'text'
-  })
+  @Column('simple-json')
   items: string[];
 
   @Column({
