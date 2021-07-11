@@ -65,7 +65,7 @@ services:
     build:
       context: ./file-service
       args:
-        SERVICE_PORT: 50290
+        SERVICE_PORT: 50400
     depends_on:
       - service-registry
     restart: always
@@ -75,7 +75,7 @@ services:
       - ./file-service:/usr/src/app
       - ./.docker/file-service/data/:/usr/src/app/files
     ports:
-      - 50290:50290
+      - 50400:50400
 
   item-service:
     build:
@@ -92,6 +92,22 @@ services:
       - ./item-service:/usr/src/app
     ports:
       - 50280:50280
+
+  selling-service:
+    build:
+      context: ./selling-service
+      args:
+        SERVICE_PORT: 50290
+    depends_on:
+      - service-registry
+      - postgres
+    restart: always
+    environment:
+      REGISTRY_URL: http://service-registry:50250
+    volumes:
+      - ./selling-service:/usr/src/app
+    ports:
+      - 50290:50290
 
   main-service:
     build:

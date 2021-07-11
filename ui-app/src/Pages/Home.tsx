@@ -27,12 +27,25 @@ const HomePage: FC = () => {
           title: 'Item Brands'
         }
       ]
+    },
+    {
+      title: 'Selling',
+      links: [
+        {
+          to: '/order/new',
+          title: 'New Sale'
+        },
+        {
+          to: '/orders',
+          title: 'Sale Orders'
+        }
+      ]
     }
   ];
 
   return (
     <HomeLayout>
-      <Space>
+      <Space align="start">
         {domains.map((domain) => (
           <Menu title={domain.title}>
             <Menu.Item key="1">

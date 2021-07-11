@@ -19,3 +19,19 @@ export interface Item extends CommonProps {
   brand?: string;
   itemGroup?: ItemGroup;
 }
+
+// interface OneOfOption {
+//   const: string | number;
+//   label: string;
+// }
+
+export interface Order {
+  id?: string;
+  customer?: string;
+  description?: string;
+  disabled?: boolean;
+  status?: string;
+  items?: any[];
+  subTotal: number;
+  total: number;
+}

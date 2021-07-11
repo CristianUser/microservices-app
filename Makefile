@@ -1,5 +1,5 @@
 requirements = postgres #mongodb rabbitmq
-services = service-registry file-service item-service main-service ui-app
+services = service-registry file-service item-service selling-service main-service ui-app
 
 .PHONY: start
 start:

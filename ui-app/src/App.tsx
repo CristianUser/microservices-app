@@ -13,6 +13,8 @@ import ItemGroupsListPage from './Pages/Item/ItemGroupsList';
 import ItemPricePage from './Pages/Item/ItemPrice';
 import ItemPricesListPage from './Pages/Item/ItemPricesList';
 import ItemsList from './Pages/Item/ItemsList';
+import SaleOrderPage from './Pages/Sale/Order';
+import SaleOrdersPage from './Pages/Sale/Orders';
 
 const routes: RouteProps[] = [
   {
@@ -58,6 +60,16 @@ const routes: RouteProps[] = [
   {
     component: ItemBrandPage,
     path: '/item-brand/:id',
+    exact: true
+  },
+  {
+    component: SaleOrdersPage,
+    path: '/orders',
+    exact: true
+  },
+  {
+    component: SaleOrderPage,
+    path: '/order/:id',
     exact: true
   }
 ];
