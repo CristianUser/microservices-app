@@ -39,7 +39,7 @@ const SiderContent: FC = (): React.ReactElement => {
 const ItemPage: FC = () => {
   const { id }: any = useParams();
   const history = useHistory();
-  const [data, setData] = useState<Item>({});
+  const [data, setData] = useState<Item>({ prices: [] });
   const [groups, setGroups] = useState<ItemGroup[]>([]);
   const [brands, setBrands] = useState<ItemBrand[]>([]);
   const [mappedGroups, setMappedGroups] = useState<any[]>([{ const: 0, title: '' }]);

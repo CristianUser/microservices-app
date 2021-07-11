@@ -1,18 +1,17 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Card, message } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
 import EditPageLayout from '../../Layouts/EditPage';
-import PreviewAndUpload from '../../Components/PreviewAndUpload';
 import itemClient from '../../Services/Item';
 import BasicClient from '../../Services/BasicClient';
-import { Item, ItemGroup } from '../../Utils/interfaces';
+import { ItemGroup, ItemPrice } from '../../Utils/interfaces';
 import JsonForm from '../../Components/JsonForm';
 
 const itemPriceClient = new BasicClient<any>({ routePrefix: '/item/price' });
 
 type IPageContext = {
-  data?: Item;
+  data?: ItemPrice;
   setData?: React.Dispatch<any>;
   items: any[];
 };
@@ -20,25 +19,13 @@ type IPageContext = {
 const PageContext = React.createContext<IPageContext>({ items: [] });
 
 const SiderContent: FC = (): React.ReactElement => {
-  const { data, setData } = useContext(PageContext);
-
-  return (
-    <>
-      <PreviewAndUpload
-        imageUrl={data?.imageUrl}
-        uploadOptions={{ path: '/item/' }}
-        onComplete={({ uri }) => {
-          setData?.({ ...data, imageUrl: `http://localhost:5000/files${uri}` });
-        }}
-      />
-    </>
-  );
+  return <></>;
 };
 
 const ItemPricePage: FC = () => {
   const { id }: any = useParams();
   const history = useHistory();
-  const [data, setData] = useState<Item>({});
+  const [data, setData] = useState<ItemPrice>({});
   const [items, setItems] = useState<ItemGroup[]>([]);
   const [mappedItems, setMappedItems] = useState<any[]>([{ const: 0, title: '' }]);
   const [loading, setLoading] = useState(false);
@@ -54,7 +41,7 @@ const ItemPricePage: FC = () => {
     },
     {
       path: `/item-price/${id}`,
-      breadcrumbName: data?.name || 'Price'
+      breadcrumbName: data?.item?.name || 'Price'
     }
   ];
 

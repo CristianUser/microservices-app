@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { FC, useEffect, useState } from 'react';
 import { Card, message } from 'antd';
@@ -25,7 +26,7 @@ const SiderContent: FC = (): React.ReactElement => {
 const SaleOrderPage: FC = () => {
   const { id }: any = useParams();
   const history = useHistory();
-  const [data, setData] = useState<Order>({ subTotal: 0, total: 0 });
+  const [data, setData] = useState<Order>({ items: [], subTotal: 0, total: 0 });
   const [items, setItems] = useState<Item[]>([]);
   const [mappedItems, setMappedItems] = useState<any[]>([{ const: 0, title: '' }]);
   const [loading, setLoading] = useState(false);
@@ -69,7 +70,7 @@ const SaleOrderPage: FC = () => {
               oneOf: mappedItems
             },
             qty: {
-              type: 'number'
+              type: 'integer'
             },
             price: {
               type: 'number',
@@ -137,7 +138,7 @@ const SaleOrderPage: FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      await itemClient.getDocs().then(({ rows }) => setItems(rows));
+      await itemClient.getDocs({ populate: true }).then(({ rows }) => setItems(rows));
 
       if (id !== 'new') {
         await sellingClient.getDoc(id).then(setData);
@@ -153,16 +154,15 @@ const SaleOrderPage: FC = () => {
   }, []);
 
   useEffect(() => {
-    data.items?.forEach((itemSelected) => {
-      // eslint-disable-next-line eqeqeq
+    data.subTotal = 0;
+    data.items.forEach((itemSelected, itemIdx) => {
       const itemData = items.find((item) => item.id == itemSelected.item);
+      const price = itemData?.prices[0].rate || 0;
 
-      // data.items?[itemIdx].price = 20;
-      console.log('itemData', itemData);
-      data.subTotal = data.subTotal || 0;
-      data.subTotal += 20 * itemSelected.qty;
+      data.items[itemIdx].price = price;
+      data.subTotal += price * itemSelected.qty;
     });
-    data.total = data.subTotal + 1;
+    data.total = data.subTotal;
     setData(data);
   }, [data.items]);
 

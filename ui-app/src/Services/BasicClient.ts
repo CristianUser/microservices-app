@@ -22,17 +22,19 @@ export default class BasicClient<DocInterface> extends BaseClient {
     });
   }
 
-  async getDoc(id: string): Promise<DocInterface> {
+  async getDoc(id: string, params?: any): Promise<DocInterface> {
     return this.callService({
       method: 'get',
-      url: `/${id}`
+      url: `/${id}`,
+      params
     });
   }
 
-  async getDocs(): Promise<SearchResult<DocInterface>> {
+  async getDocs(params?: any): Promise<SearchResult<DocInterface>> {
     return this.callService({
       method: 'get',
-      url: '/'
+      url: '/',
+      params
     });
   }
 
