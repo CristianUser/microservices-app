@@ -1,11 +1,12 @@
 import { createContext } from 'react';
 
-type ILayoutContext = {
+type IPageContext = {
   data?: any;
   setData?: React.Dispatch<any>;
   initialData?: any;
   setInitialData?: React.Dispatch<any>;
 };
-const LayoutContext = createContext<ILayoutContext>({});
 
-export default LayoutContext;
+const PageContext = createContext<IPageContext>({});
+
+export default PageContext;

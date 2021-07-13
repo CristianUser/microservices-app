@@ -1,12 +1,15 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { Layout, Button } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
+import _ from 'lodash';
+
 import AdminHeader from '../Components/AdminHeader';
 import CommonSider from '../Components/CommonSider';
 import ToolHeader from '../Components/ToolHeader';
 import LayoutContext from '../Contexts/LayoutContext';
+import PageContext from '../Contexts/PageContext';
 
 const { Content } = Layout;
 
@@ -15,6 +18,8 @@ type BreadcrumbRoute = {
   breadcrumbName: string;
 };
 type Props = {
+  title?: string;
+  subTitle?: string;
   left?: React.ReactNode;
   children?: React.ReactNode;
   breadcrumbRoutes?: Array<BreadcrumbRoute>;
@@ -22,12 +27,24 @@ type Props = {
 };
 
 const EditPageLayout: FC<Props> = (props: Props) => {
+  const [initialData, setInitialData] = useState({});
+  const { data, setData } = useContext(PageContext);
   const [collapsed, setCollapsed] = useState(false);
   const layoutProps = {
-    title: '',
-    subTitle: ''
+    setInitialData
   };
-  const { breadcrumbRoutes, children, left } = props;
+  const { breadcrumbRoutes, children, left, title, subTitle } = props;
+  const isDraft = data?.status === 'draft';
+  const isDirty = !_.isEqual(JSON.stringify(data), JSON.stringify(initialData));
+
+  const discardChanges = () => {
+    setData?.(initialData);
+  };
+  const validateDoc = () => {
+    data.status = 'active';
+    setData?.(data);
+    props.onSave?.();
+  };
 
   return (
     <Layout>
@@ -38,14 +55,24 @@ const EditPageLayout: FC<Props> = (props: Props) => {
           header={{
             backIcon: collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />,
             onBack: () => setCollapsed(!collapsed),
-            title: layoutProps.title,
-            subTitle: layoutProps.subTitle,
-            extra: [
-              <Button key="2">Discard</Button>,
-              <Button key="1" type="primary" onClick={() => props.onSave?.()}>
-                Save
-              </Button>
-            ]
+            title,
+            subTitle,
+            extra: (
+              <>
+                <Button key="2" onClick={discardChanges} disabled={!isDirty}>
+                  Discard
+                </Button>
+                {isDraft ? (
+                  <Button key="1" type="primary" onClick={validateDoc}>
+                    Confirm
+                  </Button>
+                ) : (
+                  <Button key="1" type="primary" onClick={() => props.onSave?.()}>
+                    Save
+                  </Button>
+                )}
+              </>
+            )
           }}
         />
         <Content style={{ padding: '0 50px' }}>
