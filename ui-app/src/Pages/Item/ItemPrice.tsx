@@ -8,16 +8,9 @@ import itemClient from '../../Services/Item';
 import BasicClient from '../../Services/BasicClient';
 import { Item, ItemGroup } from '../../Utils/interfaces';
 import JsonForm from '../../Components/JsonForm';
+import PageContext from '../../Contexts/PageContext';
 
 const itemPriceClient = new BasicClient<any>({ routePrefix: '/item/price' });
-
-type IPageContext = {
-  data?: Item;
-  setData?: React.Dispatch<any>;
-  items: any[];
-};
-
-const PageContext = React.createContext<IPageContext>({ items: [] });
 
 const SiderContent: FC = (): React.ReactElement => {
   const { data, setData } = useContext(PageContext);
@@ -176,7 +169,7 @@ const ItemPricePage: FC = () => {
   };
 
   return (
-    <PageContext.Provider value={{ data, setData, items }}>
+    <PageContext.Provider value={{ data, setData }}>
       <EditPageLayout left={<SiderContent />} breadcrumbRoutes={routes} onSave={onSave}>
         {loading ? (
           <Card style={{ width: '100%' }} loading={loading} />

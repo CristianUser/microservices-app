@@ -7,9 +7,9 @@ import PreviewAndUpload from '../../Components/PreviewAndUpload';
 import BasicClient from '../../Services/BasicClient';
 import { ItemGroup } from '../../Utils/interfaces';
 import JsonForm from '../../Components/JsonForm';
+import PageContext from '../../Contexts/PageContext';
 
 const itemGroupClient = new BasicClient<ItemGroup>({ routePrefix: '/item/group' });
-const PageContext = React.createContext({});
 
 const SiderContent: FC = (): React.ReactElement => {
   const { data, setData }: any = useContext(PageContext);

@@ -7,9 +7,9 @@ import PreviewAndUpload from '../../Components/PreviewAndUpload';
 import BasicClient from '../../Services/BasicClient';
 import { ItemBrand } from '../../Utils/interfaces';
 import JsonForm from '../../Components/JsonForm';
+import PageContext from '../../Contexts/PageContext';
 
 const itemBrandClient = new BasicClient<ItemBrand>({ routePrefix: '/item/brand' });
-const PageContext = React.createContext({});
 
 const SiderContent: FC = (): React.ReactElement => {
   const { data, setData }: any = useContext(PageContext);
@@ -123,7 +123,13 @@ const ItemBrandPage: FC = () => {
 
   return (
     <PageContext.Provider value={{ data, setData }}>
-      <EditPageLayout left={<SiderContent />} breadcrumbRoutes={routes} onSave={onSave}>
+      <EditPageLayout
+        left={<SiderContent />}
+        breadcrumbRoutes={routes}
+        title={data?.name || 'Brand'}
+        subTitle={data?.status}
+        onSave={onSave}
+      >
         {loading ? (
           <Card style={{ width: '100%' }} loading={loading} />
         ) : (

@@ -8,17 +8,11 @@ import itemClient from '../../Services/Item';
 import BasicClient from '../../Services/BasicClient';
 import { Item, ItemBrand, ItemGroup } from '../../Utils/interfaces';
 import JsonForm from '../../Components/JsonForm';
+import PageContext from '../../Contexts/PageContext';
+import LayoutContext from '../../Contexts/LayoutContext';
 
 const itemGroupClient = new BasicClient<ItemGroup>({ routePrefix: '/item/group' });
 const itemBrandClient = new BasicClient<ItemBrand>({ routePrefix: '/item/brand' });
-
-type IPageContext = {
-  data?: Item;
-  setData?: React.Dispatch<any>;
-  groups: ItemGroup[];
-};
-
-const PageContext = React.createContext<IPageContext>({ groups: [] });
 
 const SiderContent: FC = (): React.ReactElement => {
   const { data, setData } = useContext(PageContext);
@@ -37,6 +31,7 @@ const SiderContent: FC = (): React.ReactElement => {
 };
 
 const ItemPage: FC = () => {
+  const { setInitialData } = useContext(LayoutContext);
   const { id }: any = useParams();
   const history = useHistory();
   const [data, setData] = useState<Item>({});
@@ -160,7 +155,10 @@ const ItemPage: FC = () => {
       await itemBrandClient.getDocs().then(({ rows }) => setBrands(rows));
 
       if (id !== 'new') {
-        await itemClient.getDoc(id).then(setData);
+        await itemClient.getDoc(id).then((response) => {
+          setData(response);
+          setInitialData?.(response);
+        });
       }
     } catch (error) {
       message.error('Error loading data');
@@ -202,8 +200,14 @@ const ItemPage: FC = () => {
   };
 
   return (
-    <PageContext.Provider value={{ data, setData, groups }}>
-      <EditPageLayout left={<SiderContent />} breadcrumbRoutes={routes} onSave={onSave}>
+    <PageContext.Provider value={{ data, setData }}>
+      <EditPageLayout
+        left={<SiderContent />}
+        breadcrumbRoutes={routes}
+        title={data?.name || 'Item'}
+        subTitle={data?.status}
+        onSave={onSave}
+      >
         {loading ? (
           <Card style={{ width: '100%' }} loading={loading} />
         ) : (

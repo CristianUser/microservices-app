@@ -4,6 +4,7 @@ interface CommonProps {
   description?: string;
   imageUrl?: string;
   disabled?: boolean;
+  status?: 'draft' | 'archived' | 'active';
 }
 
 export interface ItemGroup extends CommonProps {

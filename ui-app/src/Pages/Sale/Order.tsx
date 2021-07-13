@@ -7,16 +7,9 @@ import itemClient from '../../Services/Item';
 import BasicClient from '../../Services/BasicClient';
 import { Item, Order } from '../../Utils/interfaces';
 import JsonForm from '../../Components/JsonForm';
+import PageContext from '../../Contexts/PageContext';
 
 const sellingClient = new BasicClient<Order>({ routePrefix: '/selling' });
-
-type IPageContext = {
-  data?: Order;
-  setData?: React.Dispatch<any>;
-  items: Item[];
-};
-
-const PageContext = React.createContext<IPageContext>({ items: [] });
 
 const SiderContent: FC = (): React.ReactElement => {
   return <></>;
@@ -186,8 +179,13 @@ const SaleOrderPage: FC = () => {
   };
 
   return (
-    <PageContext.Provider value={{ data, setData, items }}>
-      <EditPageLayout left={<SiderContent />} breadcrumbRoutes={routes} onSave={onSave}>
+    <PageContext.Provider value={{ data, setData }}>
+      <EditPageLayout
+        left={<SiderContent />}
+        breadcrumbRoutes={routes}
+        title="Sale Order"
+        onSave={onSave}
+      >
         {loading ? (
           <Card style={{ width: '100%' }} loading={loading} />
         ) : (
