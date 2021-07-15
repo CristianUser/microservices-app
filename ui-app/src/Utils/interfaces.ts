@@ -37,19 +37,32 @@ export interface Order {
   total: number;
 }
 
+export type DataTextProp = {
+  dynamic?: boolean;
+  value: string;
+};
+
 export interface JsonPageProps {
   apiRoutePrefix: string;
+  title: any;
+  breadcrumbRoutes: [];
+  [key: string]: any;
+}
+
+export interface JsonFormPageProps extends JsonPageProps {
   schemaPath: string;
-  title: {
-    dynamic: boolean;
-    value: string;
-  };
   uiSchema: any;
   includeImage: boolean;
-  breadcrumbRoutes: [];
 }
+
+export interface JsonListProps extends JsonPageProps {
+  toNewDoc: string;
+  columns: [];
+}
+
 export interface JsonPage {
+  type: 'list' | 'form';
   routePath: string;
   title: string;
-  props: JsonPageProps;
+  props: JsonFormPageProps | JsonListProps;
 }

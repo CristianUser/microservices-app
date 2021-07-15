@@ -4,6 +4,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, RouteProps } from 'react-router-dom';
 import './App.scss';
 import FormPageRenderer from './Components/FormRenderer';
+import ListPageRenderer from './Components/ListRenderer';
 
 import Home from './Pages/Home';
 import ItemBrandPage from './Pages/Item/ItemBrand';
@@ -12,7 +13,6 @@ import ItemGroupPage from './Pages/Item/ItemGroup';
 import ItemGroupsListPage from './Pages/Item/ItemGroupsList';
 import ItemPricePage from './Pages/Item/ItemPrice';
 import ItemPricesListPage from './Pages/Item/ItemPricesList';
-import ItemsList from './Pages/Item/ItemsList';
 import SaleOrderPage from './Pages/Sale/Order';
 import SaleOrdersPage from './Pages/Sale/Orders';
 import FormClient from './Services/FormClient';
@@ -24,11 +24,6 @@ const routes: RouteProps[] = [
   {
     component: Home,
     path: '/',
-    exact: true
-  },
-  {
-    component: ItemsList,
-    path: '/items-list',
     exact: true
   },
   {
@@ -74,7 +69,7 @@ const routes: RouteProps[] = [
 ];
 
 const App: FC = () => {
-  const [pages, setPages] = useState<JsonPage[]>([]);
+  const [pages, setPages] = useState<(JsonPage & any)[]>([]);
 
   useEffect(() => {
     formClient.getPages().then(setPages);
@@ -88,7 +83,11 @@ const App: FC = () => {
         ))}
         {pages.map((page) => (
           <Route path={page.routePath} exact>
-            <FormPageRenderer {...page.props} />
+            {page.type === 'form' ? (
+              <FormPageRenderer {...page.props} />
+            ) : (
+              <ListPageRenderer {...page.props} />
+            )}
           </Route>
         ))}
       </Switch>

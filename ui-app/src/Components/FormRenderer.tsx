@@ -2,7 +2,6 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { Card, message } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
-import _ from 'lodash';
 
 import PreviewAndUpload from './PreviewAndUpload';
 import FormClient from '../Services/FormClient';
@@ -11,6 +10,8 @@ import LayoutContext from '../Contexts/LayoutContext';
 import EditPageLayout from '../Layouts/EditPage';
 import JsonForm from './JsonForm';
 import BasicClient from '../Services/BasicClient';
+import { DataTextProp } from '../Utils/interfaces';
+import { resolveDataText, resolvePath } from '../Utils/json-renderers';
 
 const formClient = new FormClient();
 
@@ -32,11 +33,6 @@ const SiderContent: FC = (): React.ReactElement => {
   );
 };
 
-type DataTextProp = {
-  dynamic?: boolean;
-  value: string;
-};
-
 type BreadcrumbRoute = {
   path: string;
   breadcrumbName: DataTextProp;
@@ -50,17 +46,6 @@ type FormPageRendererProps = {
   includeImage: boolean;
   breadcrumbRoutes: BreadcrumbRoute[];
 };
-
-function resolveDataText(text: DataTextProp, data: any) {
-  return text.dynamic ? _.get(data, text.value, text.value) : text.value || text;
-}
-
-function resolvePath(path: string, data: any) {
-  const TOKEN_REGEX = /\{[a-zA-Z0-9_.\-/]+\}/;
-  const value = path.match(TOKEN_REGEX)?.[0].replace('{', '').replace('}', '');
-
-  return value ? path.replace(TOKEN_REGEX, _.get(data, value, path)) : path;
-}
 
 const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProps) => {
   const { apiRoutePrefix, uiSchema, schemaPath, title, includeImage, breadcrumbRoutes } = props;

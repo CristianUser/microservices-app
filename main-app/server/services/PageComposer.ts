@@ -13,19 +13,23 @@ export default class PageComposer extends BaseService {
   }
 
   async getPages() {
-    const jsonFiles = await globAsync('server/forms/**/page.json');
+    const jsonForms = await globAsync('server/forms/**/form.json');
+    const jsonLists = await globAsync('server/forms/**/list.json');
     const pages = await Promise.all(
-      jsonFiles.map(async (filepath) => {
+      jsonForms.map(async (filepath) => {
         const jsonContent = await import(path.resolve(filepath)).then((file) => file.default);
         const uiSchema = await import(
-          path.resolve(filepath.replace('page.json', 'uischema.json'))
+          path.resolve(filepath.replace('form.json', 'uischema.json'))
         ).then((file) => file.default);
 
         jsonContent.props.uiSchema = uiSchema;
         return jsonContent;
       })
     );
+    const listPages = await Promise.all(
+      jsonLists.map(async (filepath) => import(path.resolve(filepath)).then((file) => file.default))
+    );
 
-    return pages;
+    return pages.concat(listPages);
   }
 }

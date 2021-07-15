@@ -10,7 +10,7 @@ export default (fastify: FastifyInstance, opts: any, done: () => void) => {
     return pagesComposer.getPages();
   });
 
-  fastify.get<any>('/*', (request) => {
+  fastify.get<any>('/*.json', (request) => {
     return composer.buildSchema(request.url);
   });
 
