@@ -1,18 +1,29 @@
 import { FastifyInstance } from 'fastify';
-import { Sale } from '../../interfaces/Sales';
+import { Customer, Order } from '../../interfaces/Selling';
 import BasicCrud from '../../services/BasicCrud';
+import { createCrudRoutes } from '../utils';
 
 export default (fastify: FastifyInstance, opts: any, done: () => void) => {
-  const salesService = new BasicCrud<Sale>(opts.config, {
+  const orderService = new BasicCrud<Order>(opts.config, {
     routePrefix: '/',
     serviceName: 'selling-service'
   });
 
-  fastify.get('/:id', (request: any) => salesService.getDoc(request.params.id, request.query));
-  fastify.get('/', (request) => salesService.getDocs(request.query));
-  fastify.post('/', (request: any) => salesService.createDoc(request.body));
-  fastify.put('/:id', (request: any) => salesService.updateDoc(request.params.id, request.body));
-  fastify.delete('/:id', (request: any) => salesService.deleteDoc(request.params.id));
+  const customerService = new BasicCrud<Customer>(opts.config, {
+    routePrefix: '/customer/',
+    serviceName: 'selling-service'
+  });
+
+  fastify.register(createCrudRoutes, {
+    service: customerService,
+    prefix: '/customer'
+  });
+
+  fastify.get('/:id', (request: any) => orderService.getDoc(request.params.id, request.query));
+  fastify.get('/', (request) => orderService.getDocs(request.query));
+  fastify.post('/', (request: any) => orderService.createDoc(request.body));
+  fastify.put('/:id', (request: any) => orderService.updateDoc(request.params.id, request.body));
+  fastify.delete('/:id', (request: any) => orderService.deleteDoc(request.params.id));
 
   done();
 };

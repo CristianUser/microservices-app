@@ -38,6 +38,10 @@ const HomePage: FC = () => {
         {
           to: '/orders',
           title: 'Sale Orders'
+        },
+        {
+          to: '/customers',
+          title: 'Customers'
         }
       ]
     }

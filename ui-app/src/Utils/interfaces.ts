@@ -46,3 +46,7 @@ export interface Order {
   subTotal: number;
   total: number;
 }
+
+export interface Customer extends CommonProps {
+  name?: string;
+}
