@@ -3,6 +3,7 @@ import { FastifyInstance } from 'fastify';
 import itemRoutes from './item';
 import fileRoutes from './files';
 import sellingRoutes from './selling';
+import formsRoutes from './forms';
 import { IConfig } from '../config';
 
 export default (fastify: FastifyInstance, config: IConfig) => {
@@ -18,6 +19,11 @@ export default (fastify: FastifyInstance, config: IConfig) => {
 
   fastify.register(sellingRoutes, {
     prefix: '/selling',
+    config
+  });
+
+  fastify.register(formsRoutes, {
+    prefix: '/forms',
     config
   });
 };
