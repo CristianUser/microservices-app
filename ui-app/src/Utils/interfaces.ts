@@ -36,3 +36,20 @@ export interface Order {
   subTotal: number;
   total: number;
 }
+
+export interface JsonPageProps {
+  apiRoutePrefix: string;
+  schemaPath: string;
+  title: {
+    dynamic: boolean;
+    value: string;
+  };
+  uiSchema: any;
+  includeImage: boolean;
+  breadcrumbRoutes: [];
+}
+export interface JsonPage {
+  routePath: string;
+  title: string;
+  props: JsonPageProps;
+}

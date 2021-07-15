@@ -1,11 +1,11 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, RouteProps } from 'react-router-dom';
 import './App.scss';
+import FormPageRenderer from './Components/FormRenderer';
 
 import Home from './Pages/Home';
-import ItemPage from './Pages/Item/Item';
 import ItemBrandPage from './Pages/Item/ItemBrand';
 import ItemBrandsListPage from './Pages/Item/ItemBrandList';
 import ItemGroupPage from './Pages/Item/ItemGroup';
@@ -15,6 +15,10 @@ import ItemPricesListPage from './Pages/Item/ItemPricesList';
 import ItemsList from './Pages/Item/ItemsList';
 import SaleOrderPage from './Pages/Sale/Order';
 import SaleOrdersPage from './Pages/Sale/Orders';
+import FormClient from './Services/FormClient';
+import { JsonPage } from './Utils/interfaces';
+
+const formClient = new FormClient();
 
 const routes: RouteProps[] = [
   {
@@ -25,11 +29,6 @@ const routes: RouteProps[] = [
   {
     component: ItemsList,
     path: '/items-list',
-    exact: true
-  },
-  {
-    component: ItemPage,
-    path: '/item/:id',
     exact: true
   },
   {
@@ -75,11 +74,22 @@ const routes: RouteProps[] = [
 ];
 
 const App: FC = () => {
+  const [pages, setPages] = useState<JsonPage[]>([]);
+
+  useEffect(() => {
+    formClient.getPages().then(setPages);
+  }, []);
+
   return (
     <Router>
       <Switch>
         {routes.map((route, i) => (
           <Route {...route} key={`r_${i}`} />
+        ))}
+        {pages.map((page) => (
+          <Route path={page.routePath} exact>
+            <FormPageRenderer {...page.props} />
+          </Route>
         ))}
       </Switch>
     </Router>
