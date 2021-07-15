@@ -1,0 +1,30 @@
+{
+  "routePath": "/item/:id",
+  "title": "Item",
+  "props": {
+    "apiRoutePrefix": "/item",
+    "schemaPath": "item/schema.json",
+    "includeImage": true,
+    "title": {
+      "dynamic": true,
+      "value": "name"
+    },
+    "breadcrumbRoutes":[
+      {
+        "path": "/",
+        "breadcrumbName": "Home"
+      },
+      {
+        "path": "/items-list",
+        "breadcrumbName": "Items"
+      },
+      {
+        "path": "/item/{id}",
+        "breadcrumbName": {
+          "dynamic": true,
+          "value": "name"
+        }
+      }
+    ]
+  }
+}
