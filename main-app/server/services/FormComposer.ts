@@ -1,5 +1,5 @@
-/* eslint-disable class-methods-use-this */
 import _ from 'lodash';
+import path from 'path';
 import { IConfig } from '../config';
 import { BaseService } from './Base';
 
@@ -25,6 +25,28 @@ function mapResults(result: GetDocsResult<any>): MappedDoc[] {
   }));
 }
 
+function findReferences(schema: any) {
+  const TOKEN_REGEX = /^\{\{resolve:[a-zA-Z0-9_.\-/]+:[a-zA-Z0-9_.\-/]+\}\}$/;
+  const references: TemplateMatch[] = [];
+  const checkKeys = (input: any, lastPath = '') => {
+    Object.entries(input).forEach(([key, value]) => {
+      const currentPath = _.compact([lastPath, key]).join('.');
+
+      if (typeof value === 'string') {
+        if (TOKEN_REGEX.test(value)) {
+          references.push({ path: currentPath, token: value });
+        }
+      } else if (typeof value === 'object') {
+        checkKeys(value, currentPath);
+      }
+    });
+  };
+
+  checkKeys(schema);
+
+  return references;
+}
+
 export default class FormComposer extends BaseService {
   constructor({ serviceRegistryUrl, serviceVersionIdentifier }: IConfig) {
     super({ serviceRegistryUrl, serviceVersionIdentifier });
@@ -39,29 +61,9 @@ export default class FormComposer extends BaseService {
   }
 
   getMappedDocs(serviceName: string, routePrefix: string): Promise<MappedDoc[]> {
-    return this.getDocs(serviceName, routePrefix).then(mapResults);
-  }
-
-  findReferences(schema: any) {
-    const TOKEN_REGEX = /^\{\{resolve:[a-zA-Z0-9_.\-/]+:[a-zA-Z0-9_.\-/]+\}\}$/;
-    const references: TemplateMatch[] = [];
-    const checkKeys = (input: any, lastPath = '') => {
-      Object.entries(input).forEach(([key, value]) => {
-        const currentPath = _.compact([lastPath, key]).join('.');
-
-        if (typeof value === 'string') {
-          if (TOKEN_REGEX.test(value)) {
-            references.push({ path: currentPath, token: value });
-          }
-        } else if (typeof value === 'object') {
-          checkKeys(value, currentPath);
-        }
-      });
-    };
-
-    checkKeys(schema);
-
-    return references;
+    const fallback = (mappedResults: MappedDoc[]) =>
+      mappedResults.length ? mappedResults : [{ const: '', title: '' }];
+    return this.getDocs(serviceName, routePrefix).then(mapResults).then(fallback);
   }
 
   resolveToken(token: string) {
@@ -80,10 +82,11 @@ export default class FormComposer extends BaseService {
     );
   }
 
-  async build(schema: any) {
-    const foundReferences = this.findReferences(schema);
-    await this.resolveReferences(foundReferences, schema);
+  async buildSchema(schema: string) {
+    const schemaFile = await import(path.resolve(`server${schema}`)).then((file) => file?.default);
+    const foundReferences = findReferences(schemaFile);
+    await this.resolveReferences(foundReferences, schemaFile);
 
-    return schema;
+    return schemaFile;
   }
 }

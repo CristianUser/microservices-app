@@ -1,11 +1,11 @@
 import { FastifyInstance } from 'fastify';
-import ItemForm from '../../forms/item';
+import FormComposer from '../../services/FormComposer';
 
 export default (fastify: FastifyInstance, opts: any, done: () => void) => {
-  const itemForm = new ItemForm(opts.config);
+  const composer = new FormComposer(opts.config);
 
-  fastify.get<any>('/item', () => {
-    return itemForm.build();
+  fastify.get<any>('/*', (request) => {
+    return composer.buildSchema(request.url);
   });
 
   done();

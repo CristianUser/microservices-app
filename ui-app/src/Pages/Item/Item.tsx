@@ -5,14 +5,13 @@ import { useParams, useHistory } from 'react-router-dom';
 import EditPageLayout from '../../Layouts/EditPage';
 import PreviewAndUpload from '../../Components/PreviewAndUpload';
 import itemClient from '../../Services/Item';
-import BasicClient from '../../Services/BasicClient';
-import { Item, ItemBrand, ItemGroup } from '../../Utils/interfaces';
+import { Item } from '../../Utils/interfaces';
 import JsonForm from '../../Components/JsonForm';
 import PageContext from '../../Contexts/PageContext';
 import LayoutContext from '../../Contexts/LayoutContext';
+import FormClient from '../../Services/FormClient';
 
-const itemGroupClient = new BasicClient<ItemGroup>({ routePrefix: '/item/group' });
-const itemBrandClient = new BasicClient<ItemBrand>({ routePrefix: '/item/brand' });
+const formClient = new FormClient();
 
 const SiderContent: FC = (): React.ReactElement => {
   const { data, setData } = useContext(PageContext);
@@ -35,10 +34,7 @@ const ItemPage: FC = () => {
   const { id }: any = useParams();
   const history = useHistory();
   const [data, setData] = useState<Item>({});
-  const [groups, setGroups] = useState<ItemGroup[]>([]);
-  const [brands, setBrands] = useState<ItemBrand[]>([]);
-  const [mappedGroups, setMappedGroups] = useState<any[]>([{ const: 0, title: '' }]);
-  const [mappedBrands, setMappedBrands] = useState<any[]>([{ const: 0, title: '' }]);
+  const [schema, setSchema] = useState({});
   const [loading, setLoading] = useState(false);
 
   const routes = [
@@ -55,34 +51,7 @@ const ItemPage: FC = () => {
       breadcrumbName: data?.name || 'Item'
     }
   ];
-  const schema = {
-    type: 'object',
-    properties: {
-      name: {
-        type: 'string',
-        minLength: 1
-      },
-      disabled: {
-        type: 'boolean'
-      },
-      description: {
-        type: 'string'
-      },
-      uom: {
-        type: 'string',
-        enum: ['Unit', 'KG']
-      },
-      itemGroup: {
-        type: 'number',
-        oneOf: mappedGroups
-      },
-      brand: {
-        type: 'number',
-        oneOf: mappedBrands
-      }
-    },
-    required: ['name']
-  };
+
   const uiSchema = {
     type: 'VerticalLayout',
     elements: [
@@ -151,9 +120,7 @@ const ItemPage: FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      await itemGroupClient.getDocs().then(({ rows }) => setGroups(rows));
-      await itemBrandClient.getDocs().then(({ rows }) => setBrands(rows));
-
+      await formClient.getSchema('item/schema.json').then(setSchema);
       if (id !== 'new') {
         await itemClient.getDoc(id).then((response) => {
           setData(response);
@@ -169,24 +136,6 @@ const ItemPage: FC = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    setMappedGroups(
-      groups.map((row) => ({
-        title: row.name || '',
-        const: row.id || ''
-      }))
-    );
-  }, [groups]);
-
-  useEffect(() => {
-    setMappedBrands(
-      brands.map((row) => ({
-        title: row.name || '',
-        const: row.id || ''
-      }))
-    );
-  }, [brands]);
 
   const onSave = async () => {
     try {
