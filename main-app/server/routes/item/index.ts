@@ -1,11 +1,13 @@
 import { FastifyInstance } from 'fastify';
-import { ItemPrice } from '../../interfaces/Item';
+import { Item, ItemPrice } from '../../interfaces/Item';
 import BasicCrud from '../../services/BasicCrud';
-import { ItemService } from '../../services/Item';
 import { createCrudRoutes } from '../utils';
 
 export default (fastify: FastifyInstance, opts: any, done: () => void) => {
-  const itemService = new ItemService(opts.config);
+  const itemService = new BasicCrud<Item>(opts.config, {
+    routePrefix: '/item/',
+    serviceName: 'item-service'
+  });
   const itemGroupService = new BasicCrud<any>(opts.config, {
     routePrefix: '/group/',
     serviceName: 'item-service'
@@ -33,11 +35,10 @@ export default (fastify: FastifyInstance, opts: any, done: () => void) => {
     service: itemBrandService,
     prefix: '/brand'
   });
-  fastify.get('/:id', (request: any) => itemService.getDoc(request.params.id, request.query));
-  fastify.get('/', (request) => itemService.getDocs(request.query));
-  fastify.post('/', (request: any) => itemService.createDoc(request.body));
-  fastify.put('/:id', (request: any) => itemService.updateDoc(request.params.id, request.body));
-  fastify.delete('/:id', (request: any) => itemService.deleteDoc(request.params.id));
 
+  fastify.register(createCrudRoutes, {
+    service: itemService,
+    prefix: '/item'
+  });
   done();
 };

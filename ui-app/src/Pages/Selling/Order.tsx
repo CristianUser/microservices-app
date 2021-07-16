@@ -9,8 +9,10 @@ import BasicClient from '../../Services/BasicClient';
 import { Item, Order } from '../../Utils/interfaces';
 import JsonForm from '../../Components/JsonForm';
 import PageContext from '../../Contexts/PageContext';
+import FormClient from '../../Services/FormClient';
 
-const sellingClient = new BasicClient<Order>({ routePrefix: '/selling' });
+const formClient = new FormClient();
+const sellingClient = new BasicClient<Order>({ routePrefix: '/selling/order' });
 
 const SiderContent: FC = (): React.ReactElement => {
   return <></>;
@@ -21,7 +23,8 @@ const SaleOrderPage: FC = () => {
   const history = useHistory();
   const [data, setData] = useState<Order>({ items: [], subTotal: 0, total: 0 });
   const [items, setItems] = useState<Item[]>([]);
-  const [mappedItems, setMappedItems] = useState<any[]>([{ const: 0, title: '' }]);
+  const [schema, setSchema] = useState({});
+  const [uiSchema, setUiSchema] = useState({});
   const [loading, setLoading] = useState(false);
 
   const routes = [
@@ -38,101 +41,13 @@ const SaleOrderPage: FC = () => {
       breadcrumbName: data?.customer || 'Order'
     }
   ];
-  const schema = {
-    type: 'object',
-    properties: {
-      disabled: {
-        type: 'boolean'
-      },
-      customer: {
-        type: 'string'
-      },
-      subTotal: {
-        type: 'number'
-      },
-      total: {
-        type: 'number'
-      },
-      items: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            item: {
-              type: 'string',
-              oneOf: mappedItems
-            },
-            qty: {
-              type: 'integer'
-            },
-            price: {
-              type: 'number',
-              readOnly: true
-            }
-          }
-        }
-      }
-    },
-    required: ['items', 'customer']
-  };
-  const uiSchema = {
-    type: 'VerticalLayout',
-    elements: [
-      {
-        type: 'Group',
-        elements: [
-          {
-            type: 'HorizontalLayout',
-            elements: [
-              {
-                type: 'VerticalLayout',
-                elements: [
-                  {
-                    type: 'Control',
-                    scope: '#/properties/customer'
-                  }
-                ]
-              },
-              {
-                type: 'VerticalLayout',
-                elements: [
-                  {
-                    type: 'Control',
-                    scope: '#/properties/subTotal',
-                    options: {
-                      readonly: true
-                    }
-                  },
-                  {
-                    type: 'Control',
-                    scope: '#/properties/total',
-                    options: {
-                      readonly: true
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        type: 'Group',
-        elements: [
-          {
-            type: 'Control',
-            scope: '#/properties/items'
-          }
-        ]
-      }
-    ]
-  };
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      await itemClient.getDocs({ populate: true }).then(({ rows }) => setItems(rows));
-
+      await formClient.getSchema('selling/order/schema.json').then(setSchema);
+      await formClient.getSchema('selling/order/uischema.json').then(setUiSchema);
+      await itemClient.getDocs().then(({ rows }) => setItems(rows));
       if (id !== 'new') {
         await sellingClient.getDoc(id).then(setData);
       }
@@ -158,15 +73,6 @@ const SaleOrderPage: FC = () => {
     data.total = data.subTotal;
     setData(data);
   }, [data.items]);
-
-  useEffect(() => {
-    setMappedItems(
-      items.map((row) => ({
-        title: row.name || '',
-        const: row.id?.toString() || ''
-      }))
-    );
-  }, [items]);
 
   const onSave = async () => {
     try {

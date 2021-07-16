@@ -1,0 +1,51 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Group",
+      "label": "Price List",
+      "elements": [
+        {
+          "type": "HorizontalLayout",
+          "elements": [
+            {
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/item",
+                  "label": "Item"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/currency"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/rate"
+                }
+              ]
+            },
+            {
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/disabled"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/buying"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/selling"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

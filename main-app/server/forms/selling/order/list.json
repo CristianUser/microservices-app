@@ -1,0 +1,38 @@
+{
+  "type": "list",
+  "routePath": "/orders",
+  "title": "Orders",
+  "props": {
+    "apiRoutePrefix": "/selling/order",
+    "toNewDoc": "/order/new",
+    "title": "Orders",
+    "breadcrumbRoutes":[
+      {
+        "path": "/",
+        "breadcrumbName": "Home"
+      },
+      {
+        "path": "/orders",
+        "breadcrumbName": "Orders"
+      }
+    ],
+    "columns": [
+      {
+        "title": "Customer",
+        "dataIndex": "customer",
+        "render": {
+          "type": "link",
+          "to": "/order/{id}"
+        }
+      },
+      {
+        "title": "Status",
+        "dataIndex": "status"
+      },
+      {
+        "title": "ID",
+        "dataIndex": "id"
+      }
+    ]
+  }
+}

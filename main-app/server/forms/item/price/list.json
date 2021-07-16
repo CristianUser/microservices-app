@@ -1,0 +1,38 @@
+{
+  "type": "list",
+  "routePath": "/item-prices",
+  "title": "Item Prices",
+  "props": {
+    "apiRoutePrefix": "/item/price",
+    "toNewDoc": "/item-price/new",
+    "title": "Item Prices",
+    "breadcrumbRoutes":[
+      {
+        "path": "/",
+        "breadcrumbName": "Home"
+      },
+      {
+        "path": "/item-prices",
+        "breadcrumbName": "Item Prices"
+      }
+    ],
+    "columns": [
+      {
+        "title": "Item",
+        "dataIndex": "item",
+        "render": {
+          "type": "link",
+          "to": "/item-price/{id}"
+        }
+      },
+      {
+        "title": "Status",
+        "dataIndex": "status"
+      },
+      {
+        "title": "ID",
+        "dataIndex": "id"
+      }
+    ]
+  }
+}

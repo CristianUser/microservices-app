@@ -1,0 +1,38 @@
+{
+  "type": "list",
+  "routePath": "/item-groups",
+  "title": "Item Groups",
+  "props": {
+    "apiRoutePrefix": "/item/group",
+    "toNewDoc": "/item-group/new",
+    "title": "Item Groups",
+    "breadcrumbRoutes":[
+      {
+        "path": "/",
+        "breadcrumbName": "Home"
+      },
+      {
+        "path": "/item-groups",
+        "breadcrumbName": "Item Groups"
+      }
+    ],
+    "columns": [
+      {
+        "title": "Name",
+        "dataIndex": "name",
+        "render": {
+          "type": "link",
+          "to": "/item-group/{id}"
+        }
+      },
+      {
+        "title": "Status",
+        "dataIndex": "status"
+      },
+      {
+        "title": "ID",
+        "dataIndex": "id"
+      }
+    ]
+  }
+}

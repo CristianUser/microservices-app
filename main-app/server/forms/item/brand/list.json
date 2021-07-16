@@ -1,0 +1,38 @@
+{
+  "type": "list",
+  "routePath": "/item-brands",
+  "title": "Item Brands",
+  "props": {
+    "apiRoutePrefix": "/item/brand",
+    "toNewDoc": "/item-brand/new",
+    "title": "Item Brands",
+    "breadcrumbRoutes":[
+      {
+        "path": "/",
+        "breadcrumbName": "Home"
+      },
+      {
+        "path": "/item-brands",
+        "breadcrumbName": "Item Brands"
+      }
+    ],
+    "columns": [
+      {
+        "title": "Name",
+        "dataIndex": "name",
+        "render": {
+          "type": "link",
+          "to": "/item-brand/{id}"
+        }
+      },
+      {
+        "title": "Status",
+        "dataIndex": "status"
+      },
+      {
+        "title": "ID",
+        "dataIndex": "id"
+      }
+    ]
+  }
+}

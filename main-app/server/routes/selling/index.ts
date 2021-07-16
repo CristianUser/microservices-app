@@ -19,11 +19,9 @@ export default (fastify: FastifyInstance, opts: any, done: () => void) => {
     prefix: '/customer'
   });
 
-  fastify.get('/:id', (request: any) => orderService.getDoc(request.params.id, request.query));
-  fastify.get('/', (request) => orderService.getDocs(request.query));
-  fastify.post('/', (request: any) => orderService.createDoc(request.body));
-  fastify.put('/:id', (request: any) => orderService.updateDoc(request.params.id, request.body));
-  fastify.delete('/:id', (request: any) => orderService.deleteDoc(request.params.id));
-
+  fastify.register(createCrudRoutes, {
+    service: orderService,
+    prefix: '/order'
+  });
   done();
 };

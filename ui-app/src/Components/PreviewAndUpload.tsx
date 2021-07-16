@@ -76,7 +76,7 @@ const PreviewAndUpload: FC<Props> = (props: Props) => {
   return (
     <>
       <Upload
-        action="http://localhost:50290/"
+        action="http://localhost:50400/"
         data={uploadOptions}
         listType="picture-card"
         fileList={fileList}

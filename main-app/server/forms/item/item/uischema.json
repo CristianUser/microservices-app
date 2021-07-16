@@ -1,0 +1,64 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Group",
+      "elements": [
+        {
+          "type": "HorizontalLayout",
+          "elements": [
+            {
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/name",
+                  "label": "Item Name"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/itemGroup",
+                  "label": "Item Group"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/uom",
+                  "label": "Unit of Measure"
+                }
+              ]
+            },
+            {
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/disabled"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Group",
+      "label": "Description",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/brand",
+          "options": {
+            "trim": true
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/description",
+          "options": {
+            "multi": true
+          }
+        }
+      ]
+    }
+  ]
+}

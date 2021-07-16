@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "disabled": {
+      "type": "boolean"
+    },
+    "description": {
+      "type": "string"
+    },
+    "uom": {
+      "type": "string",
+      "enum": [
+        "Unit",
+        "KG"
+      ]
+    },
+    "itemGroup": {
+      "type": "number",
+      "oneOf": "{{resolve:item-service:group}}"
+    },
+    "brand": {
+      "type": "number",
+      "oneOf": "{{resolve:item-service:brand}}"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

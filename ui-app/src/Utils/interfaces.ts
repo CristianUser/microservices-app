@@ -50,3 +50,33 @@ export interface Order {
 export interface Customer extends CommonProps {
   name?: string;
 }
+
+export type DataTextProp = {
+  dynamic?: boolean;
+  value: string;
+};
+
+export interface JsonPageProps {
+  apiRoutePrefix: string;
+  title: any;
+  breadcrumbRoutes: [];
+  [key: string]: any;
+}
+
+export interface JsonFormPageProps extends JsonPageProps {
+  schemaPath: string;
+  uiSchema: any;
+  includeImage: boolean;
+}
+
+export interface JsonListProps extends JsonPageProps {
+  toNewDoc: string;
+  columns: [];
+}
+
+export interface JsonPage {
+  type: 'list' | 'form';
+  routePath: string;
+  title: string;
+  props: JsonFormPageProps | JsonListProps;
+}
