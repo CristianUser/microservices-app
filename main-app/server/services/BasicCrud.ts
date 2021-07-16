@@ -6,6 +6,11 @@ interface ConstructorOptions {
   routePrefix: string;
 }
 
+export interface GetDocsResult<T> {
+  rows: T[];
+  count: number;
+}
+
 export default class BasicCrud<T> extends BaseService {
   private routePrefix: string;
 
@@ -35,7 +40,7 @@ export default class BasicCrud<T> extends BaseService {
     });
   }
 
-  async getDocs() {
+  async getDocs(): Promise<GetDocsResult<T>> {
     const service = await this.getService(this.serviceName);
     return this.callService({
       method: 'get',

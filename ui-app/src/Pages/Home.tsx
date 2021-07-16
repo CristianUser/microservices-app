@@ -11,7 +11,7 @@ const HomePage: FC = () => {
       title: 'Item',
       links: [
         {
-          to: '/items-list',
+          to: '/items',
           title: 'Items'
         },
         {

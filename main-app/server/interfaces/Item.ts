@@ -1,3 +1,19 @@
+interface CommonProps {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+  disabled: boolean;
+  status: 'draft' | 'archived' | 'active';
+}
+
+export interface ItemGroup extends CommonProps {
+  name: string;
+}
+
+export interface ItemBrand extends CommonProps {
+  name: string;
+}
 export interface Item {
   id: number;
   name: string;

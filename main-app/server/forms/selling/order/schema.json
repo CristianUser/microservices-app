@@ -1,0 +1,40 @@
+{
+  "type": "object",
+  "properties": {
+    "disabled": {
+      "type": "boolean"
+    },
+    "customer": {
+      "type": "string"
+    },
+    "subTotal": {
+      "type": "number"
+    },
+    "total": {
+      "type": "number"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "number",
+            "oneOf": "{{resolve:item-service:item}}"
+          },
+          "qty": {
+            "type": "number"
+          },
+          "price": {
+            "type": "number",
+            "readOnly": true
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "items",
+    "customer"
+  ]
+}

@@ -13,16 +13,18 @@ type Props = {
   children?: React.ReactNode;
   title: string;
   toNewDoc: string;
+  breadcrumbRoutes?: any[];
 };
 
 const TableListLayout: FC<Props> = (props: Props) => {
-  const { children, left, title, toNewDoc } = props;
+  const { children, left, title, toNewDoc, breadcrumbRoutes } = props;
   const [collapsed, setCollapsed] = useState(false);
 
   return (
     <Layout>
       <AdminHeader />
       <ToolHeader
+        breadcrumbRoutes={breadcrumbRoutes}
         header={{
           backIcon: collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />,
           onBack: () => setCollapsed(!collapsed),

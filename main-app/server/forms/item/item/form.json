@@ -1,0 +1,31 @@
+{
+  "type": "form",
+  "routePath": "/item/:id",
+  "title": "Item",
+  "props": {
+    "apiRoutePrefix": "/item/item",
+    "schemaPath": "item/item/schema.json",
+    "includeImage": true,
+    "title": {
+      "dynamic": true,
+      "value": "name"
+    },
+    "breadcrumbRoutes":[
+      {
+        "path": "/",
+        "breadcrumbName": "Home"
+      },
+      {
+        "path": "/items",
+        "breadcrumbName": "Items"
+      },
+      {
+        "path": "/item/{id}",
+        "breadcrumbName": {
+          "dynamic": true,
+          "value": "name"
+        }
+      }
+    ]
+  }
+}
