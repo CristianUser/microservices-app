@@ -1,6 +1,6 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { Layout, Button } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import _ from 'lodash';
@@ -27,12 +27,8 @@ type Props = {
 };
 
 const EditPageLayout: FC<Props> = (props: Props) => {
-  const [initialData, setInitialData] = useState({});
-  const { data, setData } = useContext(PageContext);
+  const { data, setData, initialData } = useContext(PageContext);
   const [collapsed, setCollapsed] = useState(false);
-  const layoutProps = {
-    setInitialData
-  };
   const { breadcrumbRoutes, children, left, title, subTitle } = props;
   const isDraft = data?.status === 'draft';
   const isDirty = !_.isEqual(JSON.stringify(data), JSON.stringify(initialData));
@@ -46,9 +42,13 @@ const EditPageLayout: FC<Props> = (props: Props) => {
     props.onSave?.();
   };
 
+  useEffect(() => {
+    setData?.(data);
+  }, [initialData]);
+
   return (
     <Layout>
-      <LayoutContext.Provider value={layoutProps}>
+      <LayoutContext.Provider value={{}}>
         <AdminHeader />
         <ToolHeader
           breadcrumbRoutes={breadcrumbRoutes}
@@ -62,7 +62,7 @@ const EditPageLayout: FC<Props> = (props: Props) => {
                 <Button key="2" onClick={discardChanges} disabled={!isDirty}>
                   Discard
                 </Button>
-                {isDraft ? (
+                {isDraft && !isDirty ? (
                   <Button key="1" type="primary" onClick={validateDoc}>
                     Confirm
                   </Button>

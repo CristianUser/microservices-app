@@ -6,7 +6,6 @@ import { useParams, useHistory } from 'react-router-dom';
 import PreviewAndUpload from './PreviewAndUpload';
 import FormClient from '../Services/FormClient';
 import PageContext from '../Contexts/PageContext';
-import LayoutContext from '../Contexts/LayoutContext';
 import EditPageLayout from '../Layouts/EditPage';
 import JsonForm from './JsonForm';
 import BasicClient from '../Services/BasicClient';
@@ -52,10 +51,10 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
   const { apiRoutePrefix, uiSchema, schemaPath, title, includeImage, breadcrumbRoutes } = props;
 
   const client = new BasicClient<any>({ routePrefix: apiRoutePrefix });
-  const { setInitialData } = useContext(LayoutContext);
   const { id }: any = useParams();
   const history = useHistory();
   const [data, setData] = useState<any>({});
+  const [initialData, setInitialData] = useState<any>({});
   const [schema, setSchema] = useState({});
   const [loading, setLoading] = useState(false);
   const resolvedTitle = resolveDataText(title, data);
@@ -73,7 +72,7 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
       if (id !== 'new') {
         await client.getDoc(id).then((response) => {
           setData(response);
-          setInitialData?.(response);
+          setInitialData(response);
         });
       }
     } catch (error) {
@@ -90,7 +89,7 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
     try {
       const { status, id: newId } = await client.save(id, data);
 
-      setData({ ...data, status });
+      setInitialData({ ...data, status });
       message.success('Saved successfully!');
       history.replace(history.location.pathname.replace('new', newId || ''));
     } catch (error) {
@@ -99,7 +98,9 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
   };
 
   return (
-    <PageContext.Provider value={{ data, setData, includeImage, apiRoutePrefix }}>
+    <PageContext.Provider
+      value={{ data, setData, initialData, setInitialData, includeImage, apiRoutePrefix }}
+    >
       <EditPageLayout
         left={<SiderContent />}
         breadcrumbRoutes={resolvedBreadcrumbRoutes}
