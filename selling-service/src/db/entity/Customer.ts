@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import SaleOrder from './SaleOrder';
 
 @Entity()
 export default class Customer {
@@ -37,4 +38,7 @@ export default class Customer {
     default: 'draft'
   })
   status: string;
+
+  @OneToMany(() => SaleOrder, (order) => order.customer)
+  orders?: SaleOrder[];
 }

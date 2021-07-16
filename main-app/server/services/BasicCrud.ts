@@ -11,7 +11,7 @@ export interface GetDocsResult<T> {
   count: number;
 }
 
-class BasicCrud<T> extends BaseService {
+export default class BasicCrud<T> extends BaseService {
   private routePrefix: string;
 
   constructor(
@@ -67,5 +67,3 @@ class BasicCrud<T> extends BaseService {
     });
   }
 }
-
-export default BasicCrud;

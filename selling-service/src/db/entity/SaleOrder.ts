@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import Customer from './Customer';
 
 @Entity()
 export default class SaleOrder {
@@ -36,13 +37,14 @@ export default class SaleOrder {
   })
   status: string;
 
-  @Column('simple-json')
+  @Column({
+    type: 'simple-json',
+    default: '[]'
+  })
   items: string[];
 
-  @Column({
-    type: 'text'
-  })
-  customer: string;
+  @ManyToOne(() => Customer, (customer) => customer.orders)
+  customer: Customer;
 
   @Column('float')
   subTotal?: number;

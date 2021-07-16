@@ -1,14 +1,14 @@
 import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
 import { IConfig } from '../config';
 import CrudService from './Crud';
-import SaleOrder from '../db/entity/SaleOrder';
 import Customer from '../db/entity/Customer';
 import { createCrudRoutes } from './utils';
+import OrderService from './Order';
 
 export default (config: IConfig) => {
   const log = config.log();
-  const orderService = new CrudService<SaleOrder>(config, SaleOrder);
-  const customerService = new CrudService<Customer>(config, Customer);
+  const orderService = new OrderService(config);
+  const customerService = new CrudService<Customer>(config, Customer, ['orders']);
   const fastify = Fastify();
 
   fastify.get('/health-check', (request, reply) => {
@@ -25,6 +25,7 @@ export default (config: IConfig) => {
   });
 
   fastify.register(createCrudRoutes, {
+    prefix: '/order',
     controller: orderService
   });
 

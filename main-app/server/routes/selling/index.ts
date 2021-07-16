@@ -5,7 +5,7 @@ import { createCrudRoutes } from '../utils';
 
 export default (fastify: FastifyInstance, opts: any, done: () => void) => {
   const orderService = new BasicCrud<Order>(opts.config, {
-    routePrefix: '/',
+    routePrefix: '/order/',
     serviceName: 'selling-service'
   });
 

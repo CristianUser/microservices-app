@@ -22,6 +22,7 @@ const SaleOrderPage: FC = () => {
   const { id }: any = useParams();
   const history = useHistory();
   const [data, setData] = useState<Order>({ items: [], subTotal: 0, total: 0 });
+  const [initialData, setInitialData] = useState<any>({ items: [], subTotal: 0, total: 0 });
   const [items, setItems] = useState<Item[]>([]);
   const [schema, setSchema] = useState({});
   const [uiSchema, setUiSchema] = useState({});
@@ -47,9 +48,12 @@ const SaleOrderPage: FC = () => {
     try {
       await formClient.getSchema('selling/order/schema.json').then(setSchema);
       await formClient.getSchema('selling/order/uischema.json').then(setUiSchema);
-      await itemClient.getDocs().then(({ rows }) => setItems(rows));
+      await itemClient.getDocs({ populate: true }).then(({ rows }) => setItems(rows));
       if (id !== 'new') {
-        await sellingClient.getDoc(id).then(setData);
+        await sellingClient.getDoc(id).then((doc) => {
+          setData(doc);
+          setInitialData(doc);
+        });
       }
     } catch (error) {
       message.error('Error loading data');
@@ -65,7 +69,7 @@ const SaleOrderPage: FC = () => {
     data.subTotal = 0;
     data.items.forEach((itemSelected, itemIdx) => {
       const itemData = items.find((item) => item.id == itemSelected.item);
-      const price = itemData?.prices[0].rate || 0;
+      const price = itemData?.prices[0]?.rate || 0;
 
       data.items[itemIdx].price = price;
       data.subTotal += price * itemSelected.qty;
@@ -76,17 +80,18 @@ const SaleOrderPage: FC = () => {
 
   const onSave = async () => {
     try {
-      const result = await sellingClient.save(id, data);
+      const { status, id: newId } = await sellingClient.save(id, data);
 
+      setInitialData({ ...data, status });
       message.success('Saved successfully!');
-      history.replace(history.location.pathname.replace('new', result.id || ''));
+      history.replace(history.location.pathname.replace('new', newId || ''));
     } catch (error) {
       message.error('Error saving!');
     }
   };
 
   return (
-    <PageContext.Provider value={{ data, setData }}>
+    <PageContext.Provider value={{ data, setData, initialData, setInitialData }}>
       <EditPageLayout
         left={<SiderContent />}
         breadcrumbRoutes={routes}

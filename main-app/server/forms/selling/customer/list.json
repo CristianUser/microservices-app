@@ -1,31 +1,28 @@
 {
   "type": "list",
-  "routePath": "/orders",
-  "title": "Orders",
+  "routePath": "/customers",
+  "title": "Customers",
   "props": {
-    "callArgs": {
-      "populate": true
-    },
-    "apiRoutePrefix": "/selling/order",
-    "toNewDoc": "/order/new",
-    "title": "Orders",
+    "apiRoutePrefix": "/selling/customer",
+    "toNewDoc": "/customer/new",
+    "title": "Customers",
     "breadcrumbRoutes":[
       {
         "path": "/",
         "breadcrumbName": "Home"
       },
       {
-        "path": "/orders",
-        "breadcrumbName": "Orders"
+        "path": "/customers",
+        "breadcrumbName": "Customers"
       }
     ],
     "columns": [
       {
         "title": "Customer",
-        "dataIndex": ["customer", "name"],
+        "dataIndex": "name",
         "render": {
           "type": "link",
-          "to": "/order/{id}"
+          "to": "/customer/{id}"
         }
       },
       {

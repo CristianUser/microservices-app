@@ -5,7 +5,8 @@
       "type": "boolean"
     },
     "customer": {
-      "type": "string"
+      "type": "number",
+      "oneOf": "{{resolve:selling-service:customer}}"
     },
     "subTotal": {
       "type": "number"
@@ -19,7 +20,7 @@
         "type": "object",
         "properties": {
           "item": {
-            "type": "number",
+            "type": "string",
             "oneOf": "{{resolve:item-service:item}}"
           },
           "qty": {

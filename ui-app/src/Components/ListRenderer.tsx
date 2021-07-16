@@ -9,7 +9,7 @@ import { resolvePath } from '../Utils/json-renderers';
 import StatusTag from './StatusTag';
 
 const ListPageRenderer: FC<JsonListProps> = (props: JsonListProps) => {
-  const { apiRoutePrefix, title, breadcrumbRoutes, columns, toNewDoc } = props;
+  const { apiRoutePrefix, title, breadcrumbRoutes, columns, toNewDoc, callArgs } = props;
 
   const client = new BasicClient<any>({ routePrefix: apiRoutePrefix });
   const [rows, setRows] = useState<any[]>([]);
@@ -28,7 +28,7 @@ const ListPageRenderer: FC<JsonListProps> = (props: JsonListProps) => {
   });
 
   useEffect(() => {
-    client.getDocs().then((data) => {
+    client.getDocs(callArgs).then((data) => {
       setRows(data.rows);
     });
   }, []);
