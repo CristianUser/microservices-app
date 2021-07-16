@@ -40,7 +40,7 @@ const App: FC = () => {
           <Route {...route} key={`r_${i}`} />
         ))}
         {pages.map((page) => (
-          <Route path={page.routePath} exact>
+          <Route path={page.routePath} key={page.routePath} exact>
             {page.type === 'form' ? (
               <FormPageRenderer {...page.props} />
             ) : (
