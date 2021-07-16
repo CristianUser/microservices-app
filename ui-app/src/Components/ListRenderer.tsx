@@ -6,6 +6,7 @@ import BasicClient from '../Services/BasicClient';
 import { JsonListProps } from '../Utils/interfaces';
 import TableListLayout from '../Layouts/TableList';
 import { resolvePath } from '../Utils/json-renderers';
+import StatusTag from './StatusTag';
 
 const ListPageRenderer: FC<JsonListProps> = (props: JsonListProps) => {
   const { apiRoutePrefix, title, breadcrumbRoutes, columns, toNewDoc } = props;
@@ -13,6 +14,9 @@ const ListPageRenderer: FC<JsonListProps> = (props: JsonListProps) => {
   const client = new BasicClient<any>({ routePrefix: apiRoutePrefix });
   const [rows, setRows] = useState<any[]>([]);
   const resolvedColumns = columns.map((column: any) => {
+    if (column.dataIndex === 'status') {
+      column.render = (text: string) => <StatusTag status={text} />;
+    }
     if (column.render) {
       const { type, to } = column.render;
 

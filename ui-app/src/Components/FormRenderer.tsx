@@ -12,6 +12,7 @@ import JsonForm from './JsonForm';
 import BasicClient from '../Services/BasicClient';
 import { DataTextProp } from '../Utils/interfaces';
 import { resolveDataText, resolvePath } from '../Utils/json-renderers';
+import StatusTag from './StatusTag';
 
 const formClient = new FormClient();
 
@@ -87,10 +88,11 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
 
   const onSave = async () => {
     try {
-      const result = await client.save(id, data);
+      const { status, id: newId } = await client.save(id, data);
 
+      setData({ ...data, status });
       message.success('Saved successfully!');
-      history.replace(history.location.pathname.replace('new', result.id || ''));
+      history.replace(history.location.pathname.replace('new', newId || ''));
     } catch (error) {
       message.error('Error saving!');
     }
@@ -102,7 +104,7 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
         left={<SiderContent />}
         breadcrumbRoutes={resolvedBreadcrumbRoutes}
         title={resolvedTitle}
-        subTitle={data?.status}
+        subTitle={<StatusTag status={data.status} />}
         onSave={onSave}
       >
         {loading ? (

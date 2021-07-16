@@ -19,7 +19,7 @@ type BreadcrumbRoute = {
 };
 type Props = {
   title?: string;
-  subTitle?: string;
+  subTitle?: any;
   left?: React.ReactNode;
   children?: React.ReactNode;
   breadcrumbRoutes?: Array<BreadcrumbRoute>;
