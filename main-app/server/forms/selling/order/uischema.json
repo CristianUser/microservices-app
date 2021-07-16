@@ -1,0 +1,52 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Group",
+      "elements": [
+        {
+          "type": "HorizontalLayout",
+          "elements": [
+            {
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/customer"
+                }
+              ]
+            },
+            {
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/subTotal",
+                  "options": {
+                    "readonly": true
+                  }
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/total",
+                  "options": {
+                    "readonly": true
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Group",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/items"
+        }
+      ]
+    }
+  ]
+}

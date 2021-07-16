@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "properties": {
+    "currency": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 3
+    },
+    "rate": {
+      "type": "number"
+    },
+    "disabled": {
+      "type": "boolean"
+    },
+    "buying": {
+      "type": "boolean"
+    },
+    "selling": {
+      "type": "boolean"
+    },
+    "item": {
+      "type": "number",
+      "oneOf": "{{resolve:item-service:item}}"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

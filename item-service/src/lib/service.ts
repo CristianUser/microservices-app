@@ -44,6 +44,7 @@ export default (config: IConfig) => {
   });
 
   fastify.register(createCrudRoutes, {
+    prefix: '/item',
     controller: itemService
   });
 

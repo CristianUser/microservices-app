@@ -1,19 +1,19 @@
 {
   "type": "list",
-  "routePath": "/items",
-  "title": "Items",
+  "routePath": "/item-groups",
+  "title": "Item Groups",
   "props": {
-    "apiRoutePrefix": "/item/item",
-    "toNewDoc": "/item/new",
-    "title": "Items",
+    "apiRoutePrefix": "/item/group",
+    "toNewDoc": "/item-group/new",
+    "title": "Item Groups",
     "breadcrumbRoutes":[
       {
         "path": "/",
         "breadcrumbName": "Home"
       },
       {
-        "path": "/items",
-        "breadcrumbName": "Items"
+        "path": "/item-groups",
+        "breadcrumbName": "Item Groups"
       }
     ],
     "columns": [
@@ -22,7 +22,7 @@
         "dataIndex": "name",
         "render": {
           "type": "link",
-          "to": "/item/{id}"
+          "to": "/item-group/{id}"
         }
       },
       {

@@ -7,14 +7,7 @@ import FormPageRenderer from './Components/FormRenderer';
 import ListPageRenderer from './Components/ListRenderer';
 
 import Home from './Pages/Home';
-import ItemBrandPage from './Pages/Item/ItemBrand';
-import ItemBrandsListPage from './Pages/Item/ItemBrandList';
-import ItemGroupPage from './Pages/Item/ItemGroup';
-import ItemGroupsListPage from './Pages/Item/ItemGroupsList';
-import ItemPricePage from './Pages/Item/ItemPrice';
-import ItemPricesListPage from './Pages/Item/ItemPricesList';
 import SaleOrderPage from './Pages/Sale/Order';
-import SaleOrdersPage from './Pages/Sale/Orders';
 import FormClient from './Services/FormClient';
 import { JsonPage } from './Utils/interfaces';
 
@@ -24,41 +17,6 @@ const routes: RouteProps[] = [
   {
     component: Home,
     path: '/',
-    exact: true
-  },
-  {
-    component: ItemGroupsListPage,
-    path: '/item-groups',
-    exact: true
-  },
-  {
-    component: ItemGroupPage,
-    path: '/item-group/:id',
-    exact: true
-  },
-  {
-    component: ItemPricesListPage,
-    path: '/item-prices',
-    exact: true
-  },
-  {
-    component: ItemPricePage,
-    path: '/item-price/:id',
-    exact: true
-  },
-  {
-    component: ItemBrandsListPage,
-    path: '/item-brands',
-    exact: true
-  },
-  {
-    component: ItemBrandPage,
-    path: '/item-brand/:id',
-    exact: true
-  },
-  {
-    component: SaleOrdersPage,
-    path: '/orders',
     exact: true
   },
   {

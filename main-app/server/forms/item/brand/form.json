@@ -1,10 +1,10 @@
 {
   "type": "form",
-  "routePath": "/item/:id",
-  "title": "Item",
+  "routePath": "/item-brand/:id",
+  "title": "Item Brand",
   "props": {
-    "apiRoutePrefix": "/item/item",
-    "schemaPath": "item/item/schema.json",
+    "apiRoutePrefix": "/item/brand",
+    "schemaPath": "item/brand/schema.json",
     "includeImage": true,
     "title": {
       "dynamic": true,
@@ -16,11 +16,11 @@
         "breadcrumbName": "Home"
       },
       {
-        "path": "/items",
-        "breadcrumbName": "Items"
+        "path": "/item-brands",
+        "breadcrumbName": "Item Brands"
       },
       {
-        "path": "/item/{id}",
+        "path": "/item-brand/{id}",
         "breadcrumbName": {
           "dynamic": true,
           "value": "name"

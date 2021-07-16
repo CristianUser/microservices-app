@@ -3,7 +3,7 @@ import BasicClient from './BasicClient';
 
 export class ItemClient extends BasicClient<Item> {
   constructor() {
-    super({ routePrefix: '/item' });
+    super({ routePrefix: '/item/item' });
   }
 }
 
