@@ -87,9 +87,9 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
 
   const onSave = async () => {
     try {
-      const { status, id: newId } = await client.save(id, data);
+      const { status, createdAt, updatedAt, id: newId } = await client.save(id, data);
 
-      setInitialData({ ...data, status });
+      setInitialData({ ...data, status, createdAt, updatedAt });
       message.success('Saved successfully!');
       history.replace(history.location.pathname.replace('new', newId || ''));
     } catch (error) {

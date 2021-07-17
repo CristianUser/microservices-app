@@ -14,10 +14,6 @@ import FormClient from '../../Services/FormClient';
 const formClient = new FormClient();
 const sellingClient = new BasicClient<Order>({ routePrefix: '/selling/order' });
 
-const SiderContent: FC = (): React.ReactElement => {
-  return <></>;
-};
-
 const SaleOrderPage: FC = () => {
   const { id }: any = useParams();
   const history = useHistory();
@@ -39,7 +35,7 @@ const SaleOrderPage: FC = () => {
     },
     {
       path: `/order/${id}`,
-      breadcrumbName: data?.customer || 'Order'
+      breadcrumbName: 'Order'
     }
   ];
 
@@ -69,10 +65,12 @@ const SaleOrderPage: FC = () => {
     data.subTotal = 0;
     data.items.forEach((itemSelected, itemIdx) => {
       const itemData = items.find((item) => item.id == itemSelected.item);
-      const price = itemData?.prices[0]?.rate || 0;
 
-      data.items[itemIdx].price = price;
-      data.subTotal += price * itemSelected.qty;
+      if (!data.items[itemIdx].price) {
+        data.items[itemIdx].price = itemData?.prices[0]?.rate || 0;
+      }
+
+      data.subTotal += data.items[itemIdx].price * itemSelected.qty;
     });
     data.total = data.subTotal;
     setData(data);
@@ -92,12 +90,7 @@ const SaleOrderPage: FC = () => {
 
   return (
     <PageContext.Provider value={{ data, setData, initialData, setInitialData }}>
-      <EditPageLayout
-        left={<SiderContent />}
-        breadcrumbRoutes={routes}
-        title="Sale Order"
-        onSave={onSave}
-      >
+      <EditPageLayout breadcrumbRoutes={routes} title="Sale Order" onSave={onSave}>
         {loading ? (
           <Card style={{ width: '100%' }} loading={loading} />
         ) : (

@@ -77,7 +77,7 @@ const EditPageLayout: FC<Props> = (props: Props) => {
         />
         <Content style={{ padding: '0 50px' }}>
           <Layout className="" style={{ padding: '24px 0' }}>
-            <CommonSider collapsed={collapsed}> {left} </CommonSider>
+            {left && <CommonSider collapsed={collapsed}> {left} </CommonSider>}
             <Content style={{ padding: '0 24px', minHeight: 280 }}>{children}</Content>
           </Layout>
         </Content>
