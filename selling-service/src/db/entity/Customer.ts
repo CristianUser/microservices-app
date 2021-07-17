@@ -1,19 +1,16 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
+import CommonEntity from './Common';
 import SaleOrder from './SaleOrder';
 
 @Entity()
-export default class Customer {
-  constructor({ id, name, description, disabled, status }: any = {}) {
+export default class Customer extends CommonEntity {
+  constructor({ id, name, description }: any = {}) {
+    super();
     this.id = id;
     this.name = name;
     this.description = description;
-    this.disabled = disabled;
-    this.status = status;
   }
-
-  @PrimaryGeneratedColumn()
-  id: number;
 
   @Column({
     type: 'text'
@@ -25,19 +22,6 @@ export default class Customer {
     nullable: true
   })
   description?: string;
-
-  @Column({
-    type: 'boolean',
-    default: false
-  })
-  disabled: boolean;
-
-  @Column({
-    type: 'enum',
-    enum: ['active', 'draft', 'archived'],
-    default: 'draft'
-  })
-  status: string;
 
   @OneToMany(() => SaleOrder, (order) => order.customer)
   orders?: SaleOrder[];

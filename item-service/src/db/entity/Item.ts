@@ -1,37 +1,23 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
+import CommonEntity from './Common';
 import ItemBrand from './ItemBrand';
 import ItemGroup from './ItemGroup';
 import ItemPrice from './ItemPrice';
 
 @Entity()
-export default class Item {
-  constructor({
-    id,
-    name,
-    description,
-    disabled,
-    status,
-    uom,
-    brand,
-    itemGroup,
-    imageUrl,
-    prices
-  }: any = {}) {
+export default class Item extends CommonEntity {
+  constructor({ id, name, description, uom, brand, itemGroup, imageUrl, prices }: any = {}) {
+    super();
     this.id = id;
     this.name = name;
     this.description = description;
-    this.disabled = disabled;
-    this.status = status;
     this.uom = uom;
     this.brand = brand;
     this.itemGroup = itemGroup;
     this.imageUrl = imageUrl;
     this.prices = prices;
   }
-
-  @PrimaryGeneratedColumn()
-  id: number;
 
   @Column({
     length: 100
@@ -48,26 +34,13 @@ export default class Item {
   imageUrl?: string;
 
   @Column({
-    type: 'boolean',
-    default: false
-  })
-  disabled: boolean;
-
-  @Column({
-    type: 'enum',
-    enum: ['active', 'draft', 'archived'],
-    default: 'draft'
-  })
-  status: string;
-
-  @Column({
     type: 'text',
     default: 'Unit'
   })
   uom?: string;
 
   @ManyToOne(() => ItemBrand, (brand) => brand.items)
-  brand?: string;
+  brand?: ItemBrand;
 
   @ManyToOne(() => ItemGroup, (group) => group.items)
   itemGroup: ItemGroup;

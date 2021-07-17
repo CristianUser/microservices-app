@@ -31,7 +31,7 @@
       },
       {
         "title": "ID",
-        "dataIndex": "id"
+        "dataIndex": "cid"
       }
     ]
   }

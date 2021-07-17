@@ -5,7 +5,7 @@
       "type": "boolean"
     },
     "customer": {
-      "type": "number",
+      "type": "string",
       "oneOf": "{{resolve:selling-service:customer}}"
     },
     "subTotal": {

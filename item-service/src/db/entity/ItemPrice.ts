@@ -1,21 +1,18 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
+import CommonEntity from './Common';
 import Item from './Item';
 
 @Entity()
-export default class ItemPrice {
-  constructor({ id, disabled, status, buying, selling, currency, rate }: any = {}) {
+export default class ItemPrice extends CommonEntity {
+  constructor({ id, buying, selling, currency, rate }: any = {}) {
+    super();
     this.id = id;
-    this.disabled = disabled;
-    this.status = status;
     this.buying = buying;
     this.selling = selling;
     this.currency = currency;
     this.rate = rate;
   }
-
-  @PrimaryGeneratedColumn()
-  id: number;
 
   @Column({
     length: 3,
@@ -39,19 +36,6 @@ export default class ItemPrice {
     default: true
   })
   selling: boolean;
-
-  @Column({
-    type: 'boolean',
-    default: false
-  })
-  disabled: boolean;
-
-  @Column({
-    type: 'enum',
-    enum: ['active', 'draft', 'archived'],
-    default: 'draft'
-  })
-  status: string;
 
   @ManyToOne(() => Item, (item) => item.prices, {
     nullable: false

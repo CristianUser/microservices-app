@@ -1,20 +1,17 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
+import CommonEntity from './Common';
 import Item from './Item';
 
 @Entity()
-export default class ItemGroup {
-  constructor({ id, name, description, disabled, status, imageUrl }: any = {}) {
+export default class ItemGroup extends CommonEntity {
+  constructor({ id, name, description, imageUrl }: any = {}) {
+    super();
     this.id = id;
     this.name = name;
     this.description = description;
-    this.disabled = disabled;
-    this.status = status;
     this.imageUrl = imageUrl;
   }
-
-  @PrimaryGeneratedColumn()
-  id: number;
 
   @Column({
     length: 100
@@ -32,19 +29,6 @@ export default class ItemGroup {
     default: ''
   })
   imageUrl?: string;
-
-  @Column({
-    type: 'boolean',
-    default: false
-  })
-  disabled: boolean;
-
-  @Column({
-    type: 'enum',
-    enum: ['active', 'draft', 'archived'],
-    default: 'draft'
-  })
-  status: string;
 
   @OneToMany(() => Item, (item) => item.itemGroup)
   items?: Item[];
