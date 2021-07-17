@@ -1,7 +1,8 @@
 /* eslint-disable no-param-reassign */
 import React, { FC, useEffect, useState } from 'react';
-import { Table } from 'antd';
+import { Table, Typography } from 'antd';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
 import BasicClient from '../Services/BasicClient';
 import { JsonListProps } from '../Utils/interfaces';
 import TableListLayout from '../Layouts/TableList';
@@ -18,10 +19,16 @@ const ListPageRenderer: FC<JsonListProps> = (props: JsonListProps) => {
       column.render = (text: string) => <StatusTag status={text} />;
     }
     if (column.render) {
-      const { type, to } = column.render;
+      const { type, to, format: formatStr } = column.render;
 
       if (type === 'link') {
         column.render = (text: string, data: any) => <Link to={resolvePath(to, data)}>{text}</Link>;
+      }
+
+      if (type === 'date') {
+        column.render = (text: string) => (
+          <Typography.Text>{format(new Date(text), formatStr)}</Typography.Text>
+        );
       }
     }
     return column;

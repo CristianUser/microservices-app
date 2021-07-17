@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { Card, message } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
 
@@ -57,6 +57,8 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
   const [initialData, setInitialData] = useState<any>({});
   const [schema, setSchema] = useState({});
   const [loading, setLoading] = useState(false);
+  const isNewDoc = useMemo(() => id === 'new', [id]);
+  const localStorageKey = `${schemaPath}.formData`;
   const resolvedTitle = resolveDataText(title, data);
   const resolvedBreadcrumbRoutes = breadcrumbRoutes.map((route) => {
     return {
@@ -65,15 +67,23 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
     };
   });
 
+  useEffect(() => {
+    if (isNewDoc && Object.keys(data).length) {
+      localStorage.setItem(localStorageKey, JSON.stringify(data));
+    }
+  }, [data]);
+
   const fetchData = async () => {
     setLoading(true);
     try {
       await formClient.getSchema(schemaPath).then(setSchema);
-      if (id !== 'new') {
+      if (!isNewDoc) {
         await client.getDoc(id).then((response) => {
           setData(response);
           setInitialData(response);
         });
+      } else {
+        setData(JSON.parse(localStorage.getItem(localStorageKey) || '{}'));
       }
     } catch (error) {
       message.error('Error loading data');
@@ -91,10 +101,14 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
 
       setInitialData({ ...data, status, createdAt, updatedAt });
       message.success('Saved successfully!');
+      localStorage.removeItem(localStorageKey);
       history.replace(history.location.pathname.replace('new', newId || ''));
     } catch (error) {
       message.error('Error saving!');
     }
+  };
+  const onDiscard = () => {
+    localStorage.removeItem(localStorageKey);
   };
 
   return (
@@ -107,6 +121,7 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
         title={resolvedTitle}
         subTitle={<StatusTag status={data.status} />}
         onSave={onSave}
+        onDiscard={onDiscard}
       >
         {loading ? (
           <Card style={{ width: '100%' }} loading={loading} />

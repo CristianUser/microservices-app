@@ -24,6 +24,7 @@ type Props = {
   children?: React.ReactNode;
   breadcrumbRoutes?: Array<BreadcrumbRoute>;
   onSave?: <T = any>(a?: T) => void;
+  onDiscard?: <T = any>(a?: T) => void;
 };
 
 const EditPageLayout: FC<Props> = (props: Props) => {
@@ -35,6 +36,7 @@ const EditPageLayout: FC<Props> = (props: Props) => {
 
   const discardChanges = () => {
     setData?.(initialData);
+    props.onDiscard?.();
   };
   const validateDoc = () => {
     data.status = 'active';

@@ -31,7 +31,8 @@
       },
       {
         "title": "ID",
-        "dataIndex": "cid"
+        "dataIndex": "cid",
+        "width": 30
       }
     ]
   }
