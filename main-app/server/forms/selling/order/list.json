@@ -3,6 +3,9 @@
   "routePath": "/orders",
   "title": "Orders",
   "props": {
+    "callArgs": {
+      "populate": true
+    },
     "apiRoutePrefix": "/selling/order",
     "toNewDoc": "/order/new",
     "title": "Orders",
@@ -19,7 +22,7 @@
     "columns": [
       {
         "title": "Customer",
-        "dataIndex": "customer",
+        "dataIndex": ["customer", "name"],
         "render": {
           "type": "link",
           "to": "/order/{id}"
@@ -31,7 +34,7 @@
       },
       {
         "title": "ID",
-        "dataIndex": "id"
+        "dataIndex": "cid"
       }
     ]
   }

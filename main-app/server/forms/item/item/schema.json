@@ -19,11 +19,11 @@
       ]
     },
     "itemGroup": {
-      "type": "number",
+      "type": "string",
       "oneOf": "{{resolve:item-service:group}}"
     },
     "brand": {
-      "type": "number",
+      "type": "string",
       "oneOf": "{{resolve:item-service:brand}}"
     }
   },

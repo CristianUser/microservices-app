@@ -7,7 +7,7 @@ import FormPageRenderer from './Components/FormRenderer';
 import ListPageRenderer from './Components/ListRenderer';
 
 import Home from './Pages/Home';
-import SaleOrderPage from './Pages/Sale/Order';
+import { routes as sellingRoutes } from './Pages/Selling';
 import FormClient from './Services/FormClient';
 import { JsonPage } from './Utils/interfaces';
 
@@ -19,11 +19,7 @@ const routes: RouteProps[] = [
     path: '/',
     exact: true
   },
-  {
-    component: SaleOrderPage,
-    path: '/order/:id',
-    exact: true
-  }
+  ...sellingRoutes
 ];
 
 const App: FC = () => {

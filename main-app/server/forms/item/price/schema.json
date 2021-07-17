@@ -19,7 +19,7 @@
       "type": "boolean"
     },
     "item": {
-      "type": "number",
+      "type": "string",
       "oneOf": "{{resolve:item-service:item}}"
     }
   },

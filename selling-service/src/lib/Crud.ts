@@ -11,15 +11,15 @@ import {
 import { IConfig } from '../config';
 
 export default class CrudService<Entity extends ObjectLiteral> {
-  private config: IConfig;
+  public config: IConfig;
 
-  private repository: Repository<Entity>;
+  public repository: Repository<Entity>;
 
-  private connection: Connection;
+  public connection: Connection;
 
-  private entityClass: EntityTarget<Entity>;
+  public entityClass: EntityTarget<Entity>;
 
-  private relations: string[];
+  public relations: string[];
 
   constructor(config: IConfig, entityClass: EntityTarget<Entity>, relations: string[] = []) {
     this.config = config;
@@ -30,7 +30,7 @@ export default class CrudService<Entity extends ObjectLiteral> {
     this.renameRelatedFields = this.renameRelatedFields.bind(this);
   }
 
-  private renameRelatedFields(result: any) {
+  protected renameRelatedFields(result: any) {
     this.relations.forEach((key) => {
       const idKey = `${key}Id`;
 
@@ -67,8 +67,9 @@ export default class CrudService<Entity extends ObjectLiteral> {
       .then(this.renameRelatedFields);
   }
 
-  async getItems(findOptions?: FindManyOptions<Entity>) {
-    const [rows, count] = await this.repository.findAndCount(findOptions);
+  async getItems(findOptions: FindManyOptions<Entity> = {}, includeRelations = false) {
+    const options = includeRelations ? { relations: this.relations } : {};
+    const [rows, count] = await this.repository.findAndCount({ ...options, ...findOptions });
 
     return { rows, count };
   }

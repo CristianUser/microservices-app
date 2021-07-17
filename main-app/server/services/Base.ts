@@ -1,8 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { CircuitBreaker } from '../lib/CircuitBreaker';
 
-const circuitBreaker = new CircuitBreaker();
-
 export interface IServiceInstance {
   ip: string;
   name: string;
@@ -11,6 +9,8 @@ export interface IServiceInstance {
   version: string;
 }
 export abstract class BaseService {
+  public circuitBreaker: CircuitBreaker;
+
   public serviceName: string;
 
   private serviceRegistryUrl: string;
@@ -21,6 +21,7 @@ export abstract class BaseService {
     this.serviceRegistryUrl = serviceRegistryUrl;
     this.serviceVersionIdentifier = serviceVersionIdentifier;
     this.serviceName = serviceName;
+    this.circuitBreaker = new CircuitBreaker();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -28,9 +29,8 @@ export abstract class BaseService {
     return `http://${service.ip}:${service.port}${path}`;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   protected async callService(requestOptions: AxiosRequestConfig) {
-    return circuitBreaker.callService(requestOptions);
+    return this.circuitBreaker.callService(requestOptions);
   }
 
   protected async getService(serviceName: string): Promise<IServiceInstance> {

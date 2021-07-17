@@ -16,30 +16,28 @@ export function createCrudRoutes<T>(
     return result;
   });
 
-  fastify.get('/', async (request: any) => {
-    const result = await controller.getItems(request.body);
+  fastify.get('/', async (request: any, reply) => {
+    const includeRelations = request.query.populate === 'true';
 
-    return result;
+    reply.header('ETag', controller.etag);
+
+    return controller.getItems(request.body, includeRelations);
   });
 
   fastify.post('/', async (request: FastifyRequest) => {
-    const result = await controller.createItem(request.body);
-
-    return result;
+    return controller.createItem(request.body);
   });
 
   fastify.put('/:id', async (request: FastifyRequest) => {
     const { id }: any = request.params;
-    const result = await controller.updateItem(id, request.body);
 
-    return result;
+    return controller.updateItem(id, request.body);
   });
 
-  fastify.delete('/:id', async (request: FastifyRequest) => {
+  fastify.delete('/:id', async (request) => {
     const { id }: any = request.params;
-    const result = await controller.deleteItem(id);
 
-    return result;
+    return controller.deleteItem(id);
   });
 
   done();

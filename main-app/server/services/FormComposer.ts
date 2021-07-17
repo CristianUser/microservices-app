@@ -47,6 +47,10 @@ function findReferences(schema: any) {
   return references;
 }
 
+function loadFile(filePath: string) {
+  return import(path.resolve(`server${filePath}`)).then((file) => _.cloneDeep(file?.default));
+}
+
 export default class FormComposer extends BaseService {
   constructor({ serviceRegistryUrl, serviceVersionIdentifier }: IConfig) {
     super({ serviceRegistryUrl, serviceVersionIdentifier });
@@ -83,7 +87,7 @@ export default class FormComposer extends BaseService {
   }
 
   async buildSchema(schema: string) {
-    const schemaFile = await import(path.resolve(`server${schema}`)).then((file) => file?.default);
+    const schemaFile = await loadFile(schema);
     const foundReferences = findReferences(schemaFile);
     await this.resolveReferences(foundReferences, schemaFile);
 

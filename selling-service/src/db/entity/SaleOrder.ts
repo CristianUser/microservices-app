@@ -1,21 +1,19 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
+import CommonEntity from './Common';
+import Customer from './Customer';
 
 @Entity()
-export default class SaleOrder {
-  constructor({ id, customer, description, disabled, status, items, subTotal, total }: any = {}) {
+export default class SaleOrder extends CommonEntity {
+  constructor({ id, customer, description, items, subTotal, total }: any = {}) {
+    super();
     this.id = id;
     this.customer = customer;
     this.description = description;
-    this.disabled = disabled;
-    this.status = status;
     this.items = items;
     this.subTotal = subTotal;
     this.total = total;
   }
-
-  @PrimaryGeneratedColumn()
-  id: number;
 
   @Column({
     type: 'text',
@@ -24,27 +22,13 @@ export default class SaleOrder {
   description?: string;
 
   @Column({
-    type: 'boolean',
-    default: false
-  })
-  disabled: boolean;
-
-  @Column({
-    type: 'enum',
-    enum: ['active', 'draft', 'archived'],
-    default: 'draft'
-  })
-  status: string;
-
-  @Column({
-    type: 'text'
+    type: 'simple-json',
+    default: '[]'
   })
   items: string[];
 
-  @Column({
-    type: 'text'
-  })
-  customer: string;
+  @ManyToOne(() => Customer, (customer) => customer.orders)
+  customer: Customer;
 
   @Column('float')
   subTotal?: number;
