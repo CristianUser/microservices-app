@@ -1,5 +1,3 @@
-/* eslint-disable eqeqeq */
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { FC, useEffect, useState } from 'react';
 import { Card, message } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
@@ -64,7 +62,7 @@ const SaleOrderPage: FC = () => {
   useEffect(() => {
     data.subTotal = 0;
     data.items.forEach((itemSelected, itemIdx) => {
-      const itemData = items.find((item) => item.id == itemSelected.item);
+      const itemData = items.find((item) => item.id === itemSelected.item);
 
       if (!data.items[itemIdx].price) {
         data.items[itemIdx].price = itemData?.prices[0]?.rate || 0;
