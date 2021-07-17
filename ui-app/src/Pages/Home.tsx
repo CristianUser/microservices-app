@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import React, { FC } from 'react';
 import { Menu, Space, Typography } from 'antd';
 import { Link } from 'react-router-dom';
@@ -51,14 +50,14 @@ const HomePage: FC = () => {
     <HomeLayout>
       <Space align="start">
         {domains.map((domain) => (
-          <Menu title={domain.title}>
+          <Menu title={domain.title} key={domain.title}>
             <Menu.Item key="1">
               <Title level={5} style={{ marginBottom: 0 }}>
                 {domain.title}
               </Title>
             </Menu.Item>
-            {domain.links.map((link, idx) => (
-              <Menu.Item key={`${domain.title}_${idx}`}>
+            {domain.links.map((link) => (
+              <Menu.Item key={`${domain.title}_${link.to}`}>
                 <Link to={link.to}>{link.title}</Link>
               </Menu.Item>
             ))}
