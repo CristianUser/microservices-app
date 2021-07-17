@@ -8,12 +8,12 @@ import {
 } from 'typeorm';
 
 export default abstract class CommonEntity {
-  @PrimaryGeneratedColumn()
+  @Column()
+  @Generated('increment')
   cid?: number;
 
-  @Column()
-  @Generated('uuid')
-  id!: string;
+  @PrimaryGeneratedColumn('uuid')
+  id?: string;
 
   @Column({
     type: 'boolean',

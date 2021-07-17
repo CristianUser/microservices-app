@@ -8,11 +8,11 @@ import {
 } from 'typeorm';
 
 export default abstract class CommonEntity {
-  @PrimaryGeneratedColumn()
+  @Column()
+  @Generated('increment')
   cid?: number;
 
-  @Column()
-  @Generated('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id?: string;
 
   @Column({

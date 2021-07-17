@@ -13,6 +13,8 @@ import { IConfig } from '../config';
 export default class CrudService<Entity extends ObjectLiteral> {
   private config: IConfig;
 
+  public etag: number;
+
   private repository: Repository<Entity>;
 
   private connection: Connection;
@@ -28,6 +30,7 @@ export default class CrudService<Entity extends ObjectLiteral> {
     this.repository = getRepository(this.entityClass);
     this.connection = getConnection();
     this.renameRelatedFields = this.renameRelatedFields.bind(this);
+    this.etag = Date.now();
   }
 
   private renameRelatedFields(result: any) {
@@ -43,6 +46,7 @@ export default class CrudService<Entity extends ObjectLiteral> {
   }
 
   async createItem(payload: any) {
+    this.etag = Date.now();
     return this.connection
       .createQueryBuilder()
       .insert()
@@ -75,6 +79,7 @@ export default class CrudService<Entity extends ObjectLiteral> {
   }
 
   updateItem(id: string, payload: any) {
+    this.etag = Date.now();
     return this.connection
       .createQueryBuilder()
       .update(this.entityClass)
@@ -88,6 +93,7 @@ export default class CrudService<Entity extends ObjectLiteral> {
   deleteItem(id: string) {
     const payload: any = { disabled: true, status: 'archived' };
 
+    this.etag = Date.now();
     return this.repository.update(id, payload);
   }
 }
