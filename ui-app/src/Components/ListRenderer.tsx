@@ -90,7 +90,7 @@ const ListPageRenderer: FC<JsonListProps> = (props: JsonListProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [matchFilters, setMatchFilters] = useState<Record<string, any | any[]>>({});
   const [searchFilters, setSearchFilters] = useState<Record<string, any | any[]>>({});
-  const [sort, setSort] = useState<any>({});
+  const [sort, setSort] = useState<any>({ createdAt: 'ASC' });
   const searchableColumns: string[] = [];
   let searchInput: any;
 
