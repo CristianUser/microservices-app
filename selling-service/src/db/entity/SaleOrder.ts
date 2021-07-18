@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, Index } from 'typeorm';
 import CommonEntity from './Common';
 import Customer from './Customer';
 
@@ -27,6 +27,7 @@ export default class SaleOrder extends CommonEntity {
   })
   items: string[];
 
+  @Index()
   @ManyToOne(() => Customer, (customer) => customer.orders)
   customer: Customer;
 

@@ -60,7 +60,8 @@ export default class FormComposer extends BaseService {
     const service = await this.getService(serviceName);
     return this.callService({
       method: 'get',
-      url: this.buildUrl(service, routePrefix)
+      url: this.buildUrl(service, routePrefix),
+      params: { match: { status: 'active' }, limit: -1 }
     });
   }
 

@@ -1,11 +1,12 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, Index } from 'typeorm';
 import CommonEntity from './Common';
 import ItemBrand from './ItemBrand';
 import ItemGroup from './ItemGroup';
 import ItemPrice from './ItemPrice';
 
 @Entity()
+@Index(['name', 'status'])
 export default class Item extends CommonEntity {
   constructor({ id, name, description, uom, brand, itemGroup, imageUrl, prices }: any = {}) {
     super();
@@ -19,12 +20,16 @@ export default class Item extends CommonEntity {
     this.prices = prices;
   }
 
+  @Index()
   @Column({
     length: 100
   })
   name: string;
 
-  @Column('text')
+  @Column({
+    type: 'text',
+    default: ''
+  })
   description?: string;
 
   @Column({

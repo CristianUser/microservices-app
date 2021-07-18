@@ -70,9 +70,10 @@ export interface JsonFormPageProps extends JsonPageProps {
 }
 
 export interface JsonListProps extends JsonPageProps {
+  collapsedSidebar?: boolean;
   callArgs?: any;
   toNewDoc: string;
-  columns: [];
+  columns: any[];
 }
 
 export interface JsonPage {

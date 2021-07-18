@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
-import { Card, message } from 'antd';
+import { message } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
 
 import PreviewAndUpload from './PreviewAndUpload';
@@ -119,22 +119,19 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
         left={<SiderContent />}
         breadcrumbRoutes={resolvedBreadcrumbRoutes}
         title={resolvedTitle}
-        subTitle={<StatusTag status={data.status} />}
+        tags={<StatusTag status={data.status} />}
         onSave={onSave}
         onDiscard={onDiscard}
       >
-        {loading ? (
-          <Card style={{ width: '100%' }} loading={loading} />
-        ) : (
-          <JsonForm
-            uiSchema={uiSchema}
-            schema={schema}
-            data={data}
-            onChange={(form) => {
-              setData(form.data);
-            }}
-          />
-        )}
+        <JsonForm
+          loading={loading}
+          uiSchema={uiSchema}
+          schema={schema}
+          data={data}
+          onChange={(form) => {
+            setData(form.data);
+          }}
+        />
       </EditPageLayout>
     </PageContext.Provider>
   );

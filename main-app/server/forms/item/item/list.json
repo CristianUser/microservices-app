@@ -3,6 +3,7 @@
   "routePath": "/items",
   "title": "Items",
   "props": {
+    "collapsedSidebar": true,
     "apiRoutePrefix": "/item/item",
     "toNewDoc": "/item/new",
     "title": "Items",
@@ -18,8 +19,14 @@
     ],
     "columns": [
       {
+        "title": "ID",
+        "dataIndex": "cid",
+        "width": 30
+      },
+      {
         "title": "Name",
         "dataIndex": "name",
+        "searchable": true,
         "render": {
           "type": "link",
           "to": "/item/{id}"
@@ -27,12 +34,22 @@
       },
       {
         "title": "Status",
-        "dataIndex": "status"
+        "dataIndex": "status",
+        "filters": [
+          { "text": "Draft", "value": "draft" },
+          { "text": "Active", "value": "active" },
+          { "text": "Archived", "value": "archived" }
+        ]
       },
       {
-        "title": "ID",
-        "dataIndex": "cid",
-        "width": 30
+        "title": "Created At",
+        "dataIndex": "createdAt",
+        "sorter": true,
+        "width": 180,
+        "render": {
+          "type": "date",
+          "format": "yyyy/MM/dd hh:mm a"
+        }
       }
     ]
   }

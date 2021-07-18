@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useEffect, useState } from 'react';
-import { Card, message } from 'antd';
+import { message } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
 import EditPageLayout from '../../Layouts/EditPage';
 import itemClient from '../../Services/Item';
@@ -89,18 +90,15 @@ const SaleOrderPage: FC = () => {
   return (
     <PageContext.Provider value={{ data, setData, initialData, setInitialData }}>
       <EditPageLayout breadcrumbRoutes={routes} title="Sale Order" onSave={onSave}>
-        {loading ? (
-          <Card style={{ width: '100%' }} loading={loading} />
-        ) : (
-          <JsonForm
-            uiSchema={uiSchema}
-            schema={schema}
-            data={data}
-            onChange={(form) => {
-              setData(form.data);
-            }}
-          />
-        )}
+        <JsonForm
+          loading={loading}
+          uiSchema={uiSchema}
+          schema={schema}
+          data={data}
+          onChange={(form) => {
+            setData(form.data);
+          }}
+        />
       </EditPageLayout>
     </PageContext.Provider>
   );

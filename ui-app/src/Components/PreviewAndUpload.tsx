@@ -1,5 +1,4 @@
 /* eslint-disable react/require-default-props */
-/* eslint-disable import/no-extraneous-dependencies */
 import React, { FC, useEffect, useState } from 'react';
 import { Upload, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
