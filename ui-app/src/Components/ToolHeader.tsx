@@ -9,12 +9,12 @@ type BreadcrumbRoute = {
   path: string;
   breadcrumbName: string;
 };
-type Props = {
+type ToolHeaderProps = {
   children?: React.ReactNode;
   breadcrumbRoutes?: Array<BreadcrumbRoute>;
   header: PageHeaderProps;
 };
-const ToolHeader: FC<Props> = (props: Props) => {
+const ToolHeader: FC<ToolHeaderProps> = (props: ToolHeaderProps) => {
   return (
     <PageHeader
       breadcrumb={{

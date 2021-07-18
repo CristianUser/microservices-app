@@ -19,6 +19,11 @@
     ],
     "columns": [
       {
+        "title": "ID",
+        "dataIndex": "cid",
+        "width": 30
+      },
+      {
         "title": "Name",
         "dataIndex": "name",
         "searchable": true,
@@ -37,10 +42,14 @@
         ]
       },
       {
-        "title": "ID",
-        "dataIndex": "cid",
+        "title": "Created At",
+        "dataIndex": "createdAt",
         "sorter": true,
-        "width": 30
+        "width": 180,
+        "render": {
+          "type": "date",
+          "format": "yyyy/MM/dd hh:mm a"
+        }
       }
     ]
   }
