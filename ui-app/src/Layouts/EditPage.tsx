@@ -16,9 +16,10 @@ type BreadcrumbRoute = {
   path: string;
   breadcrumbName: string;
 };
-type Props = {
+type EditPageLayoutProps = {
   title?: string;
   subTitle?: any;
+  tags?: React.ReactElement;
   left?: React.ReactNode;
   children?: React.ReactNode;
   breadcrumbRoutes?: Array<BreadcrumbRoute>;
@@ -26,10 +27,10 @@ type Props = {
   onDiscard?: <T = any>(a?: T) => void;
 };
 
-const EditPageLayout: FC<Props> = (props: Props) => {
+const EditPageLayout: FC<EditPageLayoutProps> = (props: EditPageLayoutProps) => {
   const { data, setData, initialData } = useContext(PageContext);
   const [collapsed, setCollapsed] = useState(false);
-  const { breadcrumbRoutes, children, left, title, subTitle } = props;
+  const { breadcrumbRoutes, children, left, title, subTitle, tags } = props;
   const isDraft = data?.status === 'draft';
   const isDirty = !_.isEqual(JSON.stringify(data), JSON.stringify(initialData));
 
@@ -58,6 +59,7 @@ const EditPageLayout: FC<Props> = (props: Props) => {
             onBack: () => setCollapsed(!collapsed),
             title,
             subTitle,
+            tags,
             extra: (
               <>
                 <Button key="2" onClick={discardChanges} disabled={!isDirty}>
@@ -76,7 +78,7 @@ const EditPageLayout: FC<Props> = (props: Props) => {
             )
           }}
         />
-        <Content style={{ padding: '0 50px' }}>
+        <Content style={{ padding: '0 24px' }}>
           <Layout className="" style={{ padding: '24px 0' }}>
             {left && <CommonSider collapsed={collapsed}> {left} </CommonSider>}
             <Content style={{ padding: '0 24px', minHeight: 280 }}>{children}</Content>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -37,9 +38,6 @@ function onlyTruthyValues(input: Record<string, any>) {
 
 function buildColumns(columns: any[], getSearchPropsFor?: Function) {
   return columns.map((column: any) => {
-    if (column.sorter) {
-      column.sortDirections = ['ASC', 'DESC'];
-    }
     if (column.dataIndex === 'status') {
       column.render = (text: string) => <StatusTag status={text} />;
     }
@@ -203,8 +201,9 @@ const ListPageRenderer: FC<JsonListProps> = (props: JsonListProps) => {
     const sorting = sorterOptions.reduce((prev: any, option) => {
       if (option.field) {
         const key: any = option.field;
+        const value = option.order === 'ascend' ? 'ASC' : 'DESC';
 
-        prev[key] = option.order;
+        prev[key] = value;
       }
       return prev;
     }, {});

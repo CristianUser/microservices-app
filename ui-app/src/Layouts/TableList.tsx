@@ -37,7 +37,7 @@ const TableListLayout: FC<Props> = (props: Props) => {
           ]
         }}
       />
-      <Content style={{ padding: '0 50px' }}>
+      <Content style={{ padding: '0 24px' }}>
         <Layout className="site-layout-background" style={{ padding: '24px 0' }}>
           {left && <CommonSider collapsed={collapsed}> {left} </CommonSider>}
           <Content style={{ padding: '0 24px', minHeight: 280 }}>{children}</Content>
