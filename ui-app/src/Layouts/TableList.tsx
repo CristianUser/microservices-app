@@ -1,5 +1,4 @@
 /* eslint-disable react/require-default-props */
-/* eslint-disable import/no-extraneous-dependencies */
 import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Button } from 'antd';

@@ -1,5 +1,6 @@
+/* eslint-disable no-param-reassign */
 import { FastifyInstance, FastifyRequest } from 'fastify';
-import { Between } from 'typeorm';
+import { Between, ILike, In } from 'typeorm';
 import CrudService from './Crud';
 
 /**
@@ -33,7 +34,7 @@ export function createCrudRoutes<T>(
 
   fastify.get('/', async (request: any) => {
     const includeRelations = request.query.populate === 'true';
-    const { limit: limitArg = 10, page = 1, match, range, sortBy } = request.query;
+    const { limit: limitArg = 10, page = 1, match, range, sortBy, search } = request.query;
     const limit = parseInt(limitArg, 10);
     const pagination =
       limit !== -1
@@ -42,17 +43,25 @@ export function createCrudRoutes<T>(
             skip: (page - 1) * limit
           }
         : {};
-    const where = parseJson(match);
+    const whereEntries = Object.entries<any>(parseJson(match) || {});
+    const where = whereEntries.reduce((prev: any, [key, value]) => {
+      prev[key] = Array.isArray(value) ? In(value) : value;
+      return prev;
+    }, {});
     const order: any = parseJson(sortBy) || {};
+    const searchEntries = Object.entries<any>(parseJson(search) || {});
+    const like = searchEntries.reduce((prev: any, [key, value]) => {
+      prev[key] = ILike(`%${value}%`);
+      return prev;
+    }, {});
     const rangeEntries = Object.entries<any>(parseJson(range) || {});
     const between = rangeEntries.reduce((prev: any, [key, value]) => {
-      // eslint-disable-next-line no-param-reassign
       prev[key] = Between(value[0], value[1]);
       return prev;
     }, {});
 
     const results = await controller.getItems(
-      { where, order, ...pagination, ...between },
+      { where: { ...between, ...where, ...like }, order, ...pagination },
       includeRelations
     );
 

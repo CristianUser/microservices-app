@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^4.6.2",
     "@cristianuser/antd-renderers": "^0.13.3",
     "@jsonforms/core": "^3.0.0-alpha.0",
     "@jsonforms/react": "^3.0.0-alpha.0",

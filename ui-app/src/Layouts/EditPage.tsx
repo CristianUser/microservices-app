@@ -1,5 +1,4 @@
 /* eslint-disable react/require-default-props */
-/* eslint-disable import/no-extraneous-dependencies */
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { Layout, Button } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
