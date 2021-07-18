@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { FC } from 'react';
 import { renderers, cells } from '@cristianuser/antd-renderers';
 import { JsonForms } from '@jsonforms/react';
@@ -19,8 +20,8 @@ const JsonForm: FC<JsonFormProps> = (props: JsonFormProps) => {
 
   return loading ? (
     <Space direction="vertical" style={{ width: '100%' }}>
-      {uiSchema.elements.map(() => (
-        <Card style={{ width: '100%' }} loading />
+      {uiSchema.elements.map((element: any, i: number) => (
+        <Card style={{ width: '100%' }} key={`card_${i}`} loading />
       ))}
     </Space>
   ) : (

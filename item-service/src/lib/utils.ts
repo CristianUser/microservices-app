@@ -48,8 +48,10 @@ export function createCrudRoutes<T>(
     }, {});
     const order: any = parseJson(sortBy) || {};
     const searchEntries = Object.entries<any>(parseJson(search) || {});
-    const like = searchEntries.reduce((prev: any, [key, value]) => {
-      prev[key] = ILike(`%${value}%`);
+    const like = searchEntries.reduce((prev: any, [key, value]: [string, string]) => {
+      const likeValue = value.includes('%') ? value : `%${value}%`;
+
+      prev[key] = ILike(likeValue);
       return prev;
     }, {});
     const rangeEntries = Object.entries<any>(parseJson(range) || {});
