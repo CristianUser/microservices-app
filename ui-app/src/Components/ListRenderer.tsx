@@ -81,7 +81,8 @@ const FiltersRenderer: FC<FiltersRendererProps> = (props: FiltersRendererProps) 
 };
 
 const ListPageRenderer: FC<JsonListProps> = (props: JsonListProps) => {
-  const { apiRoutePrefix, title, breadcrumbRoutes, columns, toNewDoc, callArgs } = props;
+  const { apiRoutePrefix, title, breadcrumbRoutes, columns, toNewDoc, callArgs, collapsedSidebar } =
+    props;
 
   const client = new BasicClient<any>({ routePrefix: apiRoutePrefix });
   const [rows, setRows] = useState<any[]>([]);
@@ -196,6 +197,7 @@ const ListPageRenderer: FC<JsonListProps> = (props: JsonListProps) => {
 
   return (
     <TableListLayout
+      startCollapsed={collapsedSidebar}
       title={title}
       toNewDoc={toNewDoc}
       breadcrumbRoutes={breadcrumbRoutes}

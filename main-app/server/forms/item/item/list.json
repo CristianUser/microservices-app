@@ -3,6 +3,7 @@
   "routePath": "/items",
   "title": "Items",
   "props": {
+    "collapsedSidebar": true,
     "apiRoutePrefix": "/item/item",
     "toNewDoc": "/item/new",
     "title": "Items",

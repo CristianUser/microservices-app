@@ -14,11 +14,12 @@ type Props = {
   title: string;
   toNewDoc: string;
   breadcrumbRoutes?: any[];
+  startCollapsed?: boolean;
 };
 
 const TableListLayout: FC<Props> = (props: Props) => {
-  const { children, left, title, toNewDoc, breadcrumbRoutes } = props;
-  const [collapsed, setCollapsed] = useState(false);
+  const { children, left, title, toNewDoc, breadcrumbRoutes, startCollapsed = false } = props;
+  const [collapsed, setCollapsed] = useState(startCollapsed);
 
   return (
     <Layout>

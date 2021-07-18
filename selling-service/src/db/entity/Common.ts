@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Generated,
+  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn
@@ -21,6 +22,7 @@ export default abstract class CommonEntity {
   })
   disabled!: boolean;
 
+  @Index()
   @Column({
     type: 'enum',
     enum: ['active', 'draft', 'archived'],
@@ -34,6 +36,7 @@ export default abstract class CommonEntity {
   @UpdateDateColumn()
   updatedAt!: Date;
 
+  @Index()
   @CreateDateColumn()
   createdAt!: Date;
 }
