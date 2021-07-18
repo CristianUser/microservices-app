@@ -24,7 +24,10 @@ export default class Item extends CommonEntity {
   })
   name: string;
 
-  @Column('text')
+  @Column({
+    type: 'text',
+    default: ''
+  })
   description?: string;
 
   @Column({

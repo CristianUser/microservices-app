@@ -1,18 +1,18 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
-import { Between } from 'typeorm';
+import { Between, In } from 'typeorm';
 import CrudService from './Crud';
 
 /**
  * Parses Json in a secure way
  *
- * @param {string} string
+ * @param {string} str
  * @returns {object}
  */
-function parseJson(string: string) {
+export function parseJson(str: string) {
   try {
-    return JSON.parse(string);
+    return JSON.parse(str);
   } catch (error) {
-    return string;
+    return str;
   }
 }
 
@@ -26,22 +26,26 @@ export function createCrudRoutes<T>(
 ) {
   fastify.get('/:id', async (request: FastifyRequest) => {
     const { id }: any = request.params;
-    const result = await controller.getItem(id);
-
-    return result;
+    return controller.getItem(id);
   });
 
   fastify.get('/', async (request: any, reply) => {
     const includeRelations = request.query.populate === 'true';
-    const { limit = 10, page = 1, match, range, sortBy } = request.query;
+    const { limit: limitArg = 10, page = 1, match, range, sortBy } = request.query;
+    const limit = parseInt(limitArg, 10);
     const pagination =
-      parseInt(limit, 10) !== -1
+      limit !== -1
         ? {
             take: limit,
             skip: (page - 1) * limit
           }
         : {};
-    const where = parseJson(match);
+    const whereEntries = Object.entries<any>(parseJson(match) || {});
+    const where = whereEntries.reduce((prev: any, [key, value]) => {
+      // eslint-disable-next-line no-param-reassign
+      prev[key] = Array.isArray(value) ? In(value) : value;
+      return prev;
+    }, {});
     const order: any = parseJson(sortBy) || {};
     const rangeEntries = Object.entries<any>(parseJson(range) || {});
     const between = rangeEntries.reduce((prev: any, [key, value]) => {

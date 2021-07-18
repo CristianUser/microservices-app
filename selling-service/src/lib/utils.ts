@@ -5,14 +5,14 @@ import CrudService from './Crud';
 /**
  * Parses Json in a secure way
  *
- * @param {string} string
+ * @param {string} str
  * @returns {object}
  */
-function parseJson(string: string) {
+export function parseJson(str: string) {
   try {
-    return JSON.parse(string);
+    return JSON.parse(str);
   } catch (error) {
-    return string;
+    return str;
   }
 }
 
@@ -33,9 +33,10 @@ export function createCrudRoutes<T>(
 
   fastify.get('/', async (request: any) => {
     const includeRelations = request.query.populate === 'true';
-    const { limit = 10, page = 1, match, range, sortBy } = request.query;
+    const { limit: limitArg = 10, page = 1, match, range, sortBy } = request.query;
+    const limit = parseInt(limitArg, 10);
     const pagination =
-      parseInt(limit, 10) !== -1
+      limit !== -1
         ? {
             take: limit,
             skip: (page - 1) * limit

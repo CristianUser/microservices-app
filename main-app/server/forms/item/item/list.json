@@ -27,11 +27,17 @@
       },
       {
         "title": "Status",
-        "dataIndex": "status"
+        "dataIndex": "status",
+        "filters": [
+          { "text": "Draft", "value": "draft" },
+          { "text": "Active", "value": "active" },
+          { "text": "Archived", "value": "archived" }
+        ]
       },
       {
         "title": "ID",
         "dataIndex": "cid",
+        "sorter": true,
         "width": 30
       }
     ]
