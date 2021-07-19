@@ -1,17 +1,18 @@
 import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
 import { IConfig } from '../config';
 import CrudService from './Crud';
-import Item from '../db/entity/Item';
 import ItemGroup from '../db/entity/ItemGroup';
 import { createCrudRoutes } from './utils';
-import ItemPrice from '../db/entity/ItemPrice';
 import ItemBrand from '../db/entity/ItemBrand';
+import PriceService from './Price';
+import ItemService from './Item';
+import itemRouter from './routes/Item';
 
 export default (config: IConfig) => {
   const log = config.log();
-  const itemService = new CrudService<Item>(config, Item, ['itemGroup', 'brand', 'prices']);
+  const itemService = new ItemService(config);
+  const itemPriceService = new PriceService(config);
   const itemGroupService = new CrudService<ItemGroup>(config, ItemGroup, ['items']);
-  const itemPriceService = new CrudService<ItemPrice>(config, ItemPrice, ['item']);
   const itemBrandService = new CrudService<ItemBrand>(config, ItemBrand, ['items']);
   const fastify = Fastify();
 
@@ -43,7 +44,7 @@ export default (config: IConfig) => {
     controller: itemBrandService
   });
 
-  fastify.register(createCrudRoutes, {
+  fastify.register(itemRouter, {
     prefix: '/item',
     controller: itemService
   });

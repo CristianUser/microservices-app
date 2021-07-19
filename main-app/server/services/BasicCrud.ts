@@ -12,7 +12,7 @@ export interface GetDocsResult<T> {
 }
 
 export default class BasicCrud<T> extends BaseService {
-  private routePrefix: string;
+  public routePrefix: string;
 
   constructor(
     { serviceRegistryUrl, serviceVersionIdentifier }: IConfig,

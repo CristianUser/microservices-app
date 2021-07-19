@@ -32,6 +32,15 @@ function run_linter() {
     done
 }
 
+function clean_node() {
+    for i in  ./*/package.json;
+    do
+      SERVICE_DIRECTORY="$(dirname "${i}")"
+      printf "Removing %s\n" "$SERVICE_DIRECTORY/node_modules" ;
+      (cd $SERVICE_DIRECTORY && rm -rf node_modules);
+    done
+}
+
 selected_command=""
 while getopts "a:b:c:" opt
 do
@@ -56,6 +65,10 @@ fi
 
 if [ "${selected_command}" == "lint" ]; then
     run_linter
+fi
+
+if [ "${selected_command}" == "clean" ]; then
+    clean_node
 fi
 
 # Begin script in case all parameters are correct

@@ -1,13 +1,12 @@
 import { FastifyInstance } from 'fastify';
-import { Item, ItemPrice } from '../../interfaces/Item';
+import { ItemPrice } from '../../interfaces/Item';
 import BasicCrud from '../../services/BasicCrud';
+import ItemService from '../../services/Item';
 import { createCrudRoutes } from '../utils';
+import createItemRoutes from './item';
 
 export default (fastify: FastifyInstance, opts: any, done: () => void) => {
-  const itemService = new BasicCrud<Item>(opts.config, {
-    routePrefix: '/item/',
-    serviceName: 'item-service'
-  });
+  const itemService = new ItemService(opts.config);
   const itemGroupService = new BasicCrud<any>(opts.config, {
     routePrefix: '/group/',
     serviceName: 'item-service'
@@ -36,7 +35,7 @@ export default (fastify: FastifyInstance, opts: any, done: () => void) => {
     prefix: '/brand'
   });
 
-  fastify.register(createCrudRoutes, {
+  fastify.register(createItemRoutes, {
     service: itemService,
     prefix: '/item'
   });

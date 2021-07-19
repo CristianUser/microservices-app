@@ -23,7 +23,7 @@
         "path": "/item-price/{id}",
         "breadcrumbName": {
           "dynamic": true,
-          "value": "name"
+          "value": "item"
         }
       }
     ]

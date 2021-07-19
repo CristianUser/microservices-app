@@ -20,7 +20,7 @@ const JsonForm: FC<JsonFormProps> = (props: JsonFormProps) => {
 
   return loading ? (
     <Space direction="vertical" style={{ width: '100%' }}>
-      {uiSchema.elements.map((element: any, i: number) => (
+      {uiSchema?.elements?.map?.((element: any, i: number) => (
         <Card style={{ width: '100%' }} key={`card_${i}`} loading />
       ))}
     </Space>

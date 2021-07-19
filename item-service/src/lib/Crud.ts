@@ -15,13 +15,13 @@ export default class CrudService<Entity extends ObjectLiteral> {
 
   public etag: number;
 
-  private repository: Repository<Entity>;
+  protected repository: Repository<Entity>;
 
-  private connection: Connection;
+  public connection: Connection;
 
-  private entityClass: EntityTarget<Entity>;
+  public entityClass: EntityTarget<Entity>;
 
-  private relations: string[];
+  public relations: string[];
 
   constructor(config: IConfig, entityClass: EntityTarget<Entity>, relations: string[] = []) {
     this.config = config;

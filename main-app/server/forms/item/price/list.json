@@ -3,6 +3,9 @@
   "routePath": "/item-prices",
   "title": "Item Prices",
   "props": {
+    "callArgs": {
+      "populate": true
+    },
     "apiRoutePrefix": "/item/price",
     "toNewDoc": "/item-price/new",
     "title": "Item Prices",
@@ -19,7 +22,7 @@
     "columns": [
       {
         "title": "Item",
-        "dataIndex": "item",
+        "dataIndex": ["item", "name"],
         "render": {
           "type": "link",
           "to": "/item-price/{id}"
