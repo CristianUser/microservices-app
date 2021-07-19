@@ -16,19 +16,23 @@ export interface ItemBrand extends CommonProps {
 }
 export interface ItemPrice {
   id?: number;
-  currency?: string;
-  rate?: number;
+  currency: string;
+  rate: number;
   buying?: boolean;
   selling?: boolean;
   disabled?: boolean;
   status?: string;
-  item?: Item;
+  item: Item | string;
 }
 export interface Item extends CommonProps {
   uom?: string;
   brand?: string;
   itemGroup?: ItemGroup;
   prices: ItemPrice[];
+}
+
+export interface PricedItem extends Item {
+  price: number;
 }
 
 // interface OneOfOption {
