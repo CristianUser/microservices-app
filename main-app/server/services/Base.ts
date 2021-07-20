@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import path from 'path';
 import { CircuitBreaker } from '../lib/CircuitBreaker';
 
 export interface IServiceInstance {
@@ -25,8 +26,8 @@ export abstract class BaseService {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  protected buildUrl(service: IServiceInstance, path: string = '/'): string {
-    return `http://${service.ip}:${service.port}${path}`;
+  protected buildUrl(service: IServiceInstance, pathname: string = '/'): string {
+    return `http://${service.ip}:${service.port}${path.normalize(pathname)}`;
   }
 
   protected async callService(requestOptions: AxiosRequestConfig) {
