@@ -5,7 +5,7 @@ import CrudService from './Crud';
 
 export default class PriceService extends CrudService<ItemPrice> {
   constructor(config: IConfig) {
-    super(config, ItemPrice, ['itemGroup', 'brand', 'prices']);
+    super(config, ItemPrice, ['item']);
   }
 
   async createItem(payload: any) {

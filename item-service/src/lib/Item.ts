@@ -12,7 +12,7 @@ function addPriceToBody(results: any[]) {
 
 export default class ItemService extends CrudService<Item> {
   constructor(config: IConfig) {
-    super(config, Item, ['item']);
+    super(config, Item, ['itemGroup', 'brand', 'prices']);
   }
 
   async getPricedItems(where = {}) {
