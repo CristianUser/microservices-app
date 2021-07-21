@@ -2,12 +2,11 @@
   "definitions": {
     "Contacts": {
       "type": "object",
-      "additionalProperties": false,
+      "additionalProperties": true,
       "title": "Contacts"
     }
   },
   "type": "object",
-  "additionalProperties": false,
   "properties": {
     "id": {
       "type": "string"
@@ -54,9 +53,6 @@
     "imageUrl": {
       "type": "string"
     },
-    "contacts": {
-      "$ref": "#/definitions/Contacts"
-    },
     "joinDate": {
       "type": "string",
       "format": "date-time"
@@ -82,7 +78,6 @@
     "birthDate",
     "employmentType",
     "gender",
-    "id",
     "joinDate",
     "name",
     "status"

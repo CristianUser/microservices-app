@@ -54,6 +54,7 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
   const { id }: any = useParams();
   const history = useHistory();
   const [data, setData] = useState<any>({});
+  const [errors, setErrors] = useState<any>([]);
   const [initialData, setInitialData] = useState<any>({});
   const [schema, setSchema] = useState({});
   const [loading, setLoading] = useState(false);
@@ -96,6 +97,11 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
   }, []);
 
   const onSave = async () => {
+    if (errors?.length) {
+      message.error('There are some errors to pay attention');
+      return;
+    }
+
     try {
       const { status, createdAt, updatedAt, id: newId } = await client.save(id, data);
 
@@ -130,6 +136,7 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
           data={data}
           onChange={(form) => {
             setData(form.data);
+            setErrors(form.errors);
           }}
         />
       </EditPageLayout>
