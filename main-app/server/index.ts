@@ -10,7 +10,7 @@ async function build() {
 
   fastify.register(fastifyCors);
 
-  registerRoutes(fastify, config);
+  await registerRoutes(fastify, config);
   fastify.setErrorHandler((errors: any, request: FastifyRequest, reply: FastifyReply) => {
     const { stack, ...error } = errors;
     reply.status(error.status || 500);

@@ -1,0 +1,63 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Group",
+      "elements": [
+        {
+          "type": "HorizontalLayout",
+          "elements": [
+            {
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/employee",
+                  "label": "Employee Name"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/approver"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/approvalStatus"
+                }
+              ]
+            },
+            {
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/leaveType"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/startDate"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/endDate"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Group",
+      "label": "Leave Details",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/reason",
+          "options": {
+            "trim": true
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "definitions": {
+    "Contacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "title": "Contacts"
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "disabled": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "description": {
+      "type": "string"
+    },
+    "position": {
+      "type": "string"
+    },
+    "employmentType": {
+      "type": "string",
+      "enum": [
+        "fulltime",
+        "part-time",
+        "intern"
+      ]
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "male",
+        "female",
+        "other"
+      ]
+    },
+    "imageUrl": {
+      "type": "string"
+    },
+    "contacts": {
+      "$ref": "#/definitions/Contacts"
+    },
+    "joinDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "birthDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "department": {
+      "type": "string",
+      "oneOf": "{{resolve:hr-service:department}}"
+    },
+    "leaveApplications": {
+      "type": "array",
+      "items": {}
+    },
+    "approvedApplications": {
+      "type": "array",
+      "items": {}
+    }
+  },
+  "required": [
+    "birthDate",
+    "employmentType",
+    "gender",
+    "id",
+    "joinDate",
+    "name",
+    "status"
+  ]
+}

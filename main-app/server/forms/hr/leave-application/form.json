@@ -1,0 +1,31 @@
+{
+  "type": "form",
+  "routePath": "/leave-application/:id",
+  "title": "Leave Application",
+  "props": {
+    "apiRoutePrefix": "/hr/leave-application",
+    "schemaPath": "hr/leave-application/schema.json",
+    "includeImage": true,
+    "title": {
+      "dynamic": true,
+      "value": "name"
+    },
+    "breadcrumbRoutes": [
+      {
+        "path": "/",
+        "breadcrumbName": "Home"
+      },
+      {
+        "path": "/leave-applications",
+        "breadcrumbName": "Leave Applications"
+      },
+      {
+        "path": "/leave-application/{id}",
+        "breadcrumbName": {
+          "dynamic": true,
+          "value": "name"
+        }
+      }
+    ]
+  }
+}

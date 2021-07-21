@@ -4,6 +4,7 @@ import CrudService from './Crud';
 import { createCrudRoutes } from './utils';
 import Employee from '../db/entity/Employee';
 import Department from '../db/entity/Department';
+import LeaveApplication from '../db/entity/LeaveApplication';
 
 export default (config: IConfig) => {
   const log = config.log();
@@ -13,7 +14,7 @@ export default (config: IConfig) => {
     'approvedApplications'
   ]);
   const departmentService = new CrudService<Department>(config, Department, ['employees']);
-  const leaveApplicationService = new CrudService<Department>(config, Department, [
+  const leaveApplicationService = new CrudService<LeaveApplication>(config, LeaveApplication, [
     'employee',
     'approver'
   ]);

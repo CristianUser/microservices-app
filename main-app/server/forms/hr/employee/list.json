@@ -1,0 +1,39 @@
+{
+  "type": "list",
+  "routePath": "/employees",
+  "title": "Employees",
+  "props": {
+    "apiRoutePrefix": "/hr/employee",
+    "toNewDoc": "/employee/new",
+    "title": "Employees",
+    "breadcrumbRoutes": [
+      {
+        "path": "/",
+        "breadcrumbName": "Home"
+      },
+      {
+        "path": "/employees",
+        "breadcrumbName": "Employees"
+      }
+    ],
+    "columns": [
+      {
+        "title": "Name",
+        "dataIndex": "name",
+        "render": {
+          "type": "link",
+          "to": "/employee/{id}"
+        }
+      },
+      {
+        "title": "Status",
+        "dataIndex": "status"
+      },
+      {
+        "title": "ID",
+        "dataIndex": "cid",
+        "width": 30
+      }
+    ]
+  }
+}

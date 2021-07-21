@@ -5,20 +5,14 @@ import Employee from './Employee';
 
 @Entity()
 export default class LeaveApplication extends CommonEntity {
-  constructor({ id, name, reason, startDate, endDate, employee }: any = {}) {
+  constructor({ id, reason, startDate, endDate, employee }: any = {}) {
     super();
     this.id = id;
-    this.name = name;
     this.reason = reason;
     this.startDate = startDate;
     this.endDate = endDate;
     this.employee = employee;
   }
-
-  @Column({
-    length: 100
-  })
-  name: string;
 
   @Column({
     type: 'text',
