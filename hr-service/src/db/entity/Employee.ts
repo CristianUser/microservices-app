@@ -3,6 +3,7 @@ import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import CommonEntity from './Common';
 import Department from './Department';
 import LeaveApplication from './LeaveApplication';
+import Position from './Position';
 
 @Entity()
 export default class Employee extends CommonEntity {
@@ -23,12 +24,6 @@ export default class Employee extends CommonEntity {
     nullable: true
   })
   description?: string;
-
-  @Column({
-    type: 'text',
-    nullable: true
-  })
-  position?: string;
 
   @Column({
     type: 'enum',
@@ -62,6 +57,9 @@ export default class Employee extends CommonEntity {
 
   @ManyToOne(() => Department, (department) => department.employees)
   department?: Department;
+
+  @ManyToOne(() => Position, (position) => position.employees)
+  position?: Position;
 
   @OneToMany(() => LeaveApplication, (leaveApplication) => leaveApplication.employee)
   leaveApplications?: LeaveApplication;

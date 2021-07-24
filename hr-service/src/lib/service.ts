@@ -5,15 +5,21 @@ import { createCrudRoutes } from './utils';
 import Employee from '../db/entity/Employee';
 import Department from '../db/entity/Department';
 import LeaveApplication from '../db/entity/LeaveApplication';
+import Position from '../db/entity/Position';
 
 export default (config: IConfig) => {
   const log = config.log();
   const employeeService = new CrudService<Employee>(config, Employee, [
     'department',
+    'position',
     'leaveApplications',
     'approvedApplications'
   ]);
-  const departmentService = new CrudService<Department>(config, Department, ['employees']);
+  const departmentService = new CrudService<Department>(config, Department, [
+    'employees',
+    'positions'
+  ]);
+  const positionService = new CrudService<Position>(config, Position, ['department']);
   const leaveApplicationService = new CrudService<LeaveApplication>(config, LeaveApplication, [
     'employee',
     'approver'
@@ -41,6 +47,11 @@ export default (config: IConfig) => {
   fastify.register(createCrudRoutes, {
     controller: departmentService,
     prefix: '/department'
+  });
+
+  fastify.register(createCrudRoutes, {
+    controller: positionService,
+    prefix: '/position'
   });
 
   fastify.register(createCrudRoutes, {

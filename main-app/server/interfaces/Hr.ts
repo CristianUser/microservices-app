@@ -35,3 +35,10 @@ export interface LeaveApplication extends CommonProps {
   employee: Employee | string;
   approver?: Employee | string;
 }
+
+export interface Position extends CommonProps {
+  name: string;
+  description?: string;
+  employees?: Employee[];
+  department?: Department | string;
+}

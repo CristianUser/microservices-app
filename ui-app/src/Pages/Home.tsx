@@ -56,6 +56,10 @@ const HomePage: FC = () => {
           title: 'Departments'
         },
         {
+          to: '/positions',
+          title: 'Positions'
+        },
+        {
           to: '/leave-applications',
           title: 'Leave Applications'
         }

@@ -31,9 +31,6 @@
     "description": {
       "type": "string"
     },
-    "position": {
-      "type": "string"
-    },
     "employmentType": {
       "type": "string",
       "enum": [
@@ -64,6 +61,10 @@
     "department": {
       "type": "string",
       "oneOf": "{{resolve:hr-service:department}}"
+    },
+    "position": {
+      "type": "string",
+      "oneOf": "{{resolve:hr-service:position}}"
     },
     "leaveApplications": {
       "type": "array",

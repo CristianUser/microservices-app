@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { Department, Employee, LeaveApplication } from '../../interfaces/Hr';
+import { Department, Employee, LeaveApplication, Position } from '../../interfaces/Hr';
 import BasicCrud from '../../services/BasicCrud';
 import { createCrudRoutes } from '../utils';
 
@@ -14,6 +14,12 @@ export default (fastify: FastifyInstance, opts: any, done: () => void) => {
     routePrefix: '/department',
     serviceName
   });
+
+  const positionService = new BasicCrud<Position>(opts.config, {
+    routePrefix: '/position',
+    serviceName
+  });
+
   const leaveApplicationService = new BasicCrud<LeaveApplication>(opts.config, {
     routePrefix: '/leave-application',
     serviceName
@@ -27,6 +33,11 @@ export default (fastify: FastifyInstance, opts: any, done: () => void) => {
   fastify.register(createCrudRoutes, {
     service: departmentService,
     prefix: '/department'
+  });
+
+  fastify.register(createCrudRoutes, {
+    service: positionService,
+    prefix: '/position'
   });
 
   fastify.register(createCrudRoutes, {

@@ -1,0 +1,31 @@
+{
+  "type": "form",
+  "routePath": "/position/:id",
+  "title": "Position",
+  "props": {
+    "apiRoutePrefix": "/hr/position",
+    "schemaPath": "hr/position/schema.json",
+    "includeImage": true,
+    "title": {
+      "dynamic": true,
+      "value": "name"
+    },
+    "breadcrumbRoutes": [
+      {
+        "path": "/",
+        "breadcrumbName": "Home"
+      },
+      {
+        "path": "/positions",
+        "breadcrumbName": "Positions"
+      },
+      {
+        "path": "/position/{id}",
+        "breadcrumbName": {
+          "dynamic": true,
+          "value": "name"
+        }
+      }
+    ]
+  }
+}
