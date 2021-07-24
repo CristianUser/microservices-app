@@ -6,7 +6,7 @@ import registerRoutes from './routes';
 const config = getConfig();
 
 async function build() {
-  const fastify = Fastify({ logger: { prettyPrint: true } });
+  const fastify = Fastify();
 
   fastify.register(fastifyCors);
 

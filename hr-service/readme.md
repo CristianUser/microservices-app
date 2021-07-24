@@ -2,7 +2,9 @@
 
 ## Scope:
 
-- Sale Order
-- Customer
-- POS (Point Of Sale)
-- POS Session
+- Employee
+- Department
+- Position
+- Leaves
+- TimeSheets
+- Payroll
