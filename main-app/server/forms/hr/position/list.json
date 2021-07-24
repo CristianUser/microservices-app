@@ -1,0 +1,39 @@
+{
+  "type": "list",
+  "routePath": "/positions",
+  "title": "Positions",
+  "props": {
+    "apiRoutePrefix": "/hr/position",
+    "toNewDoc": "/position/new",
+    "title": "Positions",
+    "breadcrumbRoutes": [
+      {
+        "path": "/",
+        "breadcrumbName": "Home"
+      },
+      {
+        "path": "/positions",
+        "breadcrumbName": "Positions"
+      }
+    ],
+    "columns": [
+      {
+        "title": "Name",
+        "dataIndex": "name",
+        "render": {
+          "type": "link",
+          "to": "/position/{id}"
+        }
+      },
+      {
+        "title": "Status",
+        "dataIndex": "status"
+      },
+      {
+        "title": "ID",
+        "dataIndex": "cid",
+        "width": 30
+      }
+    ]
+  }
+}

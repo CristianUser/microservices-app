@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import _ from 'lodash';
 import path from 'path';
 import { IConfig } from '../config';
@@ -26,7 +27,7 @@ function mapResults(result: GetDocsResult<any>): MappedDoc[] {
 }
 
 function findReferences(schema: any) {
-  const TOKEN_REGEX = /^\{\{resolve:[a-zA-Z0-9_.\-/]+:[a-zA-Z0-9_.\-/]+\}\}$/;
+  const TOKEN_REGEX = /^\{\{resolve:[a-zA-Z0-9_.\-/]+:.+\}\}$/;
   const references: TemplateMatch[] = [];
   const checkKeys = (input: any, lastPath = '') => {
     Object.entries(input).forEach(([key, value]) => {
@@ -52,45 +53,80 @@ function loadFile(filePath: string) {
 }
 
 export default class FormComposer extends BaseService {
+  private cache: Map<string, Promise<any>>;
+
   constructor({ serviceRegistryUrl, serviceVersionIdentifier }: IConfig) {
     super({ serviceRegistryUrl, serviceVersionIdentifier });
+    this.cache = new Map();
   }
 
-  async getDocs(serviceName: string, routePrefix: string): Promise<GetDocsResult<any>> {
+  async getDocs(
+    serviceName: string,
+    routePrefix: string,
+    filter?: Record<string, any>
+  ): Promise<GetDocsResult<any>> {
     const service = await this.getService(serviceName);
-    return this.callService({
+    const cacheKey = [serviceName, routePrefix, JSON.stringify(filter)].join();
+
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey);
+    }
+
+    const call = this.callService({
       method: 'get',
       url: this.buildUrl(service, routePrefix),
-      params: { match: { status: 'active' }, limit: -1 }
+      params: { match: { status: 'active', ...filter }, limit: -1 }
     });
+
+    this.cache.set(cacheKey, call);
+
+    return call;
   }
 
-  getMappedDocs(serviceName: string, routePrefix: string): Promise<MappedDoc[]> {
+  getMappedDocs(
+    serviceName: string,
+    routePrefix: string,
+    filter?: Record<string, any>
+  ): Promise<MappedDoc[]> {
     const fallback = (mappedResults: MappedDoc[]) =>
       mappedResults.length ? mappedResults : [{ const: '', title: '' }];
-    return this.getDocs(serviceName, routePrefix).then(mapResults).then(fallback);
+    return this.getDocs(serviceName, routePrefix, filter).then(mapResults).then(fallback);
   }
 
-  resolveToken(token: string) {
-    const [, service, endpoint] = token.replace('{{', '').replace('}}', '').split(':');
+  resolveToken(token: string, query: URLSearchParams) {
+    const [, service, entity] = token.replace('{{', '').replace('}}', '').split(':');
+    const [endpoint, filterCfg] = entity.split('?');
+    const filters = filterCfg?.split(',') || [];
+    const matchFilter: any = filters.reduce<any>((prev, filter: string) => {
+      const value = query.get(filter);
 
-    return this.getMappedDocs(service, `/${endpoint}`);
+      if (value) {
+        prev[filter] = value;
+      }
+      return prev;
+    }, {});
+
+    return this.getMappedDocs(service, `/${endpoint}`, matchFilter);
   }
 
-  resolveReferences(references: TemplateMatch[], schema: any) {
+  resolveReferences(references: TemplateMatch[], schema: any, query: URLSearchParams) {
     return Promise.all(
       references.map((match) =>
-        this.resolveToken(match.token).then((values) => {
+        this.resolveToken(match.token, query).then((values) => {
           _.set(schema, match.path, values);
         })
       )
     );
   }
 
-  async buildSchema(schema: string) {
+  async buildSchema(url: string) {
+    const [schema, queryString] = url.split('?');
+    const query = new URLSearchParams(queryString);
     const schemaFile = await loadFile(schema);
     const foundReferences = findReferences(schemaFile);
-    await this.resolveReferences(foundReferences, schemaFile);
+
+    await this.resolveReferences(foundReferences, schemaFile, query);
+    this.cache.clear();
 
     return schemaFile;
   }

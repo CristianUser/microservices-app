@@ -1,0 +1,39 @@
+{
+  "type": "list",
+  "routePath": "/leave-applications",
+  "title": "Leave Applications",
+  "props": {
+    "apiRoutePrefix": "/hr/leave-application",
+    "toNewDoc": "/leave-application/new",
+    "title": "Leave Applications",
+    "breadcrumbRoutes": [
+      {
+        "path": "/",
+        "breadcrumbName": "Home"
+      },
+      {
+        "path": "/leave-applications",
+        "breadcrumbName": "Leave Applications"
+      }
+    ],
+    "columns": [
+      {
+        "title": "Name",
+        "dataIndex": "name",
+        "render": {
+          "type": "link",
+          "to": "/leave-application/{id}"
+        }
+      },
+      {
+        "title": "Status",
+        "dataIndex": "status"
+      },
+      {
+        "title": "ID",
+        "dataIndex": "cid",
+        "width": 30
+      }
+    ]
+  }
+}

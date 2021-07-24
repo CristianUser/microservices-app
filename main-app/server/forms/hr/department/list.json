@@ -1,0 +1,39 @@
+{
+  "type": "list",
+  "routePath": "/departments",
+  "title": "Departments",
+  "props": {
+    "apiRoutePrefix": "/hr/department",
+    "toNewDoc": "/department/new",
+    "title": "Departments",
+    "breadcrumbRoutes": [
+      {
+        "path": "/",
+        "breadcrumbName": "Home"
+      },
+      {
+        "path": "/departments",
+        "breadcrumbName": "Departments"
+      }
+    ],
+    "columns": [
+      {
+        "title": "Name",
+        "dataIndex": "name",
+        "render": {
+          "type": "link",
+          "to": "/department/{id}"
+        }
+      },
+      {
+        "title": "Status",
+        "dataIndex": "status"
+      },
+      {
+        "title": "ID",
+        "dataIndex": "cid",
+        "width": 30
+      }
+    ]
+  }
+}

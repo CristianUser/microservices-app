@@ -6,11 +6,11 @@ import registerRoutes from './routes';
 const config = getConfig();
 
 async function build() {
-  const fastify = Fastify({ logger: { prettyPrint: true } });
+  const fastify = Fastify();
 
   fastify.register(fastifyCors);
 
-  registerRoutes(fastify, config);
+  await registerRoutes(fastify, config);
   fastify.setErrorHandler((errors: any, request: FastifyRequest, reply: FastifyReply) => {
     const { stack, ...error } = errors;
     reply.status(error.status || 500);

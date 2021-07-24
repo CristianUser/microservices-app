@@ -1,0 +1,67 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "disabled": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "startDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "endDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "approvalStatus": {
+      "type": "string",
+      "enum": [
+        "sent",
+        "in-progress",
+        "approved"
+      ]
+    },
+    "leaveType": {
+      "type": "string",
+      "enum": [
+        "vacation",
+        "health",
+        "other"
+      ]
+    },
+    "employee": {
+      "type": "string",
+      "oneOf": "{{resolve:hr-service:employee}}"
+    },
+    "approver": {
+      "type": "string",
+      "oneOf": "{{resolve:hr-service:employee}}"
+    }
+  },
+  "required": [
+    "approvalStatus",
+    "approver",
+    "employee",
+    "endDate",
+    "leaveType",
+    "reason",
+    "startDate"
+  ]
+}

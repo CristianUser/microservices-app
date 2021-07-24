@@ -1,0 +1,31 @@
+{
+  "type": "form",
+  "routePath": "/department/:id",
+  "title": "Department",
+  "props": {
+    "apiRoutePrefix": "/hr/department",
+    "schemaPath": "hr/department/schema.json",
+    "includeImage": true,
+    "title": {
+      "dynamic": true,
+      "value": "name"
+    },
+    "breadcrumbRoutes": [
+      {
+        "path": "/",
+        "breadcrumbName": "Home"
+      },
+      {
+        "path": "/departments",
+        "breadcrumbName": "Departments"
+      },
+      {
+        "path": "/department/{id}",
+        "breadcrumbName": {
+          "dynamic": true,
+          "value": "name"
+        }
+      }
+    ]
+  }
+}

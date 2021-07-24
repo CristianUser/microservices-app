@@ -43,6 +43,27 @@ const HomePage: FC = () => {
           title: 'Customers'
         }
       ]
+    },
+    {
+      title: 'HR',
+      links: [
+        {
+          to: '/employees',
+          title: 'Employees'
+        },
+        {
+          to: '/departments',
+          title: 'Departments'
+        },
+        {
+          to: '/positions',
+          title: 'Positions'
+        },
+        {
+          to: '/leave-applications',
+          title: 'Leave Applications'
+        }
+      ]
     }
   ];
 

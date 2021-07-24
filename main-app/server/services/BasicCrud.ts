@@ -36,7 +36,7 @@ export default class BasicCrud<T> extends BaseService {
     const service = await this.getService(this.serviceName);
     return this.callService({
       method: 'get',
-      url: this.buildUrl(service, `${this.routePrefix}${id}`),
+      url: this.buildUrl(service, `${this.routePrefix}/${id}`),
       params
     });
   }
@@ -54,7 +54,7 @@ export default class BasicCrud<T> extends BaseService {
     const service = await this.getService(this.serviceName);
     return this.callService({
       method: 'put',
-      url: this.buildUrl(service, `${this.routePrefix}${id}`),
+      url: this.buildUrl(service, `${this.routePrefix}/${id}`),
       data
     });
   }
@@ -63,7 +63,7 @@ export default class BasicCrud<T> extends BaseService {
     const service = await this.getService(this.serviceName);
     return this.callService({
       method: 'delete',
-      url: this.buildUrl(service, `${this.routePrefix}${id}`)
+      url: this.buildUrl(service, `${this.routePrefix}/${id}`)
     });
   }
 }
