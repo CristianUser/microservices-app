@@ -64,7 +64,7 @@
     },
     "position": {
       "type": "string",
-      "oneOf": "{{resolve:hr-service:position}}"
+      "oneOf": "{{resolve:hr-service:position?department}}"
     },
     "leaveApplications": {
       "type": "array",

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { message } from 'antd';
@@ -9,7 +10,7 @@ import PageContext from '../Contexts/PageContext';
 import EditPageLayout from '../Layouts/EditPage';
 import JsonForm from './JsonForm';
 import BasicClient from '../Services/BasicClient';
-import { DataTextProp } from '../Utils/interfaces';
+import { JsonFormPageProps } from '../Utils/interfaces';
 import { resolveDataText, resolvePath } from '../Utils/json-renderers';
 import StatusTag from './StatusTag';
 
@@ -33,22 +34,16 @@ const SiderContent: FC = (): React.ReactElement => {
   );
 };
 
-type BreadcrumbRoute = {
-  path: string;
-  breadcrumbName: DataTextProp;
-};
-
-type FormPageRendererProps = {
-  apiRoutePrefix: string;
-  schemaPath: string;
-  uiSchema: any;
-  title: DataTextProp;
-  includeImage: boolean;
-  breadcrumbRoutes: BreadcrumbRoute[];
-};
-
-const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProps) => {
-  const { apiRoutePrefix, uiSchema, schemaPath, title, includeImage, breadcrumbRoutes } = props;
+const FormPageRenderer: FC<JsonFormPageProps> = (props: JsonFormPageProps) => {
+  const {
+    apiRoutePrefix,
+    breadcrumbRoutes,
+    includeImage,
+    schemaPath,
+    schemaSubs,
+    title,
+    uiSchema
+  } = props;
 
   const client = new BasicClient<any>({ routePrefix: apiRoutePrefix });
   const { id }: any = useParams();
@@ -59,6 +54,7 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
   const [schema, setSchema] = useState({});
   const [loading, setLoading] = useState(false);
   const isNewDoc = useMemo(() => id === 'new', [id]);
+  const schemaEffect = useMemo(() => schemaSubs?.map((key) => data[key]) || [], [data]);
   const localStorageKey = `${schemaPath}.formData`;
   const resolvedTitle = resolveDataText(title, data);
   const resolvedBreadcrumbRoutes = breadcrumbRoutes.map((route) => {
@@ -74,10 +70,16 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
     }
   }, [data]);
 
+  const fetchSchema = (params = {}) => {
+    setLoading(true);
+    formClient
+      .getSchema(schemaPath, params)
+      .then(setSchema)
+      .finally(() => setLoading(false));
+  };
   const fetchData = async () => {
     setLoading(true);
     try {
-      await formClient.getSchema(schemaPath).then(setSchema);
       if (!isNewDoc) {
         await client.getDoc(id).then((response) => {
           setData(response);
@@ -91,6 +93,15 @@ const FormPageRenderer: FC<FormPageRendererProps> = (props: FormPageRendererProp
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    fetchSchema(
+      schemaSubs?.reduce<any>((prev, key) => {
+        prev[key] = data[key];
+        return prev;
+      }, {})
+    );
+  }, schemaEffect);
 
   useEffect(() => {
     fetchData();

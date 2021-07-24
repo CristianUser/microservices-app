@@ -5,10 +5,11 @@ export default class FormClient extends BaseClient {
     super({ baseUrl: `${process.env.REACT_APP_API_URL}` });
   }
 
-  async getSchema(schema: string): Promise<any> {
+  async getSchema(schema: string, params?: any): Promise<any> {
     return this.callService({
       method: 'get',
-      url: `/forms/${schema}`
+      url: `/forms/${schema}`,
+      params
     });
   }
 

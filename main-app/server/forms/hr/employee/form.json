@@ -10,6 +10,7 @@
       "dynamic": true,
       "value": "name"
     },
+    "schemaSubs": ["department"],
     "breadcrumbRoutes": [
       {
         "path": "/",

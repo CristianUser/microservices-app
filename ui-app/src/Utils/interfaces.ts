@@ -60,10 +60,14 @@ export type DataTextProp = {
   value: string;
 };
 
+export interface BreadcrumbRoute {
+  path: string;
+  breadcrumbName: DataTextProp;
+}
 export interface JsonPageProps {
   apiRoutePrefix: string;
   title: any;
-  breadcrumbRoutes: [];
+  breadcrumbRoutes: BreadcrumbRoute[];
   [key: string]: any;
 }
 
@@ -71,6 +75,7 @@ export interface JsonFormPageProps extends JsonPageProps {
   schemaPath: string;
   uiSchema: any;
   includeImage: boolean;
+  schemaSubs?: string[];
 }
 
 export interface JsonListProps extends JsonPageProps {
