@@ -53,8 +53,11 @@ function loadFile(filePath: string) {
 }
 
 export default class FormComposer extends BaseService {
+  private cache: Record<string, any>;
+
   constructor({ serviceRegistryUrl, serviceVersionIdentifier }: IConfig) {
     super({ serviceRegistryUrl, serviceVersionIdentifier });
+    this.cache = {};
   }
 
   async getDocs(
@@ -63,11 +66,17 @@ export default class FormComposer extends BaseService {
     filter?: Record<string, any>
   ): Promise<GetDocsResult<any>> {
     const service = await this.getService(serviceName);
-    return this.callService({
+    const cacheKey = [serviceName, routePrefix, JSON.stringify(filter)].join();
+
+    if (this.cache[cacheKey]) {
+      return this.cache[cacheKey];
+    }
+    // eslint-disable-next-line no-return-assign
+    return (this.cache[cacheKey] = this.callService({
       method: 'get',
       url: this.buildUrl(service, routePrefix),
       params: { match: { status: 'active', ...filter }, limit: -1 }
-    });
+    }));
   }
 
   getMappedDocs(
@@ -113,6 +122,7 @@ export default class FormComposer extends BaseService {
     const foundReferences = findReferences(schemaFile);
 
     await this.resolveReferences(foundReferences, schemaFile, query);
+    this.cache = {};
 
     return schemaFile;
   }

@@ -11,7 +11,7 @@ function getRequestIp(request: FastifyRequest): string | undefined {
 export default (config: IConfig) => {
   const log = config.log();
   const serviceRegistry = new ServiceRegistry(config);
-  const fastify = Fastify({ logger: { prettyPrint: true } });
+  const fastify = Fastify();
 
   fastify.get('/health-check', (request, reply) => {
     reply.send({ status: 'ok' });

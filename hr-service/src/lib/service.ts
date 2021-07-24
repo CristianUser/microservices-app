@@ -24,7 +24,7 @@ export default (config: IConfig) => {
     'employee',
     'approver'
   ]);
-  const fastify = Fastify();
+  const fastify = Fastify({ logger: { prettyPrint: true } });
 
   fastify.get('/health-check', (request, reply) => {
     const { uptime, memoryUsage, cpuUsage } = process;
