@@ -41,6 +41,10 @@ const HomePage: FC = () => {
         {
           to: '/customers',
           title: 'Customers'
+        },
+        {
+          to: '/pos-editor',
+          title: 'Pos Editor'
         }
       ]
     },
