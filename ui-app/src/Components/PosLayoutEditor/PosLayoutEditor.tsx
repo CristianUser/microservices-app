@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react/require-default-props */
 /* eslint-disable no-param-reassign */
 import '@antv/graphin-icons/dist/index.css';
@@ -13,14 +14,17 @@ import Graphin, {
   NodeConfig
 } from '@antv/graphin';
 import { ContextMenu } from '@antv/graphin-components';
-import { PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import IconLoader from '@antv/graphin-icons';
 import { Item } from '@antv/graphin-components/lib/ContextMenu/Menu';
 import { Button, Card, Col, Row } from 'antd';
+import _ from 'lodash';
+
+import FormModal from './FormModal';
 
 const icons = Graphin.registerFontFamily(IconLoader);
 const { Menu } = ContextMenu;
-const { FontPaint } = Behaviors;
+const { FontPaint, ZoomCanvas } = Behaviors;
 
 function createEventHandler(
   event: string,
@@ -48,9 +52,11 @@ type PosLayoutEditorProps = {
 const PosLayoutEditor: FC<PosLayoutEditorProps> = (props: PosLayoutEditorProps) => {
   const { onClickNode, onChange, data: initialData } = props;
   const [data, setData] = useState<GraphinData>(initialData);
+  const [showForm, setShowForm] = useState(false);
+  const [editingNode, setEditingNode] = useState<any>({});
   const onAddTable = () => {
     const newNode: IUserNode = {
-      id: `node-${data.nodes.length}`,
+      id: `node-${Date.now()}`,
       style: {
         keyshape: {
           size: 80
@@ -61,7 +67,7 @@ const PosLayoutEditor: FC<PosLayoutEditorProps> = (props: PosLayoutEditorProps) 
           type: 'font',
           value: icons.user
         },
-        badges: [{ type: 'text', value: 3 }],
+        badges: [{ position: 'RT', type: 'text', value: 3 }],
         label: {
           value: `Table ${data.nodes.length}`
         }
@@ -73,11 +79,36 @@ const PosLayoutEditor: FC<PosLayoutEditorProps> = (props: PosLayoutEditorProps) 
       nodes: [...data.nodes, newNode]
     });
   };
-  const handleAddNode = (item: Item) => {
+  const handleContextMenu = (item: Item, evtData: any) => {
     const { key } = item;
-    if (key === 'add-node') {
-      console.log('from context menu');
+
+    switch (key) {
+      case 'remove-node':
+        setData({
+          ...data,
+          nodes: _.remove(data.nodes, (node: any) => node.id !== evtData.id)
+        });
+        break;
+      case 'edit-node':
+        setEditingNode(evtData);
+        setShowForm(true);
+        break;
+      default:
+        break;
     }
+  };
+
+  const onSaveNode = (editedNode: IUserNode) => {
+    const newList = [...data.nodes];
+    const idx = newList.findIndex((node) => node.id === editedNode.id);
+
+    newList[idx] = editedNode;
+
+    setData({
+      ...data,
+      nodes: newList
+    });
+    setShowForm(false);
   };
 
   const NodeClicks = createEventHandler('node:click', (evt) => {
@@ -89,7 +120,6 @@ const PosLayoutEditor: FC<PosLayoutEditorProps> = (props: PosLayoutEditorProps) 
   const GraphChanges = createEventHandler('dragnodeend', (evt, { graph }) => {
     const graphData = graph.save() as GraphinData;
 
-    onChange?.(graphData);
     setData(graphData);
   });
 
@@ -97,8 +127,18 @@ const PosLayoutEditor: FC<PosLayoutEditorProps> = (props: PosLayoutEditorProps) 
     setData(initialData);
   }, [initialData]);
 
+  useEffect(() => {
+    onChange?.(data);
+  }, [data]);
+
   return (
     <Row gutter={20}>
+      <FormModal
+        visible={showForm}
+        data={editingNode}
+        onCancel={() => setShowForm(false)}
+        onSave={onSaveNode}
+      />
       <Col span={4}>
         <Card>
           <Button onClick={onAddTable}>Add Table</Button>
@@ -108,24 +148,29 @@ const PosLayoutEditor: FC<PosLayoutEditorProps> = (props: PosLayoutEditorProps) 
         <Graphin
           data={data}
           layout={{
-            type: 'graphin-force'
+            type: 'graphin'
           }}
         >
           <FontPaint />
           <NodeClicks />
           <GraphChanges />
-          {/* <ZoomCanvas sensitivity={100} enableOptimize /> */}
-          <ContextMenu bindType="canvas" style={{ width: '140px' }}>
+          <ZoomCanvas sensitivity={100} enableOptimize />
+          <ContextMenu bindType="node" style={{ width: '140px' }}>
             <Menu
-              bindType="canvas"
+              bindType="node"
               options={[
                 {
-                  icon: <PlusOutlined />,
-                  key: 'add-node',
-                  name: 'Add Node'
+                  icon: <EditOutlined />,
+                  key: 'edit-node',
+                  name: 'Edit Node'
+                },
+                {
+                  icon: <DeleteOutlined />,
+                  key: 'remove-node',
+                  name: 'Remove Node'
                 }
               ]}
-              onChange={handleAddNode}
+              onChange={handleContextMenu}
             />
           </ContextMenu>
         </Graphin>

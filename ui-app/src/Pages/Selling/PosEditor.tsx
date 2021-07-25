@@ -7,7 +7,7 @@ import { message, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import EditPageLayout from '../../Layouts/EditPage';
 import PageContext from '../../Contexts/PageContext';
-import PosLayoutEditor from '../../Components/PosLayoutEditor';
+import PosLayoutEditor from '../../Components/PosLayoutEditor/PosLayoutEditor';
 import FormClient from '../../Services/FormClient';
 import BasicClient from '../../Services/BasicClient';
 import JsonForm from '../../Components/JsonForm';
