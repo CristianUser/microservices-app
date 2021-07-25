@@ -13,7 +13,7 @@ export const routes: RouteProps[] = [
   },
   {
     component: PosEditorPage,
-    path: '/pos-editor',
+    path: '/pos-layout/:id',
     exact: true
   }
 ];

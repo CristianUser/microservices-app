@@ -5,10 +5,12 @@ import Customer from '../db/entity/Customer';
 import { createCrudRoutes } from './utils';
 import OrderService from './Order';
 import PosSession from '../db/entity/PosSession';
+import PosLayoutService from './PosLayout';
 
 export default (config: IConfig) => {
   const log = config.log();
   const orderService = new OrderService(config);
+  const posLayoutService = new PosLayoutService(config);
   const customerService = new CrudService<Customer>(config, Customer, ['orders']);
   const posSessionService = new CrudService<PosSession>(config, PosSession, []);
   const fastify = Fastify();
@@ -34,6 +36,11 @@ export default (config: IConfig) => {
   fastify.register(createCrudRoutes, {
     controller: customerService,
     prefix: '/customer'
+  });
+
+  fastify.register(createCrudRoutes, {
+    controller: posLayoutService,
+    prefix: '/pos-layout'
   });
 
   fastify.register(createCrudRoutes, {

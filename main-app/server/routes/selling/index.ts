@@ -3,15 +3,22 @@ import { Customer, Order } from '../../interfaces/Selling';
 import BasicCrud from '../../services/BasicCrud';
 import { createCrudRoutes } from '../utils';
 
+const serviceName = 'selling-service';
+
 export default (fastify: FastifyInstance, opts: any, done: () => void) => {
   const orderService = new BasicCrud<Order>(opts.config, {
     routePrefix: '/order/',
-    serviceName: 'selling-service'
+    serviceName
   });
 
   const customerService = new BasicCrud<Customer>(opts.config, {
     routePrefix: '/customer/',
-    serviceName: 'selling-service'
+    serviceName
+  });
+
+  const posLayoutService = new BasicCrud<Customer>(opts.config, {
+    routePrefix: '/pos-layout',
+    serviceName
   });
 
   fastify.register(createCrudRoutes, {
@@ -22,6 +29,11 @@ export default (fastify: FastifyInstance, opts: any, done: () => void) => {
   fastify.register(createCrudRoutes, {
     service: orderService,
     prefix: '/order'
+  });
+
+  fastify.register(createCrudRoutes, {
+    service: posLayoutService,
+    prefix: '/pos-layout'
   });
   done();
 };

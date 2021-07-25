@@ -98,7 +98,7 @@ const PosLayoutEditor: FC<PosLayoutEditorProps> = (props: PosLayoutEditorProps) 
   }, [initialData]);
 
   return (
-    <Row gutter={16}>
+    <Row gutter={20}>
       <Col span={4}>
         <Card>
           <Button onClick={onAddTable}>Add Table</Button>

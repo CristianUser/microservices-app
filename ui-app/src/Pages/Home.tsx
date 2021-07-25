@@ -43,8 +43,8 @@ const HomePage: FC = () => {
           title: 'Customers'
         },
         {
-          to: '/pos-editor',
-          title: 'Pos Editor'
+          to: '/pos-layouts',
+          title: 'Pos Layouts Editor'
         }
       ]
     },

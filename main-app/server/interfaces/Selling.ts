@@ -1,5 +1,5 @@
 export interface Order {
-  id: number;
+  id: string;
   customer: string;
   description?: string;
   disabled: boolean;
@@ -10,9 +10,18 @@ export interface Order {
 }
 
 export interface Customer {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   disabled: boolean;
   status: string;
+}
+
+export interface PosLayout {
+  id: string;
+  name: string;
+  data: any;
+  description?: string;
+  startDate?: Date;
+  endDate?: Date;
 }
