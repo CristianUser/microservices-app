@@ -25,3 +25,12 @@ export interface PosLayout {
   startDate?: Date;
   endDate?: Date;
 }
+
+export interface PosSession {
+  id: string;
+  employee: string;
+  layout: string;
+  description?: string;
+  startDate?: Date;
+  endDate?: Date;
+}

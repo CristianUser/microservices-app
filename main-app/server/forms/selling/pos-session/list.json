@@ -1,0 +1,42 @@
+{
+  "type": "list",
+  "routePath": "/pos-sessions",
+  "title": "Pos Sessions",
+  "props": {
+    "apiRoutePrefix": "/selling/pos-session",
+    "toNewDoc": {
+      "type": "modal",
+      "to": "/pos-session/{id}"
+    },
+    "title": "Pos Sessions",
+    "breadcrumbRoutes": [
+      {
+        "path": "/",
+        "breadcrumbName": "Home"
+      },
+      {
+        "path": "/pos-sessions",
+        "breadcrumbName": "Pos Sessions"
+      }
+    ],
+    "columns": [
+      {
+        "title": "Name",
+        "dataIndex": "employee",
+        "render": {
+          "type": "link",
+          "to": "/pos-session/{id}"
+        }
+      },
+      {
+        "title": "Status",
+        "dataIndex": "status"
+      },
+      {
+        "title": "ID",
+        "dataIndex": "cid",
+        "width": 30
+      }
+    ]
+  }
+}

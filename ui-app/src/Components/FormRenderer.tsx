@@ -64,12 +64,6 @@ const FormPageRenderer: FC<JsonFormPageProps> = (props: JsonFormPageProps) => {
     };
   });
 
-  useEffect(() => {
-    if (isNewDoc && Object.keys(data).length) {
-      localStorage.setItem(localStorageKey, JSON.stringify(data));
-    }
-  }, [data]);
-
   const fetchSchema = (params = {}) => {
     setLoading(true);
     formClient
@@ -93,6 +87,12 @@ const FormPageRenderer: FC<JsonFormPageProps> = (props: JsonFormPageProps) => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (isNewDoc && Object.keys(data).length) {
+      localStorage.setItem(localStorageKey, JSON.stringify(data));
+    }
+  }, [data]);
 
   useEffect(() => {
     fetchSchema(

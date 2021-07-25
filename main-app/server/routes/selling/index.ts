@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { Customer, Order } from '../../interfaces/Selling';
+import { Customer, Order, PosLayout, PosSession } from '../../interfaces/Selling';
 import BasicCrud from '../../services/BasicCrud';
 import { createCrudRoutes } from '../utils';
 
@@ -16,8 +16,13 @@ export default (fastify: FastifyInstance, opts: any, done: () => void) => {
     serviceName
   });
 
-  const posLayoutService = new BasicCrud<Customer>(opts.config, {
+  const posLayoutService = new BasicCrud<PosLayout>(opts.config, {
     routePrefix: '/pos-layout',
+    serviceName
+  });
+
+  const posSessionService = new BasicCrud<PosSession>(opts.config, {
+    routePrefix: '/pos-session',
     serviceName
   });
 
@@ -29,6 +34,11 @@ export default (fastify: FastifyInstance, opts: any, done: () => void) => {
   fastify.register(createCrudRoutes, {
     service: orderService,
     prefix: '/order'
+  });
+
+  fastify.register(createCrudRoutes, {
+    service: posSessionService,
+    prefix: '/pos-session'
   });
 
   fastify.register(createCrudRoutes, {

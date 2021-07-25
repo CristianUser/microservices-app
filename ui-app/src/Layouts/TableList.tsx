@@ -1,6 +1,5 @@
 /* eslint-disable react/require-default-props */
 import React, { FC, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Layout, Button } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import AdminHeader from '../Components/AdminHeader';
@@ -12,13 +11,13 @@ type Props = {
   left?: React.ReactNode;
   children?: React.ReactNode;
   title: string;
-  toNewDoc: string;
   breadcrumbRoutes?: any[];
   startCollapsed?: boolean;
+  onNew?: () => void;
 };
 
 const TableListLayout: FC<Props> = (props: Props) => {
-  const { children, left, title, toNewDoc, breadcrumbRoutes, startCollapsed = false } = props;
+  const { children, left, title, onNew, breadcrumbRoutes, startCollapsed = false } = props;
   const [collapsed, setCollapsed] = useState(startCollapsed);
 
   return (
@@ -31,9 +30,9 @@ const TableListLayout: FC<Props> = (props: Props) => {
           onBack: () => setCollapsed(!collapsed),
           title,
           extra: [
-            <Link key="1" to={toNewDoc}>
-              <Button type="primary">New</Button>
-            </Link>
+            <Button type="primary" onClick={onNew}>
+              New
+            </Button>
           ]
         }}
       />

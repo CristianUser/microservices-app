@@ -29,13 +29,13 @@ export default class PosSession extends CommonEntity {
   description?: string;
 
   @Column({
-    type: 'date',
+    type: 'timestamp',
     default: new Date()
   })
   startDate?: Date;
 
   @Column({
-    type: 'date',
+    type: 'timestamp',
     nullable: true
   })
   endDate?: Date;

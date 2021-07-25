@@ -8,7 +8,7 @@ export default class FormClient extends BaseClient {
   async getSchema(schema: string, params?: any): Promise<any> {
     return this.callService({
       method: 'get',
-      url: `/forms/${schema}`,
+      url: `/forms/${schema}`.replaceAll('//', '/'),
       params
     });
   }

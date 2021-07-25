@@ -5,7 +5,7 @@
 /* eslint-disable no-param-reassign */
 import React, { FC, useEffect, useState } from 'react';
 import { Button, Form, Input, Select, Space, Table, TablePaginationConfig, Typography } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
 import { SorterResult } from 'antd/lib/table/interface';
 import { SearchOutlined } from '@ant-design/icons';
@@ -16,6 +16,7 @@ import TableListLayout from '../Layouts/TableList';
 import { JsonListProps } from '../Utils/interfaces';
 import { resolvePath } from '../Utils/json-renderers';
 import StatusTag from './StatusTag';
+import FormModal from './FormModal';
 
 const { Text } = Typography;
 
@@ -152,7 +153,9 @@ const ListPageRenderer: FC<JsonListProps> = (props: JsonListProps) => {
   } = props;
 
   const client = new BasicClient<any>({ routePrefix: apiRoutePrefix });
+  const history = useHistory();
   const [rows, setRows] = useState<any[]>([]);
+  const [showForm, setShowForm] = useState(false);
   const [pagination, setPagination] = useState<any>({ current: 1, pageSize: 10 });
   const [loading, setLoading] = useState<boolean>(false);
   const [matchFilters, setMatchFilters] = useState<Record<string, any | any[]>>({});
@@ -182,6 +185,15 @@ const ListPageRenderer: FC<JsonListProps> = (props: JsonListProps) => {
 
   const onChangeFilters = (formData: Record<string, any>) => {
     setMatchFilters(onlyTruthyValues(formData));
+  };
+
+  const onNew = () => {
+    if (typeof toNewDoc === 'string') {
+      history.push(toNewDoc);
+    } else {
+      // open form dialog
+      setShowForm(true);
+    }
   };
 
   const handleTableChange = (
@@ -218,10 +230,18 @@ const ListPageRenderer: FC<JsonListProps> = (props: JsonListProps) => {
     <TableListLayout
       startCollapsed={collapsedSidebar}
       title={title}
-      toNewDoc={toNewDoc}
+      onNew={onNew}
       breadcrumbRoutes={breadcrumbRoutes}
       left={<FiltersRenderer onChange={onChangeFilters} />}
     >
+      <FormModal
+        title={title}
+        apiRoutePrefix={apiRoutePrefix}
+        visible={showForm}
+        toNewDoc={toNewDoc}
+        onCancel={() => setShowForm(false)}
+        onSave={() => setShowForm(false)}
+      />
       <Table
         rowSelection={{
           type: 'checkbox'
