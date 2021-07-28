@@ -12,7 +12,7 @@ export default (config: IConfig) => {
   const orderService = new OrderService(config);
   const posLayoutService = new PosLayoutService(config);
   const customerService = new CrudService<Customer>(config, Customer, ['orders']);
-  const posSessionService = new CrudService<PosSession>(config, PosSession, []);
+  const posSessionService = new CrudService<PosSession>(config, PosSession, ['layout']);
   const fastify = Fastify();
 
   fastify.get('/health-check', (request, reply) => {

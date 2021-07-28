@@ -55,8 +55,6 @@ const FormModal: React.FC<FormModalProps> = ({
 
       message.success('Saved successfully!');
       localStorage.removeItem(localStorageKey);
-      console.log('resolvePath(toNewDoc.to, doc)', resolvePath(toNewDoc.to, doc));
-      console.log('doc', doc);
       history.push(resolvePath(toNewDoc.to, doc));
       onSaveModal?.(doc);
     } catch (error) {

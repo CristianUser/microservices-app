@@ -4,6 +4,7 @@ import { RouteProps } from 'react-router-dom';
 
 import SaleOrderPage from './Order';
 import PosEditorPage from './PosEditor';
+import PosSessionPage from './PosSession';
 
 export const routes: RouteProps[] = [
   {
@@ -14,6 +15,11 @@ export const routes: RouteProps[] = [
   {
     component: PosEditorPage,
     path: '/pos-layout/:id',
+    exact: true
+  },
+  {
+    component: PosSessionPage,
+    path: '/pos-session/:id',
     exact: true
   }
 ];

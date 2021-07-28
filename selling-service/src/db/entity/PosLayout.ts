@@ -1,6 +1,7 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import CommonEntity from './Common';
+import PosSession from './PosSession';
 
 @Entity()
 export default class PosLayout extends CommonEntity {
@@ -40,4 +41,7 @@ export default class PosLayout extends CommonEntity {
     nullable: true
   })
   endDate?: Date;
+
+  @OneToMany(() => PosSession, (session) => session.layout)
+  sessions?: PosSession[];
 }

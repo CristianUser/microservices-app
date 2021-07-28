@@ -13,7 +13,7 @@ import Graphin, {
   NodeConfig
 } from '@antv/graphin';
 
-const { FontPaint, ZoomCanvas } = Behaviors;
+const { FontPaint, ZoomCanvas, DragNode, DragCanvas } = Behaviors;
 
 function createEventHandler(
   event: string,
@@ -55,6 +55,8 @@ const PosLayout: FC<PosLayoutProps> = (props: PosLayoutProps) => {
     >
       <FontPaint />
       <NodeClicks />
+      <DragNode disabled />
+      <DragCanvas disabled />
       <ZoomCanvas sensitivity={100} enableOptimize />
     </Graphin>
   );

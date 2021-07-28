@@ -1,6 +1,7 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import CommonEntity from './Common';
+import PosLayout from './PosLayout';
 
 @Entity()
 export default class PosSession extends CommonEntity {
@@ -16,11 +17,6 @@ export default class PosSession extends CommonEntity {
     type: 'text'
   })
   employee: string;
-
-  @Column({
-    type: 'text'
-  })
-  layout: string;
 
   @Column({
     type: 'text',
@@ -39,4 +35,7 @@ export default class PosSession extends CommonEntity {
     nullable: true
   })
   endDate?: Date;
+
+  @ManyToOne(() => PosLayout, (posLayout) => posLayout.sessions)
+  layout: PosLayout;
 }
