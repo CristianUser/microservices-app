@@ -13,7 +13,7 @@ import BasicClient from '../../Services/BasicClient';
 import JsonForm from '../../Components/JsonForm';
 
 const formClient = new FormClient();
-const sellingClient = new BasicClient<any>({ routePrefix: '/selling/pos-layout' });
+const posLayoutClient = new BasicClient<any>({ routePrefix: '/selling/pos-layout' });
 const source = Utils.mock(2).circle().graphin();
 source.edges = [];
 source.nodes.forEach((node: any) => {
@@ -58,7 +58,7 @@ const PosEditorPage: FC = () => {
       await formClient.getSchema('selling/pos-layout/schema.json').then(setSchema);
       await formClient.getSchema('selling/pos-layout/uischema.json').then(setUiSchema);
       if (!isNewDoc) {
-        await sellingClient.getDoc(id).then((doc) => {
+        await posLayoutClient.getDoc(id).then((doc) => {
           setData(doc);
           setInitialData(doc);
           setGraphData(doc.data);
@@ -76,7 +76,7 @@ const PosEditorPage: FC = () => {
 
   const onSave = async () => {
     try {
-      const { status, id: newId } = await sellingClient.save(id, data);
+      const { status, id: newId } = await posLayoutClient.save(id, data);
 
       setInitialData({ ...data, status });
       localStorage.removeItem(localStorageKey);
