@@ -5,7 +5,7 @@
   "props": {
     "apiRoutePrefix": "/hr/leave-application",
     "schemaPath": "hr/leave-application/schema.json",
-    "includeImage": true,
+    "includeImage": false,
     "title": {
       "dynamic": true,
       "value": "name"

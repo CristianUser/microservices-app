@@ -109,6 +109,7 @@ const FormPageRenderer: FC<JsonFormPageProps> = (props: JsonFormPageProps) => {
 
   const onSave = async () => {
     if (errors?.length) {
+      console.error(errors);
       message.error('There are some errors to pay attention');
       return;
     }

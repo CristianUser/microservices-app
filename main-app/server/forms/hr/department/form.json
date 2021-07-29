@@ -5,7 +5,7 @@
   "props": {
     "apiRoutePrefix": "/hr/department",
     "schemaPath": "hr/department/schema.json",
-    "includeImage": true,
+    "includeImage": false,
     "title": {
       "dynamic": true,
       "value": "name"

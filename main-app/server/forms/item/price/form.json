@@ -5,7 +5,7 @@
   "props": {
     "apiRoutePrefix": "/item/price",
     "schemaPath": "item/price/schema.json",
-    "includeImage": true,
+    "includeImage": false,
     "title": {
       "dynamic": true,
       "value": "name"
