@@ -12,18 +12,24 @@ const formClient = new FormClient();
 
 interface FormModalProps {
   apiRoutePrefix: string;
+  data?: any;
+  schemaPrefix?: string;
+  skipSave?: boolean;
   title: string;
   visible: boolean;
-  toNewDoc: any;
+  toNewDoc?: any;
   onSave?: (data: any) => void;
   onCancel?: () => void;
 }
 
 const FormModal: React.FC<FormModalProps> = ({
   apiRoutePrefix,
+  data: initialData,
   visible,
   onSave: onSaveModal,
   onCancel,
+  schemaPrefix = '',
+  skipSave = false,
   title,
   toNewDoc
 }: FormModalProps) => {
@@ -49,18 +55,22 @@ const FormModal: React.FC<FormModalProps> = ({
       message.error('There are some errors to pay attention');
       return;
     }
-    setLoading(true);
-    try {
-      const doc = await client.save('new', data);
+    if (skipSave) {
+      onSaveModal?.(data);
+    } else {
+      setLoading(true);
+      try {
+        const doc = await client.save('new', data);
 
-      message.success('Saved successfully!');
-      localStorage.removeItem(localStorageKey);
-      history.push(resolvePath(toNewDoc.to, doc));
-      onSaveModal?.(doc);
-    } catch (error) {
-      message.error('Error saving!');
+        message.success('Saved successfully!');
+        localStorage.removeItem(localStorageKey);
+        history.push(resolvePath(toNewDoc.to, doc));
+        onSaveModal?.(doc);
+      } catch (error) {
+        message.error('Error saving!');
+      }
+      setLoading(false);
     }
-    setLoading(false);
   };
   const onDiscard = () => {
     localStorage.removeItem(localStorageKey);
@@ -70,8 +80,10 @@ const FormModal: React.FC<FormModalProps> = ({
   const fetchData = async () => {
     setLoading(true);
     try {
-      await formClient.getSchema(`${apiRoutePrefix}/schema.json`).then(setSchema);
-      await formClient.getSchema(`${apiRoutePrefix}/uischema.json`).then(setUiSchema);
+      await formClient.getSchema(`${apiRoutePrefix}/${schemaPrefix}schema.json`).then(setSchema);
+      await formClient
+        .getSchema(`${apiRoutePrefix}/${schemaPrefix}uischema.json`)
+        .then(setUiSchema);
 
       setData(JSON.parse(localStorage.getItem(localStorageKey) || '{}'));
     } catch (error) {
@@ -83,6 +95,12 @@ const FormModal: React.FC<FormModalProps> = ({
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (initialData) {
+      setData(initialData);
+    }
+  }, [initialData]);
 
   return (
     <Modal

@@ -19,8 +19,7 @@ import IconLoader from '@antv/graphin-icons';
 import { Item } from '@antv/graphin-components/lib/ContextMenu/Menu';
 import { Button, Card, Col, Row } from 'antd';
 import _ from 'lodash';
-
-import FormModal from './FormModal';
+import FormModal from '../FormModal';
 
 const icons = Graphin.registerFontFamily(IconLoader);
 const { Menu } = ContextMenu;
@@ -90,7 +89,11 @@ const PosLayoutEditor: FC<PosLayoutEditorProps> = (props: PosLayoutEditorProps) 
         });
         break;
       case 'edit-node':
-        setEditingNode(evtData);
+        setEditingNode({
+          id: evtData.id,
+          title: _.get(evtData, 'style.label.value'),
+          customer: _.get(evtData, 'data.customer')
+        });
         setShowForm(true);
         break;
       default:
@@ -98,15 +101,16 @@ const PosLayoutEditor: FC<PosLayoutEditorProps> = (props: PosLayoutEditorProps) 
     }
   };
 
-  const onSaveNode = (editedNode: IUserNode) => {
-    const newList = [...data.nodes];
-    const idx = newList.findIndex((node) => node.id === editedNode.id);
+  const onSaveNode = ({ id, title, customer }: { title: string; id: string; customer: string }) => {
+    const newList = _.cloneDeep(data.nodes);
+    const idx = newList.findIndex((node) => node.id === id);
 
-    newList[idx] = editedNode;
+    _.set(newList[idx], 'style.label.value', title);
+    _.set(newList[idx], 'data.customer', customer);
 
     setData({
       ...data,
-      nodes: newList
+      nodes: [...newList]
     });
     setShowForm(false);
   };
@@ -134,10 +138,14 @@ const PosLayoutEditor: FC<PosLayoutEditorProps> = (props: PosLayoutEditorProps) 
   return (
     <Row gutter={20}>
       <FormModal
+        title=""
+        apiRoutePrefix="/selling/pos-layout"
+        schemaPrefix="table-"
         visible={showForm}
         data={editingNode}
         onCancel={() => setShowForm(false)}
         onSave={onSaveNode}
+        skipSave
       />
       <Col span={4}>
         <Card>

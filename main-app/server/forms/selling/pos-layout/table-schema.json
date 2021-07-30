@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "properties": {
+    "disabled": {
+      "type": "boolean"
+    },
+    "title": {
+      "type": "string"
+    },
+    "customer": {
+      "type": "string",
+      "oneOf": "{{resolve:selling-service:customer}}"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

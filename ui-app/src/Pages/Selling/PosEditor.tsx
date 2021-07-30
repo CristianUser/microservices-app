@@ -43,11 +43,11 @@ const PosEditorPage: FC = () => {
       breadcrumbName: 'Home'
     },
     {
-      path: '/layouts',
+      path: '/pos-layouts',
       breadcrumbName: 'Pos Layouts'
     },
     {
-      path: `/layout/${id}`,
+      path: `/pos-layout/${id}`,
       breadcrumbName: 'Pos Layout'
     }
   ];
