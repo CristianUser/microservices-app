@@ -51,6 +51,16 @@ export interface Order {
   total: number;
 }
 
+export interface PosSession {
+  id?: string;
+  employee?: string;
+  layout?: any;
+  data?: any;
+  description?: string;
+  startDate?: Date;
+  endDate?: Date;
+}
+
 export interface Customer extends CommonProps {
   name?: string;
 }

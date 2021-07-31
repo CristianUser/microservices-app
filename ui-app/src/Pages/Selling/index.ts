@@ -4,7 +4,7 @@ import { RouteProps } from 'react-router-dom';
 
 import SaleOrderPage from './Order';
 import PosEditorPage from './PosEditor';
-import PosSessionPage from './PosSession';
+import PosSessionPage from './PosSession/PosSession';
 
 export const routes: RouteProps[] = [
   {

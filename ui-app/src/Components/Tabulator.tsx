@@ -8,7 +8,7 @@ const { TabPane } = Tabs;
 
 export type Pane = {
   title: string;
-  key: any;
+  key: string;
   closable?: boolean;
   content?: any;
   data?: any;
@@ -61,7 +61,7 @@ const Tabulator: FC<TabulatorProps> = (props: TabulatorProps) => {
     const { title, key } = paneData;
     const newActiveKey = key || `newTab${(newTabIndex += 1)}`;
     const newPanes = [...panes];
-    newPanes.push({ title, key: newActiveKey, data: paneData.data });
+    newPanes.push({ title, key: newActiveKey, data: paneData.data || {} });
     setPanes(newPanes);
     setActiveKey(newActiveKey);
   };

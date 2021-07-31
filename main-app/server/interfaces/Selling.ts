@@ -30,6 +30,7 @@ export interface PosSession {
   id: string;
   employee: string;
   layout: string;
+  data: any;
   description?: string;
   startDate?: Date;
   endDate?: Date;
