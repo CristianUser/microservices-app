@@ -18,7 +18,11 @@ import itemClient from '../../Services/Item';
 const sellingClient = new BasicClient<any>({ routePrefix: '/selling/pos-session' });
 
 type PosSaleProps = {
+  id: string;
   items: PricedItem[];
+  customer: string;
+  details: SaleDetail[];
+  onChange: (key: any, data: any) => void;
 };
 
 type SaleDetail = {
@@ -34,7 +38,7 @@ const detailsColumns = [
   { dataIndex: 'price', title: 'Price' }
 ];
 const PosSale: FC<PosSaleProps> = (props: PosSaleProps) => {
-  const { items } = props;
+  const { id, items, customer, onChange, details: dataDetails } = props;
   const [details, setDetails] = useState<SaleDetail[]>([]);
   const total = useMemo(() => details.reduce((a, b) => a + b.price * b.qty, 0), [details]);
 
@@ -57,9 +61,20 @@ const PosSale: FC<PosSaleProps> = (props: PosSaleProps) => {
     setDetails(newDetails);
   };
 
+  useEffect(() => {
+    onChange(id, details);
+  }, [details]);
+
+  useEffect(() => {
+    if (dataDetails.length) {
+      setDetails(dataDetails);
+    }
+  }, [dataDetails]);
+
   const renderFooter = () =>
     details.length ? (
       <Descriptions title="Summary">
+        <Descriptions.Item label="Customer">{customer}</Descriptions.Item>
         <Descriptions.Item label="Total">{total}</Descriptions.Item>
         <Descriptions.Item label="Sub-Total">{total}</Descriptions.Item>
       </Descriptions>
@@ -69,14 +84,19 @@ const PosSale: FC<PosSaleProps> = (props: PosSaleProps) => {
     <Row gutter={[16, 16]}>
       <Col span={12}>
         <Card title="Sale">
-          <Table columns={detailsColumns} dataSource={details} footer={renderFooter} />
+          <Table
+            rowKey="item"
+            columns={detailsColumns}
+            dataSource={details}
+            footer={renderFooter}
+          />
         </Card>
       </Col>
       <Col span={12}>
         <Card title="Items">
           <Row gutter={[16, 16]} style={{ width: '100%' }}>
             {items.map((item) => (
-              <Col span={6} onClick={() => onClickItem(item)}>
+              <Col key={item.id} span={6} onClick={() => onClickItem(item)}>
                 <Image
                   preview={false}
                   src={item.imageUrl}
@@ -94,11 +114,11 @@ const PosSale: FC<PosSaleProps> = (props: PosSaleProps) => {
 
 const PosSessionPage: FC = () => {
   const tabRef = useTab();
-  const { id }: any = useParams();
+  const { id } = useParams<any>();
   const history = useHistory();
   const [data, setData] = useState<any>({});
   const [items, setItems] = useState<PricedItem[]>([]);
-  const [panes, setPanes] = useState<any>([]);
+  const [panes, setPanes] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   const routes = [
@@ -142,7 +162,7 @@ const PosSessionPage: FC = () => {
     const newPane = {
       key: table.id,
       title: _.get(table, 'style.label.value'),
-      data: { items }
+      data: { items, customer: _.get(table, 'data.customer'), details: [] }
     };
 
     if (tabRef.getPane(newPane.key)) {
@@ -152,12 +172,35 @@ const PosSessionPage: FC = () => {
     }
   };
 
+  const onChangeSaleDetails = (key: string, details: any) => {
+    const idx = panes.findIndex((pane) => pane.key === key);
+
+    _.set(panes[idx], 'data.details', details);
+
+    setPanes(panes);
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (data.data?.panes) {
+      setPanes(data.data?.panes);
+      if (data.data?.panes.length) {
+        const [firstPane] = data.data?.panes;
+
+        tabRef.select(firstPane.key);
+      }
+    }
+  }, [data]);
+
+  useEffect(() => {
+    setData({ ...data, data: { panes } });
+  }, [panes]);
+
   const withProps = (Component: FC<any>, props: any): FC<any> => {
-    return () => <Component {...props} />;
+    return (extraProps: PosSaleProps) => <Component {...props} {...extraProps} />;
   };
 
   return (
@@ -169,7 +212,7 @@ const PosSessionPage: FC = () => {
               tab={tabRef}
               data={panes}
               onChange={setPanes}
-              content={withProps(PosSale, { items })}
+              content={withProps(PosSale, { items, onChange: onChangeSaleDetails })}
             />
           </Card>
           {data.layout?.data?.nodes.length && (

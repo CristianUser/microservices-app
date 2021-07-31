@@ -37,11 +37,11 @@ export function useTab(): TabRef {
   return { addPane: () => {}, removePane: () => {}, select: () => {}, getPane: () => ({} as any) };
 }
 
-const contentWithProps = (Component: FC<any> | undefined, { data, content }: Pane) => {
+const contentWithProps = (Component: FC<any> | undefined, data: Pane) => {
   if (Component) {
     return <Component {...data} />;
   }
-  return content;
+  return <></>;
 };
 
 const Tabulator: FC<TabulatorProps> = (props: TabulatorProps) => {
@@ -61,7 +61,7 @@ const Tabulator: FC<TabulatorProps> = (props: TabulatorProps) => {
     const { title, key } = paneData;
     const newActiveKey = key || `newTab${(newTabIndex += 1)}`;
     const newPanes = [...panes];
-    newPanes.push({ title, content: contentWithProps(content, paneData), key: newActiveKey });
+    newPanes.push({ title, key: newActiveKey, data: paneData.data });
     setPanes(newPanes);
     setActiveKey(newActiveKey);
   };
@@ -118,7 +118,7 @@ const Tabulator: FC<TabulatorProps> = (props: TabulatorProps) => {
     <Tabs type="editable-card" onChange={onChangeTabs} activeKey={activeKey} onEdit={onEdit}>
       {panes.map((pane) => (
         <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
-          {pane.content}
+          {contentWithProps(content, { ...pane.data, id: pane.key })}
         </TabPane>
       ))}
     </Tabs>

@@ -4,15 +4,15 @@ import CrudService from './Crud';
 import Customer from '../db/entity/Customer';
 import { createCrudRoutes } from './utils';
 import OrderService from './Order';
-import PosSession from '../db/entity/PosSession';
 import PosLayoutService from './PosLayout';
+import PosSessionService from './PosSession';
 
 export default (config: IConfig) => {
   const log = config.log();
   const orderService = new OrderService(config);
   const posLayoutService = new PosLayoutService(config);
   const customerService = new CrudService<Customer>(config, Customer, ['orders']);
-  const posSessionService = new CrudService<PosSession>(config, PosSession, ['layout']);
+  const posSessionService = new PosSessionService(config);
   const fastify = Fastify();
 
   fastify.get('/health-check', (request, reply) => {

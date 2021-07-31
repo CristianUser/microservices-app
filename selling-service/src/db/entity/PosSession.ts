@@ -36,6 +36,12 @@ export default class PosSession extends CommonEntity {
   })
   endDate?: Date;
 
+  @Column({
+    type: 'simple-json',
+    default: {}
+  })
+  data?: string;
+
   @ManyToOne(() => PosLayout, (posLayout) => posLayout.sessions)
   layout: PosLayout;
 }
