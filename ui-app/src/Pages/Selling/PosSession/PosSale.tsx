@@ -75,7 +75,7 @@ const PosSale: FC<PosSaleProps> = (props: PosSaleProps) => {
     if (customer) {
       customerClient.getDoc(customer).then(setCustomerData);
     }
-  }, []);
+  }, [customer]);
 
   const renderFooter = () =>
     details.length ? (

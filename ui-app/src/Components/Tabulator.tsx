@@ -95,6 +95,12 @@ const Tabulator: FC<TabulatorProps> = (props: TabulatorProps) => {
     }
   };
 
+  const renderPane = (pane: Pane) => (
+    <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
+      {contentWithProps(content, { ...pane.data, id: pane.key })}
+    </TabPane>
+  );
+
   useEffect(() => {
     onChange?.(panes);
   }, [onChange, panes]);
@@ -114,11 +120,7 @@ const Tabulator: FC<TabulatorProps> = (props: TabulatorProps) => {
 
   return (
     <Tabs type="editable-card" onChange={onChangeTabs} activeKey={activeKey} onEdit={onEdit}>
-      {panes.map((pane) => (
-        <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
-          {contentWithProps(content, { ...pane.data, id: pane.key })}
-        </TabPane>
-      ))}
+      {panes.map((pane) => renderPane(pane))}
     </Tabs>
   );
 };

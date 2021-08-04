@@ -60,6 +60,7 @@ export interface PosSession {
   description?: string;
   startDate?: Date;
   endDate?: Date;
+  orders?: Order[];
 }
 
 export interface Customer extends CommonProps {

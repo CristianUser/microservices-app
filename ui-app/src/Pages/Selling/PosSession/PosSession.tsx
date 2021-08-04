@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useEffect, useState } from 'react';
-import { Card, message, Space } from 'antd';
+import { Card, message, Space, Table } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import _ from 'lodash';
 
@@ -20,6 +20,12 @@ const sellingClient = new BasicClient<Order>({ routePrefix: '/selling/order' });
 function withProps<T>(Component: FC<T>, props: T & any): FC<T> {
   return (extraProps: T) => <Component {...props} {...extraProps} />;
 }
+
+const salesColumns = [
+  { dataIndex: 'cid', title: 'ID' },
+  { dataIndex: 'total', title: 'Total' },
+  { dataIndex: 'createdAt', title: 'Date' }
+];
 
 const PosSessionPage: FC = () => {
   const tabRef = useTab();
@@ -91,8 +97,8 @@ const PosSessionPage: FC = () => {
 
   const onSubmitSale = (key: string, order: Order) => {
     sellingClient.createDoc({ ...order, session: id }).then(() => {
-      message.success('Order Completed');
       tabRef.removePane(key);
+      message.success('Order Completed');
       onSave();
     });
   };
@@ -135,6 +141,9 @@ const PosSessionPage: FC = () => {
           {data.layout?.data?.nodes.length && (
             <PosLayout data={data.layout.data} onClickNode={onClickTable} />
           )}
+          <Card title="Sales" loading={loading}>
+            <Table columns={salesColumns} dataSource={data.orders} />
+          </Card>
         </Space>
       </EditPageLayout>
     </PageContext.Provider>
