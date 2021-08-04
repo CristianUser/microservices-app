@@ -1,7 +1,8 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import CommonEntity from './Common';
 import PosLayout from './PosLayout';
+import SaleOrder from './SaleOrder';
 
 @Entity()
 export default class PosSession extends CommonEntity {
@@ -41,6 +42,9 @@ export default class PosSession extends CommonEntity {
     default: {}
   })
   data?: string;
+
+  @OneToMany(() => SaleOrder, (order) => order.session)
+  orders?: SaleOrder;
 
   @ManyToOne(() => PosLayout, (posLayout) => posLayout.sessions)
   layout: PosLayout;

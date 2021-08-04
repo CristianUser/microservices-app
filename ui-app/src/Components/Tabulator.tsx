@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/require-default-props */
 import { Tabs } from 'antd';
 import React, { FC, useEffect, useState } from 'react';
@@ -46,7 +45,6 @@ const contentWithProps = (Component: FC<any> | undefined, data: Pane) => {
 
 const Tabulator: FC<TabulatorProps> = (props: TabulatorProps) => {
   const { tab, data, onChange, content } = props;
-  let newTabIndex = 0;
   const [activeKey, setActiveKey] = useState(initialPanes[0].key);
   const [panes, setPanes] = useState(data || initialPanes);
 
@@ -57,12 +55,12 @@ const Tabulator: FC<TabulatorProps> = (props: TabulatorProps) => {
   const getPane = (targetKey: string): Pane | undefined =>
     panes.find((pane) => pane.key === targetKey);
 
-  const add = (paneData: Pane & any = { title: 'New Tab' }) => {
-    const { title, key } = paneData;
-    const newActiveKey = key || `newTab${(newTabIndex += 1)}`;
-    const newPanes = [...panes];
-    newPanes.push({ title, key: newActiveKey, data: paneData.data || {} });
-    setPanes(newPanes);
+  const add = (paneData: Pane & any = {}) => {
+    const { title = `New Tab ${panes.length + 1}`, key } = paneData;
+    const newActiveKey = key || `tab-${Date.now()}`;
+    const newPane = { title, key: newActiveKey, data: paneData.data || {} };
+
+    setPanes([...panes, newPane]);
     setActiveKey(newActiveKey);
   };
 

@@ -6,7 +6,7 @@ import CrudService from './Crud';
 
 export default class PosSessionService extends CrudService<PosSession> {
   constructor(config: IConfig) {
-    super(config, PosSession, ['layout']);
+    super(config, PosSession, ['layout', 'orders']);
   }
 
   private parseJson(result: any) {

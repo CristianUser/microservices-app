@@ -49,6 +49,7 @@ export interface Order {
   items: any[];
   subTotal: number;
   total: number;
+  session?: string;
 }
 
 export interface PosSession {

@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useEffect, useState } from 'react';
-
 import { Card, message, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import _ from 'lodash';
@@ -11,11 +10,16 @@ import PageContext from '../../../Contexts/PageContext';
 import BasicClient from '../../../Services/BasicClient';
 import PosLayout from '../../../Components/PosLayoutEditor/PosLayout';
 import Tabulator, { Pane, useTab } from '../../../Components/Tabulator';
-import { PosSession, PricedItem } from '../../../Utils/interfaces';
+import { Order, PosSession, PricedItem } from '../../../Utils/interfaces';
 import itemClient from '../../../Services/Item';
 import PosSale, { PosSaleProps, SaleDetail } from './PosSale';
 
-const sellingClient = new BasicClient<PosSession>({ routePrefix: '/selling/pos-session' });
+const sessionClient = new BasicClient<PosSession>({ routePrefix: '/selling/pos-session' });
+const sellingClient = new BasicClient<Order>({ routePrefix: '/selling/order' });
+
+function withProps<T>(Component: FC<T>, props: T & any): FC<T> {
+  return (extraProps: T) => <Component {...props} {...extraProps} />;
+}
 
 const PosSessionPage: FC = () => {
   const tabRef = useTab();
@@ -45,7 +49,7 @@ const PosSessionPage: FC = () => {
     setLoading(true);
     try {
       await itemClient.getPricedItems().then((rows) => setItems(rows));
-      await sellingClient.getDoc(id, { populate: true }).then(setData);
+      await sessionClient.getDoc(id, { populate: true }).then(setData);
     } catch (error) {
       message.error('Error loading data');
     }
@@ -54,7 +58,7 @@ const PosSessionPage: FC = () => {
 
   const onSave = async () => {
     try {
-      const { id: newId } = await sellingClient.save(id, data);
+      const { id: newId } = await sessionClient.save(id, data);
 
       message.success('Saved successfully!');
       history.replace(history.location.pathname.replace('new', newId || ''));
@@ -85,6 +89,14 @@ const PosSessionPage: FC = () => {
     setPanes(panes);
   };
 
+  const onSubmitSale = (key: string, order: Order) => {
+    sellingClient.createDoc({ ...order, session: id }).then(() => {
+      message.success('Order Completed');
+      tabRef.removePane(key);
+      onSave();
+    });
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -104,10 +116,6 @@ const PosSessionPage: FC = () => {
     setData({ ...data, data: { panes } });
   }, [panes]);
 
-  function withProps<T>(Component: FC<T>, props: T & any): FC<T> {
-    return (extraProps: T) => <Component {...props} {...extraProps} />;
-  }
-
   return (
     <PageContext.Provider value={{ data, setData }}>
       <EditPageLayout title="Pos Session" onSave={onSave} breadcrumbRoutes={routes}>
@@ -117,7 +125,11 @@ const PosSessionPage: FC = () => {
               tab={tabRef}
               data={panes}
               onChange={setPanes}
-              content={withProps<PosSaleProps>(PosSale, { items, onChange: onChangeSaleDetails })}
+              content={withProps<PosSaleProps>(PosSale, {
+                items,
+                onChange: onChangeSaleDetails,
+                onSubmit: onSubmitSale
+              })}
             />
           </Card>
           {data.layout?.data?.nodes.length && (

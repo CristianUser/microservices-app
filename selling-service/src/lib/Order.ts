@@ -6,7 +6,7 @@ import CrudService from './Crud';
 
 export default class OrderService extends CrudService<SaleOrder> {
   constructor(config: IConfig) {
-    super(config, SaleOrder, ['customer']);
+    super(config, SaleOrder, ['customer', 'session']);
   }
 
   private parseJson(result: any) {
