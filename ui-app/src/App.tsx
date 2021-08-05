@@ -38,6 +38,7 @@ const App: FC = () => {
         {pages.map((page) => (
           <Route path={page.routePath} key={page.routePath} exact>
             {page.type === 'form' ? (
+              // you should think about this destructuring
               <FormPageRenderer {...page.props} />
             ) : (
               <ListPageRenderer {...page.props} />

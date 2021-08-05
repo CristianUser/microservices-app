@@ -26,6 +26,7 @@ type TabulatorProps = {
 };
 
 type TabRef = {
+  currentPane: string;
   addPane: (pane?: Pane) => void;
   removePane: (key: string) => void;
   select: (key: string) => void;
@@ -33,7 +34,13 @@ type TabRef = {
 };
 
 export function useTab(): TabRef {
-  return { addPane: () => {}, removePane: () => {}, select: () => {}, getPane: () => ({} as any) };
+  return {
+    addPane: () => {},
+    removePane: () => {},
+    select: () => {},
+    getPane: () => ({} as any),
+    currentPane: '1'
+  };
 }
 
 const contentWithProps = (Component: FC<any> | undefined, data: Pane) => {
@@ -95,11 +102,13 @@ const Tabulator: FC<TabulatorProps> = (props: TabulatorProps) => {
     }
   };
 
-  const renderPane = (pane: Pane) => (
-    <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
-      {contentWithProps(content, { ...pane.data, id: pane.key })}
-    </TabPane>
-  );
+  const renderPane = (pane: Pane) => {
+    return (
+      <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
+        {contentWithProps(content, { ...pane.data, id: pane.key })}
+      </TabPane>
+    );
+  };
 
   useEffect(() => {
     onChange?.(panes);
@@ -115,6 +124,7 @@ const Tabulator: FC<TabulatorProps> = (props: TabulatorProps) => {
       tab.removePane = remove;
       tab.getPane = getPane;
       tab.select = (key) => setActiveKey(key);
+      tab.currentPane = activeKey;
     }
   }, [tab]);
 
@@ -125,4 +135,4 @@ const Tabulator: FC<TabulatorProps> = (props: TabulatorProps) => {
   );
 };
 
-export default Tabulator;
+export default React.memo(Tabulator);

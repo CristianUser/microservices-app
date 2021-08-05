@@ -64,7 +64,10 @@ const PosSessionPage: FC = () => {
 
   const onSave = async () => {
     try {
-      const { id: newId } = await sessionClient.save(id, data);
+      const { id: newId } = await sessionClient.save(
+        id,
+        _.omit({ ...data, data: { panes } }, ['orders'])
+      );
 
       message.success('Saved successfully!');
       history.replace(history.location.pathname.replace('new', newId || ''));
@@ -118,10 +121,6 @@ const PosSessionPage: FC = () => {
     }
   }, [data]);
 
-  useEffect(() => {
-    setData({ ...data, data: { panes } });
-  }, [panes]);
-
   return (
     <PageContext.Provider value={{ data, setData }}>
       <EditPageLayout title="Pos Session" onSave={onSave} breadcrumbRoutes={routes}>
@@ -142,7 +141,7 @@ const PosSessionPage: FC = () => {
             <PosLayout data={data.layout.data} onClickNode={onClickTable} />
           )}
           <Card title="Sales" loading={loading}>
-            <Table columns={salesColumns} dataSource={data.orders} />
+            <Table columns={salesColumns} dataSource={data.orders} rowKey="id" />
           </Card>
         </Space>
       </EditPageLayout>
