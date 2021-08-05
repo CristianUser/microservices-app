@@ -115,7 +115,9 @@ const Tabulator: FC<TabulatorProps> = (props: TabulatorProps) => {
   }, [onChange, panes]);
 
   useEffect(() => {
-    setPanes(data || panes);
+    if (!panes.length) {
+      setPanes(data || panes);
+    }
   }, [data]);
 
   useEffect(() => {

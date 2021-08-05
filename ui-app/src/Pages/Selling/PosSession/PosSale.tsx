@@ -10,7 +10,7 @@ export type PosSaleProps = {
   items: PricedItem[];
   customer: string;
   details: SaleDetail[];
-  onChange: (key: string, data: any) => void;
+  onChange: (key: string, data: SaleDetail[]) => void;
   onSubmit?: (key: string, data: any) => void;
 };
 

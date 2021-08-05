@@ -113,6 +113,7 @@ const FormPageRenderer: FC<JsonFormPageProps> = (props: JsonFormPageProps) => {
       message.error('There are some errors to pay attention');
       return;
     }
+    setLoading(true);
 
     try {
       const { status, createdAt, updatedAt, id: newId } = await client.save(id, data);
@@ -124,6 +125,7 @@ const FormPageRenderer: FC<JsonFormPageProps> = (props: JsonFormPageProps) => {
     } catch (error) {
       message.error('Error saving!');
     }
+    setLoading(false);
   };
   const onDiscard = () => {
     localStorage.removeItem(localStorageKey);

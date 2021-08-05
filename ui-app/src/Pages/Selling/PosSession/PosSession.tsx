@@ -5,6 +5,8 @@ import { Card, message, Space, Table } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import _ from 'lodash';
 
+import { ColumnType } from 'antd/lib/table';
+import { format } from 'date-fns';
 import EditPageLayout from '../../../Layouts/EditPage';
 import PageContext from '../../../Contexts/PageContext';
 import BasicClient from '../../../Services/BasicClient';
@@ -21,11 +23,24 @@ function withProps<T>(Component: FC<T>, props: T & any): FC<T> {
   return (extraProps: T) => <Component {...props} {...extraProps} />;
 }
 
-const salesColumns = [
+const salesColumns: ColumnType<Order>[] = [
   { dataIndex: 'cid', title: 'ID' },
-  { dataIndex: 'total', title: 'Total' },
-  { dataIndex: 'createdAt', title: 'Date' }
+  { dataIndex: 'total', title: 'Total', render: (value: number) => `$${value.toFixed(2)}` },
+  {
+    dataIndex: 'createdAt',
+    title: 'Date',
+    render: (value: string) => format(new Date(value), 'yyyy/MM/dd')
+  }
 ];
+
+const expandedRowRender = (record: Order) => {
+  const columns = [
+    { dataIndex: 'itemName', title: 'Item' },
+    { dataIndex: 'qty', title: 'QTY' },
+    { dataIndex: 'price', title: 'Price' }
+  ];
+  return <Table columns={columns} dataSource={record.items} pagination={false} />;
+};
 
 const PosSessionPage: FC = () => {
   const tabRef = useTab();
@@ -63,6 +78,8 @@ const PosSessionPage: FC = () => {
   };
 
   const onSave = async () => {
+    setLoading(true);
+
     try {
       const { id: newId } = await sessionClient.save(
         id,
@@ -74,13 +91,14 @@ const PosSessionPage: FC = () => {
     } catch (error) {
       message.error('Error saving!');
     }
+    setLoading(false);
   };
 
   const onClickTable = (table: any) => {
     const newPane = {
       key: table.id,
       title: _.get(table, 'style.label.value'),
-      data: { items, customer: _.get(table, 'data.customer'), details: [] }
+      data: { customer: _.get(table, 'data.customer'), details: [] }
     };
 
     if (tabRef.getPane(newPane.key)) {
@@ -98,12 +116,18 @@ const PosSessionPage: FC = () => {
     setPanes(panes);
   };
 
-  const onSubmitSale = (key: string, order: Order) => {
-    sellingClient.createDoc({ ...order, session: id }).then(() => {
+  const onSubmitSale = async (key: string, order: Order) => {
+    setLoading(true);
+    try {
+      sellingClient.createDoc({ ...order, session: id });
       tabRef.removePane(key);
       message.success('Order Completed');
-      onSave();
-    });
+      await onSave();
+      fetchData();
+    } catch (error) {
+      message.error('Error submitting sale');
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -113,13 +137,17 @@ const PosSessionPage: FC = () => {
   useEffect(() => {
     if (data.data?.panes) {
       setPanes(data.data?.panes);
-      if (data.data?.panes.length) {
-        const [firstPane] = data.data?.panes;
-
-        tabRef.select(firstPane.key);
-      }
     }
   }, [data]);
+
+  useEffect(() => {
+    if (tabRef.currentPane === '1' && panes.length) {
+      const [firstPane] = panes;
+
+      tabRef.select(firstPane.key);
+      setPanes([...panes]);
+    }
+  }, [panes]);
 
   return (
     <PageContext.Provider value={{ data, setData }}>
@@ -141,7 +169,12 @@ const PosSessionPage: FC = () => {
             <PosLayout data={data.layout.data} onClickNode={onClickTable} />
           )}
           <Card title="Sales" loading={loading}>
-            <Table columns={salesColumns} dataSource={data.orders} rowKey="id" />
+            <Table
+              columns={salesColumns}
+              dataSource={data.orders}
+              rowKey="id"
+              expandable={{ expandedRowRender }}
+            />
           </Card>
         </Space>
       </EditPageLayout>
