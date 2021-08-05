@@ -27,7 +27,9 @@ const ToolHeader: FC<ToolHeaderProps> = (props: ToolHeaderProps) => {
       }}
       ghost={false}
       {...props.header}
-    />
+    >
+      {props.children}
+    </PageHeader>
   );
 };
 export default ToolHeader;

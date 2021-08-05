@@ -1,13 +1,14 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useEffect, useState } from 'react';
-import { Card, message, Space, Table } from 'antd';
+import React, { FC, useEffect, useMemo, useState } from 'react';
+import { Button, Card, message, Space, Statistic, Table } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import _ from 'lodash';
 
 import { ColumnType } from 'antd/lib/table';
 import { format } from 'date-fns';
-import EditPageLayout from '../../../Layouts/EditPage';
+import ExtendedEditLayout from '../../../Layouts/ExtendedEdit';
 import PageContext from '../../../Contexts/PageContext';
 import BasicClient from '../../../Services/BasicClient';
 import PosLayout from '../../../Components/PosLayoutEditor/PosLayout';
@@ -15,9 +16,11 @@ import Tabulator, { Pane, useTab } from '../../../Components/Tabulator';
 import { Order, PosSession, PricedItem } from '../../../Utils/interfaces';
 import itemClient from '../../../Services/Item';
 import PosSale, { PosSaleProps, SaleDetail } from './PosSale';
+import TimeCounter from '../../../Components/TimeCounter';
 
 const sessionClient = new BasicClient<PosSession>({ routePrefix: '/selling/pos-session' });
 const sellingClient = new BasicClient<Order>({ routePrefix: '/selling/order' });
+const employeeClient = new BasicClient<any>({ routePrefix: '/hr/employee' });
 
 function withProps<T>(Component: FC<T>, props: T & any): FC<T> {
   return (extraProps: T) => <Component {...props} {...extraProps} />;
@@ -39,7 +42,7 @@ const expandedRowRender = (record: Order) => {
     { dataIndex: 'qty', title: 'QTY' },
     { dataIndex: 'price', title: 'Price' }
   ];
-  return <Table columns={columns} dataSource={record.items} pagination={false} />;
+  return <Table columns={columns} dataSource={record.items} pagination={false} rowKey="item" />;
 };
 
 const PosSessionPage: FC = () => {
@@ -47,9 +50,27 @@ const PosSessionPage: FC = () => {
   const { id } = useParams<any>();
   const history = useHistory();
   const [data, setData] = useState<PosSession>({});
+  const [employee, setEmployee] = useState<any>();
   const [items, setItems] = useState<PricedItem[]>([]);
   const [panes, setPanes] = useState<Pane[]>([]);
   const [loading, setLoading] = useState(false);
+  const editable = data.status === 'draft';
+  const totalSold = useMemo(
+    () =>
+      data.orders?.reduce((total, order) => {
+        total += order.total;
+        return total;
+      }, 0) || 0,
+    [data.orders]
+  );
+  const status = useMemo(() => {
+    const statusMap: any = {
+      draft: 'In Progress',
+      active: 'Completed'
+    };
+
+    return statusMap[data.status || 'draft'];
+  }, [data.status]);
 
   const routes = [
     {
@@ -88,6 +109,24 @@ const PosSessionPage: FC = () => {
 
       message.success('Saved successfully!');
       history.replace(history.location.pathname.replace('new', newId || ''));
+    } catch (error) {
+      message.error('Error saving!');
+    }
+    setLoading(false);
+  };
+
+  const onFinish = async () => {
+    setLoading(true);
+
+    try {
+      const newData = _.omit({ ...data, data: {}, status: 'active', endDate: new Date() }, [
+        'orders'
+      ]);
+
+      await sessionClient.save(id, newData);
+      setData(newData);
+
+      message.success('Saved successfully!');
     } catch (error) {
       message.error('Error saving!');
     }
@@ -135,6 +174,10 @@ const PosSessionPage: FC = () => {
   }, []);
 
   useEffect(() => {
+    if (!employee && data.employee) {
+      employeeClient.getDoc(data.employee).then(setEmployee);
+    }
+
     if (data.data?.panes) {
       setPanes(data.data?.panes);
     }
@@ -151,22 +194,57 @@ const PosSessionPage: FC = () => {
 
   return (
     <PageContext.Provider value={{ data, setData }}>
-      <EditPageLayout title="Pos Session" onSave={onSave} breadcrumbRoutes={routes}>
-        <Space direction="vertical" style={{ width: '100%' }}>
-          <Card loading={loading}>
-            <Tabulator
-              tab={tabRef}
-              data={panes}
-              onChange={setPanes}
-              content={withProps<PosSaleProps>(PosSale, {
-                items,
-                onChange: onChangeSaleDetails,
-                onSubmit: onSubmitSale
-              })}
+      <ExtendedEditLayout
+        title="Pos Session"
+        breadcrumbRoutes={routes}
+        actions={
+          editable && (
+            <>
+              <Button key="btn-1" onClick={onSave}>
+                Save
+              </Button>
+              <Button key="btn-2" onClick={onFinish}>
+                Finish
+              </Button>
+            </>
+          )
+        }
+        headerContent={
+          <Space>
+            <Statistic title="Status" value={status} />
+            <TimeCounter title="Time" value={data.createdAt?.toString()} />
+            <Statistic
+              title="Sold"
+              prefix="$"
+              value={totalSold}
+              precision={2}
+              style={{
+                margin: '0 32px'
+              }}
             />
-          </Card>
-          {data.layout?.data?.nodes.length && (
-            <PosLayout data={data.layout.data} onClickNode={onClickTable} />
+            <Statistic title="Employee" value={employee?.name} />
+          </Space>
+        }
+      >
+        <Space direction="vertical" style={{ width: '100%' }}>
+          {editable && (
+            <>
+              <Card loading={loading}>
+                <Tabulator
+                  tab={tabRef}
+                  data={panes}
+                  onChange={setPanes}
+                  content={withProps<PosSaleProps>(PosSale, {
+                    items,
+                    onChange: onChangeSaleDetails,
+                    onSubmit: onSubmitSale
+                  })}
+                />
+              </Card>
+              {data.layout?.data?.nodes.length && (
+                <PosLayout data={data.layout.data} onClickNode={onClickTable} />
+              )}
+            </>
           )}
           <Card title="Sales" loading={loading}>
             <Table
@@ -177,7 +255,7 @@ const PosSessionPage: FC = () => {
             />
           </Card>
         </Space>
-      </EditPageLayout>
+      </ExtendedEditLayout>
     </PageContext.Provider>
   );
 };
