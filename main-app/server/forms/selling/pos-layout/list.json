@@ -1,0 +1,39 @@
+{
+  "type": "list",
+  "routePath": "/pos-layouts",
+  "title": "Pos Layouts",
+  "props": {
+    "apiRoutePrefix": "/selling/pos-layout",
+    "toNewDoc": "/pos-layout/new",
+    "title": "Pos Layouts",
+    "breadcrumbRoutes": [
+      {
+        "path": "/",
+        "breadcrumbName": "Home"
+      },
+      {
+        "path": "/pos-layouts",
+        "breadcrumbName": "Pos Layouts"
+      }
+    ],
+    "columns": [
+      {
+        "title": "Name",
+        "dataIndex": "name",
+        "render": {
+          "type": "link",
+          "to": "/pos-layout/{id}"
+        }
+      },
+      {
+        "title": "Status",
+        "dataIndex": "status"
+      },
+      {
+        "title": "ID",
+        "dataIndex": "cid",
+        "width": 30
+      }
+    ]
+  }
+}

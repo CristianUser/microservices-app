@@ -37,6 +37,7 @@ function findReferences(schema: any) {
         if (TOKEN_REGEX.test(value)) {
           references.push({ path: currentPath, token: value });
         }
+        // to look for the token recursively
       } else if (typeof value === 'object') {
         checkKeys(value, currentPath);
       }

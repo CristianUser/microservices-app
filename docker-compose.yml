@@ -144,8 +144,8 @@ services:
       context: ./ui-app
       args:
         SERVICE_PORT: 8080
-    depends_on:
-      - main-service
+    # depends_on:
+      # - main-service
     restart: always
     environment:
       REACT_APP_API_URL: http://localhost:5000

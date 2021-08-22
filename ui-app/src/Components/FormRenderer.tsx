@@ -64,12 +64,6 @@ const FormPageRenderer: FC<JsonFormPageProps> = (props: JsonFormPageProps) => {
     };
   });
 
-  useEffect(() => {
-    if (isNewDoc && Object.keys(data).length) {
-      localStorage.setItem(localStorageKey, JSON.stringify(data));
-    }
-  }, [data]);
-
   const fetchSchema = (params = {}) => {
     setLoading(true);
     formClient
@@ -95,6 +89,12 @@ const FormPageRenderer: FC<JsonFormPageProps> = (props: JsonFormPageProps) => {
   };
 
   useEffect(() => {
+    if (isNewDoc && Object.keys(data).length) {
+      localStorage.setItem(localStorageKey, JSON.stringify(data));
+    }
+  }, [data]);
+
+  useEffect(() => {
     fetchSchema(
       schemaSubs?.reduce<any>((prev, key) => {
         prev[key] = data[key];
@@ -109,9 +109,11 @@ const FormPageRenderer: FC<JsonFormPageProps> = (props: JsonFormPageProps) => {
 
   const onSave = async () => {
     if (errors?.length) {
+      console.error(errors);
       message.error('There are some errors to pay attention');
       return;
     }
+    setLoading(true);
 
     try {
       const { status, createdAt, updatedAt, id: newId } = await client.save(id, data);
@@ -123,6 +125,7 @@ const FormPageRenderer: FC<JsonFormPageProps> = (props: JsonFormPageProps) => {
     } catch (error) {
       message.error('Error saving!');
     }
+    setLoading(false);
   };
   const onDiscard = () => {
     localStorage.removeItem(localStorageKey);

@@ -49,6 +49,20 @@ export interface Order {
   items: any[];
   subTotal: number;
   total: number;
+  session?: string;
+}
+
+export interface PosSession {
+  id?: string;
+  employee?: string;
+  layout?: any;
+  data?: any;
+  description?: string;
+  startDate?: Date;
+  endDate?: Date;
+  orders?: Order[];
+  status?: string;
+  createdAt?: Date;
 }
 
 export interface Customer extends CommonProps {

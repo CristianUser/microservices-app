@@ -1,16 +1,16 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-param-reassign */
 import { IConfig } from '../config';
-import SaleOrder from '../db/entity/SaleOrder';
+import PosSession from '../db/entity/PosSession';
 import CrudService from './Crud';
 
-export default class OrderService extends CrudService<SaleOrder> {
+export default class PosSessionService extends CrudService<PosSession> {
   constructor(config: IConfig) {
-    super(config, SaleOrder, ['customer', 'session']);
+    super(config, PosSession, ['layout', 'orders']);
   }
 
   private parseJson(result: any) {
-    result.items = JSON.parse(result.items);
+    result.data = JSON.parse(result.data);
 
     return result;
   }

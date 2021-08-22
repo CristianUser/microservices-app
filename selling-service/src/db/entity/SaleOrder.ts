@@ -2,6 +2,7 @@
 import { Entity, Column, ManyToOne, Index } from 'typeorm';
 import CommonEntity from './Common';
 import Customer from './Customer';
+import PosSession from './PosSession';
 
 @Entity()
 export default class SaleOrder extends CommonEntity {
@@ -27,13 +28,16 @@ export default class SaleOrder extends CommonEntity {
   })
   items: string[];
 
-  @Index()
-  @ManyToOne(() => Customer, (customer) => customer.orders)
-  customer: Customer;
-
   @Column('float')
   subTotal?: number;
 
   @Column('float')
   total?: number;
+
+  @Index()
+  @ManyToOne(() => Customer, (customer) => customer.orders)
+  customer: Customer;
+
+  @ManyToOne(() => PosSession, (session) => session.orders, { nullable: true })
+  session?: PosSession;
 }

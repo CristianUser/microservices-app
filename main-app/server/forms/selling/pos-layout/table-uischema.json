@@ -1,0 +1,18 @@
+{
+  "type": "Group",
+  "elements": [
+    {
+      "type": "VerticalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/title"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/customer"
+        }
+      ]
+    }
+  ]
+}
