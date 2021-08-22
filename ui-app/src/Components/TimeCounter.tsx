@@ -3,7 +3,8 @@ import React, { FC, useEffect } from 'react';
 
 type TimeCounterProps = {
   title?: string;
-  value: any;
+  startTime: any;
+  endTime?: any;
 };
 
 function convertHMS(sec: number): string {
@@ -24,22 +25,33 @@ function convertHMS(sec: number): string {
 }
 
 const TimeCounter: FC<TimeCounterProps> = (props: TimeCounterProps) => {
-  const { title, value } = props;
+  const { title, startTime, endTime } = props;
   const [, updateState] = React.useState<any>();
   const forceUpdate = React.useCallback(() => updateState({}), []);
-  const scDiff = (new Date().getTime() - new Date(value).getTime()) / 1000;
-
+  const scDiff =
+    ((endTime ? new Date(endTime).getTime() : new Date().getTime()) -
+      new Date(startTime).getTime()) /
+    1000;
+  let updateInterval: any;
   useEffect(() => {
-    const updateInterval = setInterval(() => forceUpdate(), 1000);
-
+    if (!endTime) {
+      updateInterval = setInterval(() => forceUpdate(), 1000);
+    }
     return () => clearInterval(updateInterval);
   }, []);
 
-  return value ? <Statistic title={title} value={convertHMS(scDiff)} /> : null;
+  useEffect(() => {
+    if (endTime) {
+      clearInterval(updateInterval);
+    }
+  }, [endTime]);
+
+  return startTime ? <Statistic title={title} value={convertHMS(scDiff)} /> : null;
 };
 
 TimeCounter.defaultProps = {
-  title: ''
+  title: '',
+  endTime: undefined
 };
 
 export default TimeCounter;

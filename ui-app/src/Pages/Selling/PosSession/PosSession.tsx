@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { Button, Card, message, Space, Statistic, Table } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import _ from 'lodash';
@@ -32,7 +32,7 @@ const salesColumns: ColumnType<Order>[] = [
   {
     dataIndex: 'createdAt',
     title: 'Date',
-    render: (value: string) => format(new Date(value), 'yyyy/MM/dd')
+    render: (value: string) => format(new Date(value), 'yyyy/MM/dd HH:mm')
   }
 ];
 
@@ -54,6 +54,7 @@ const PosSessionPage: FC = () => {
   const [items, setItems] = useState<PricedItem[]>([]);
   const [panes, setPanes] = useState<Pane[]>([]);
   const [loading, setLoading] = useState(false);
+  const hasSubmittedSale = useRef(false);
   const editable = data.status === 'draft';
   const totalSold = useMemo(
     () =>
@@ -98,7 +99,7 @@ const PosSessionPage: FC = () => {
     setLoading(false);
   };
 
-  const onSave = async () => {
+  const saveSession = async () => {
     setLoading(true);
 
     try {
@@ -123,9 +124,7 @@ const PosSessionPage: FC = () => {
         'orders'
       ]);
 
-      await sessionClient.save(id, newData);
-      setData(newData);
-
+      await sessionClient.save(id, newData).then(setData);
       message.success('Saved successfully!');
     } catch (error) {
       message.error('Error saving!');
@@ -158,11 +157,11 @@ const PosSessionPage: FC = () => {
   const onSubmitSale = async (key: string, order: Order) => {
     setLoading(true);
     try {
-      sellingClient.createDoc({ ...order, session: id });
+      await sellingClient.createDoc({ ...order, session: id });
       tabRef.removePane(key);
       message.success('Order Completed');
-      await onSave();
-      fetchData();
+      hasSubmittedSale.current = true;
+      await fetchData();
     } catch (error) {
       message.error('Error submitting sale');
     }
@@ -190,6 +189,10 @@ const PosSessionPage: FC = () => {
       tabRef.select(firstPane.key);
       setPanes([...panes]);
     }
+    if (hasSubmittedSale.current) {
+      saveSession();
+      hasSubmittedSale.current = false;
+    }
   }, [panes]);
 
   return (
@@ -200,7 +203,7 @@ const PosSessionPage: FC = () => {
         actions={
           editable && (
             <>
-              <Button key="btn-1" onClick={onSave}>
+              <Button key="btn-1" onClick={saveSession}>
                 Save
               </Button>
               <Button key="btn-2" onClick={onFinish}>
@@ -212,7 +215,11 @@ const PosSessionPage: FC = () => {
         headerContent={
           <Space>
             <Statistic title="Status" value={status} />
-            <TimeCounter title="Time" value={data.createdAt?.toString()} />
+            <TimeCounter
+              title="Time"
+              startTime={data.createdAt?.toString()}
+              endTime={data.endDate?.toString()}
+            />
             <Statistic
               title="Sold"
               prefix="$"
