@@ -6,7 +6,7 @@ name: Service Registry
 on:
   push:
     paths:
-      - 'main-app/**'
+      - 'service-registry/**'
 
 jobs:
   lint:
