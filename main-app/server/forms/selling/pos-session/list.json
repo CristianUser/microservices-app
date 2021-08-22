@@ -33,6 +33,15 @@
         "dataIndex": "status"
       },
       {
+        "title": "Date",
+        "dataIndex": "startDate",
+        "width": 180,
+        "render": {
+          "type": "date",
+          "format": "yyyy/MM/dd HH:mm"
+        }
+      },
+      {
         "title": "ID",
         "dataIndex": "cid",
         "width": 30
