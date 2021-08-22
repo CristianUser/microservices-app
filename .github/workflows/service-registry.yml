@@ -18,12 +18,12 @@ jobs:
         with:
           node-version: 14.x
       - name: Install
-        working-directory: ./main-app
+        working-directory: ./service-registry
         env:
           CI: true
         run: npm install
       - name: Lint JS
-        working-directory: ./main-app
+        working-directory: ./service-registry
         env:
           CI: true
         run: npm run lint
